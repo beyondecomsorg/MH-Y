@@ -32,21 +32,12 @@
           <div class="ajax-cart__item-image__wrapper">
             <a href="{{ item.url }}" title="{{ item.product.title | escape }}">
               {% if item.image != blank %}
-                {% liquid
-                  assign loading = 'lazy'
-                  assign fetch_priority = 'auto'
-                  if forloop.index < 3
-                    assign loading = 'eager'
-                    assign fetch_priority = 'high'
-                  endif
-                 %}
-                {%
-                  render 'basic-responsive-image',
-                  type: item.image,
-                  width: 1200,
-                  loading: loading,
-                  fetchpriority: fetch_priority
-                %}
+                <img src="{{ item.image | image_url: width: 240 }}"
+                     alt="{{ item.title | escape }}"
+                     loading="lazy"
+                     width="80"
+                     height="80"
+                     class="ajax-cart__item-img-el" />
               {% else %}
                 {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
               {% endif %}
@@ -97,9 +88,6 @@
 
           <div data-cart-item-price>
             <dl data-cart-item-price-list>
-              {%- comment -%}
-                Markup template for discount item
-              {%- endcomment -%}
               <div {% unless hasDiscount %}class="hide" {% endunless %}data-cart-item-discounted-price-group>
                 <dt>
                   <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
@@ -115,9 +103,6 @@
                 </dd>
               </div>
 
-              {%- comment -%}
-                Markup template for regular price item
-              {%- endcomment -%}
               <div {% if hasDiscount %}class="hide" {% endif %}data-cart-item-regular-price-group>
                 <dt>
                   <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
@@ -127,9 +112,6 @@
                 </dd>
               </div>
 
-              {%- comment -%}
-                Markup template for unit price
-              {%- endcomment -%}
               <div {% unless item.unit_price_measurement %}class="hide" {% endunless %}data-unit-price-group>
                 <dt>
                   <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
@@ -180,7 +162,7 @@
         </div>
         <div class="ajax-cart__item-qty v-center js-item-quantity">
           <div class="ajax-cart__item-quantity a-left">
-            <button data-ajax-qty-decrease="{{ item.id | append: '-' | append: forloop.index }}" data-item-key="{{ item.key }}" class="downer-{{ item.id | append: '-' | append: forloop.index }} ajax-cart__qty-control--down mb0 v-center" type="button"><span class="visuallyhidden">{{ 'cart.general.decrease' | t: product: item.title | escape }}</span>-</button>
+            <button data-ajax-qty-decrease="{{ item.id | append: '-' | append: forloop.index }}" data-item-key="{{ item.key }}" class="downer-{{ item.id | append: '-' | append: forloop.index }} ajax-cart__qty-control--down mb0 v-center"{% if item.quantity <= 1 %} disabled="disabled" data-disabled="true"{% endif %} type="button"><span class="visuallyhidden">{{ 'cart.general.decrease' | t: product: item.title | escape }}</span>-</button>
             <input class="updates_{{ item.id | append: '-' | append: forloop.index }} {% if no_js_cart %}ajax-cart__qty-input--no-js{% else %}ajax-cart__qty-input{% endif %} v-center a-center"
               data-item-qty
               data-item-id="{{ item.id | append: '-' | append: forloop.index }}"
@@ -217,7 +199,7 @@
       </div>
     {% endfor %}
   </div>
-  <div class="ajax-cart__info-wrapper a-left {% if cart.item_count < 1 %}hide{% endif %} js-cart-info">
+  <div class="ajax-cart__info-wrapper span-12 auto a-left {% if cart.item_count < 1 %}hide{% endif %} js-cart-info">
     <div class="ajax-cart__accordion js-cart-accordion">
       {% if settings.show_cart_giftwrap %}
         <span class="gift--wrap">
@@ -257,7 +239,17 @@
         </div>
       {% endif %}
   </div>
-  <div class="ajax-cart__summary-wrapper {% if cart.item_count < 1 %}hide{% endif %} js-cart-summary">
+  {% if cart.item_count > 0 %}
+    {% assign rec_item = cart.items | last %}
+    {% assign rec_product_id = rec_item.product_id %}
+    <div class="ajax-cart__recommendations span-12 auto js-cart-recommendations" data-product-id="{{ rec_product_id }}" data-money-format="{{ shop.money_format | escape }}">
+      <h3 class="ajax-cart__recommendations-title">You may also like</h3>
+      <div class="ajax-cart__recommendations-slider js-recommendations-container">
+        <!-- Recommended products will load here via JavaScript -->
+      </div>
+    </div>
+  {% endif %}
+  <div class="ajax-cart__summary-wrapper span-12 auto {% if cart.item_count < 1 %}hide{% endif %} js-cart-summary">
     <div class="ajax-cart__final-details">
       <div class="subtotal">
         <p class="title a-left mb0">{{ 'cart.general.subtotal' | t }}</p>
@@ -302,16 +294,20 @@
           {% endif %}
         {%- endif -%}
       </div>
-      <hr />
+      <hr class="ajax-cart__summary-hr" />
       <div class="total">
-        <p class="title a-left">{{ 'cart.general.total' | t }}</p>
-        <p class="total-price a-right"><span class="cart-original-total cart-price block">{{ cart.total_price | money }}</span>
-        <span class="cart-total"></span></p>
+        <p class="title a-left mb0">{{ 'cart.general.total' | t }}</p>
+        <p class="total-price a-right mb0"><span class="cart-original-total cart-price block">{{ cart.total_price | money }}</span></p>
       </div>
     </div>
     <div class="ajax-cart__buttons">
-      {% comment %} <a class="ajax-cart__button-view_cart button secondary-button" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {% endcomment %}
-      <input class="ajax-cart__button-submit" type="submit" name="checkout" id="checkout" value="{{ 'cart.general.checkout' | t }}" />
+      <button class="ajax-cart__button-submit" type="submit" name="checkout" id="checkout">
+        <svg class="ajax-cart__lock-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>{{ 'cart.general.checkout' | t }}</span>
+      </button>
     </div>
   </div>
 </form>

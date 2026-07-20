@@ -1,187 +1,99 @@
-{% liquid
-  assign section_padding = ''
-  if section.settings.section_padding == 'top'
-    assign section_padding = 'pb0'
-  elsif section.settings.section_padding == 'bottom'
-    assign section_padding = 'mt0'
-  elsif section.settings.section_padding == 'none'
-    assign section_padding = 'mt0 pb0 pt0'
-  endif
+{% comment %}
+  ==============================================================================
+  SECTION: shop-the-look.liquid
+  ==============================================================================
+  Renders "Shop the Look" & "Discover More" complementary products carousel as a standalone section.
+{% endcomment %}
 
-  assign sm_render = '100vw'
-  assign md_render = '100vw'
-  assign lg_render = '100vw'
-
-  assign show_quickview = false
-  assign show_quickadd = false
-
-  if settings.quickadd
-    assign show_quickadd = true
-  endif
-  if settings.quickview_type != 'none'
-    assign show_quickview = true
-  endif
-
-  # Handle LCP loading
-  assign loading = 'lazy'
-  assign fetch_priority = 'auto'
-  if section.index == 1
-    assign fetch_priority = 'high'
-    assign loading = 'eager'
-  endif
-
-%}
-
-<section
-  class="shop--the_look_section global__section image__withText-section section-{{ section.id }} padded--section {{ section_padding }}" 
-  data-section-id="{{ section.id }}"
-  data-section-type="shop-the-look"
-  data-aos="fade"
->
-
-  <div class="grid__wrapper row shop--the__look gr0">
-
-    {% if section.settings.heading != blank %}
-      <div class="span-12 auto">
-        <h2 class="section-heading">{{ section.settings.heading | escape }}</h2>
-      </div>
-      {% endif %}
-
-    <div class="shop--the_look--image span-6 md-span-12 sm-span-12 auto" data-aos="fade">
-
-      {% if section.settings.image != blank %}
-        {% render 'basic-responsive-image',
-          type:  section.settings.image,
-          width: 1600,
-          loading: 'lazy',
-          sm_render: sm_render,
-          md_render: md_render,
-          lg_render: lg_render,
-          loading: loading,
-          fetchpriority: fetch_priority
-        %}
-
-      {% else %}
-
-        <div class="onboard shop--the_look--image_placeholder">
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
-        </div>
-
-      {% endif %}
-    </div>
-
-    <div class="shop--the_look--products span-6 md-span-12 sm-span-12 auto" 
-      data-aos="fade"
-      data-aos-delay="100">
-
-      <div class="shop--the_look-scroll">
-      {% for block in section.blocks %}
-
-          {% if block.settings.product == blank %}
-            {% render 'onboard-product', prod_limit: 1 %}
-          {% else %}
-
-            {% assign product = block.settings.product %}
-            <div id="product-listing-{{ product.id }}" class="product-index shop--thelook_product js-product-listin{% if forloop.last %} last{% endif %}"
-              data-alpha="{{ product.title }}"
-              data-product-id="{{ product.id }}"
-              data-price="{{ product.price }}">
-              {% render 'product-listing-simple',
-                product: product,
-                show_quickadd: show_quickadd,
-                show_quickview: show_quickview,
-                loading: loading,
-                fetchpriority: fetch_priority %}
-            </div>
-
-          {% endif %}
-
-      {% endfor %}
-      </div>
-    </div>
-
-  </div>
-
-</section>
+<div class="shopify-section--shop-the-look-wrapper" style="max-width: {{ section.settings.max_width }}px; margin: 0 auto; padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;">
+  {% render 'shop-the-look', block: section, section: section, product: product %}
+</div>
 
 {% schema %}
 {
-"name": "Shop the look",
-"max_blocks": 10,
-"disabled_on": {
-  "groups": ["header", "footer"]
-},
-"settings":
-[
-  {
-    "type": "text",
-    "id": "heading",
-    "label": "Heading",
-    "default": "Shop this look"
+  "name": "Shop the Look Section",
+  "class": "shopify-section--shop-the-look",
+  "disabled_on": {
+    "groups": ["header", "footer"]
   },
-  {
-    "type": "image_picker",
-    "id": "image",
-    "label": "Image",
-    "info": "1600px x 1200px recommended"
-  },
-  {
-    "type": "select",
-    "id": "section_padding",
-    "label": "Section spacing",
-    "options": [
-      {
-        "value": "top",
-        "label": "Top"
-      },
-      {
-        "value": "bottom",
-        "label": "Bottom"
-      },
-      {
-        "value": "both",
-        "label": "Both"
-      },
-      {
-        "value": "none",
-        "label": "None"
+  "settings": [
+    {
+      "type": "text",
+      "id": "tab1_title",
+      "label": "Tab 1 Title",
+      "default": "SHOP THE LOOK"
+    },
+    {
+      "type": "text",
+      "id": "tab2_title",
+      "label": "Tab 2 Title",
+      "default": "DISCOVER MORE"
+    },
+    {
+      "type": "select",
+      "id": "rec_method",
+      "label": "Recommendation Method",
+      "options": [
+        { "value": "both", "label": "Native Complementary + Category Rule Fallback" },
+        { "value": "native", "label": "Native Complementary Only" },
+        { "value": "rule_based", "label": "Category Rule Fallback Only" }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback / Discover More Collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Maximum products to show",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 600,
+      "max": 1400,
+      "step": 40,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop the Look Section",
+      "settings": {
+        "tab1_title": "SHOP THE LOOK",
+        "tab2_title": "DISCOVER MORE",
+        "rec_method": "both"
       }
-    ],
-    "default": "both"
-  }
-],
-"blocks":
-[
-  {
-    "type": "product",
-    "name": "Product",
-    "settings":
-    [
-      {
-        "type": "product",
-        "id": "product",
-        "label": "Product"
-      }
-    ]
-  }
-],
-"presets":
-[
-  {
-    "name": "Shop the look",
-    "blocks":
-    [
-      {
-        "type": "product"
-      },
-      {
-        "type": "product"
-      },
-      {
-        "type": "product"
-      }
-    ]
-  }
-]
+    }
+  ]
 }
 {% endschema %}

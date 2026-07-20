@@ -1227,3 +1227,301 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("DOMContentLoaded", initPremiumProductCards);
   document.addEventListener("shopify:section:load", initPremiumProductCards);
 })();
+
+/* ==========================================================================
+   CART DRAWER RECOMMENDATIONS & QUANTITY BUTTON STATE
+   ========================================================================== */
+(function () {
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatMoney(cents, format) {
+    if (typeof cents === 'string') cents = cents.replace('.', '');
+    if (typeof cents !== 'number') cents = parseInt(cents, 10) || 0;
+
+    const moneyFormat = format || (window.theme && window.theme.config && window.theme.config.money_format) || (window.Shopify && window.Shopify.money_format) || 'Rs. {{amount}}';
+
+    if (window.theme && window.theme.Helpers && typeof window.theme.Helpers.formatMoney === 'function') {
+      return window.theme.Helpers.formatMoney(cents, moneyFormat);
+    }
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      return window.Shopify.formatMoney(cents, moneyFormat);
+    }
+
+    let value = '';
+    const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+
+    function formatWithDelimiters(number, precision, thousands, decimal) {
+      precision = precision === undefined ? 2 : precision;
+      thousands = thousands || ',';
+      decimal = decimal || '.';
+      if (isNaN(number) || number == null) return '0';
+
+      number = (number / 100.0).toFixed(precision);
+      const parts = number.split('.');
+      const dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+      const centsAmount = parts[1] ? decimal + parts[1] : '';
+      return dollarsAmount + centsAmount;
+    }
+
+    const match = moneyFormat.match(placeholderRegex);
+    if (!match) return moneyFormat + ' ' + (cents / 100).toFixed(2);
+
+    switch (match[1]) {
+      case 'amount':
+        value = formatWithDelimiters(cents, 2, ',', '.');
+        break;
+      case 'amount_no_decimals':
+        value = formatWithDelimiters(cents, 0, ',', '.');
+        break;
+      case 'amount_with_comma_separator':
+        value = formatWithDelimiters(cents, 2, '.', ',');
+        break;
+      case 'amount_no_decimals_with_comma_separator':
+        value = formatWithDelimiters(cents, 0, '.', ',');
+        break;
+      default:
+        value = formatWithDelimiters(cents, 2, ',', '.');
+        break;
+    }
+
+    return moneyFormat.replace(placeholderRegex, value);
+  }
+
+  function renderRecommendations(recWrap, products) {
+    const container = recWrap.querySelector('.js-recommendations-container');
+    if (!container) return;
+
+    if (!products || products.length === 0) {
+      recWrap.style.display = 'none';
+      return;
+    }
+
+    recWrap.style.display = 'block';
+    const limitedProducts = products.slice(0, 4);
+    const moneyFormat = recWrap.getAttribute('data-money-format') || (window.theme && window.theme.config && window.theme.config.money_format) || (window.Shopify && window.Shopify.money_format);
+
+    const cardsHtml = limitedProducts
+      .map(function (product) {
+        const variant =
+          (product.variants && product.variants.find(function (v) { return v.available; })) ||
+          (product.variants && product.variants[0]);
+
+        const isAvailable = variant && variant.available;
+        const imgUrl = product.featured_image || (product.images && product.images[0]) || '';
+        const title = product.title || '';
+        const price = variant ? variant.price : product.price;
+        const comparePrice = variant ? variant.compare_at_price : product.compare_at_price;
+
+        const formattedPrice = formatMoney(price, moneyFormat);
+        let compareHtml = '';
+        if (comparePrice && comparePrice > price) {
+          compareHtml = '<span class="mhy-rec-compare-price">' + formatMoney(comparePrice, moneyFormat) + '</span>';
+        }
+
+        const variantId = variant ? variant.id : '';
+        const btnLabel = isAvailable ? '+ Add' : 'Sold Out';
+        const disabledAttr = isAvailable ? '' : 'disabled="disabled"';
+        const soldOutClass = isAvailable ? '' : 'is-sold-out';
+
+        return (
+          '<div class="mhy-rec-card">' +
+            '<a href="' + product.url + '" class="mhy-rec-img-link">' +
+              '<img src="' + imgUrl + '" alt="' + escapeHtml(title) + '" class="mhy-rec-img" loading="lazy" width="70" height="70" />' +
+            '</a>' +
+            '<div class="mhy-rec-details">' +
+              '<a href="' + product.url + '" class="mhy-rec-title" title="' + escapeHtml(title) + '">' + escapeHtml(title) + '</a>' +
+              '<div class="mhy-rec-price-row">' +
+                '<span class="mhy-rec-price">' + formattedPrice + '</span>' +
+                compareHtml +
+              '</div>' +
+              '<button type="button" class="mhy-rec-add-btn ' + soldOutClass + '" data-variant-id="' + variantId + '" ' + disabledAttr + '>' +
+                btnLabel +
+              '</button>' +
+            '</div>' +
+          '</div>'
+        );
+      })
+      .join('');
+
+    container.innerHTML = cardsHtml;
+  }
+
+  function fetchRecommendationsForElement(recWrap) {
+    const productId = recWrap.getAttribute('data-product-id');
+    if (!productId) {
+      recWrap.style.display = 'none';
+      return;
+    }
+
+    if (recWrap.dataset.fetchedId === productId) return;
+    recWrap.dataset.fetchedId = productId;
+
+    const url = '/recommendations/products.json?product_id=' + encodeURIComponent(productId) + '&limit=4&intent=related';
+
+    fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(function (data) {
+        renderRecommendations(recWrap, data.products || []);
+      })
+      .catch(function (err) {
+        console.error('Error fetching cart recommendations:', err);
+        recWrap.style.display = 'none';
+      });
+  }
+
+  function initCartRecommendations() {
+    const recWraps = document.querySelectorAll('.js-cart-recommendations');
+    recWraps.forEach(function (recWrap) {
+      fetchRecommendationsForElement(recWrap);
+    });
+  }
+
+  function getCartConfig() {
+    var el = document.getElementById('cart-config');
+    if (el) {
+      try {
+        var parsed = JSON.parse(el.innerHTML);
+        if (parsed && parsed.cart_url) return parsed;
+      } catch (e) {}
+    }
+    return {
+      cart_url: (window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root + 'cart' : '/cart'),
+      money_format: (window.theme && window.theme.config && window.theme.config.money_format) || (window.Shopify && window.Shopify.money_format) || 'Rs. {{amount}}'
+    };
+  }
+
+  function handleAddToCart(btn) {
+    const variantId = btn.getAttribute('data-variant-id');
+    if (!variantId || btn.disabled) return;
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = 'Adding...';
+
+    const config = getCartConfig();
+    const rootPath = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+
+    fetch(rootPath + 'cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        items: [{ id: parseInt(variantId, 10), quantity: 1 }]
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Failed to add item to cart');
+        return res.json();
+      })
+      .then(function () {
+        btn.textContent = 'Added!';
+
+        if (window.Shopify && Shopify.theme && Shopify.theme.cart && Shopify.theme.ajaxCart) {
+          Shopify.theme.cart.getCart().then(function (cartState) {
+            Shopify.theme.ajaxCart.updateView(config, cartState);
+          });
+        } else {
+          window.location.reload();
+        }
+      })
+      .catch(function (err) {
+        console.error('Error adding recommendation to cart:', err);
+        btn.textContent = originalText;
+        btn.disabled = false;
+      });
+  }
+
+  function updateQuantityButtonStates() {
+    const decreaseBtns = document.querySelectorAll('[data-ajax-qty-decrease]');
+    decreaseBtns.forEach(function (btn) {
+      const input = btn.nextElementSibling;
+      if (input && input.matches('input')) {
+        const val = parseInt(input.value, 10) || 1;
+        if (val <= 1) {
+          btn.setAttribute('disabled', 'disabled');
+          btn.setAttribute('data-disabled', 'true');
+        } else {
+          btn.removeAttribute('disabled');
+          btn.removeAttribute('data-disabled');
+        }
+      }
+    });
+  }
+
+  function observeCartDrawer() {
+    const cartContent = document.querySelector('.js-ajax-cart-content');
+    if (!cartContent) return;
+
+    const observer = new MutationObserver(function () {
+      initCartRecommendations();
+      updateQuantityButtonStates();
+    });
+
+    observer.observe(cartContent, { childList: true, subtree: true });
+  }
+
+  function handlePdpQuantityControls() {
+    document.addEventListener('click', function (e) {
+      const downBtn = e.target && e.target.closest ? e.target.closest('.js-pdp-qty-down') : null;
+      const upBtn = e.target && e.target.closest ? e.target.closest('.js-pdp-qty-up') : null;
+
+      if (downBtn) {
+        e.preventDefault();
+        const wrapper = downBtn.closest('.mhy-pdp-qty-wrapper');
+        const input = wrapper ? wrapper.querySelector('.js-pdp-qty-input') : null;
+        if (input) {
+          let val = parseInt(input.value, 10) || 1;
+          if (val > 1) val--;
+          input.value = val;
+          downBtn.disabled = val <= 1;
+        }
+      }
+
+      if (upBtn) {
+        e.preventDefault();
+        const wrapper = upBtn.closest('.mhy-pdp-qty-wrapper');
+        const input = wrapper ? wrapper.querySelector('.js-pdp-qty-input') : null;
+        if (input) {
+          let val = parseInt(input.value, 10) || 1;
+          val++;
+          input.value = val;
+          const down = wrapper.querySelector('.js-pdp-qty-down');
+          if (down) down.disabled = false;
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    const recBtn = e.target && e.target.closest ? e.target.closest('.mhy-rec-add-btn') : null;
+    if (recBtn) {
+      e.preventDefault();
+      handleAddToCart(recBtn);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initCartRecommendations();
+    updateQuantityButtonStates();
+    observeCartDrawer();
+    handlePdpQuantityControls();
+  });
+
+  document.addEventListener('shopify:section:load', function () {
+    initCartRecommendations();
+    updateQuantityButtonStates();
+  });
+})();

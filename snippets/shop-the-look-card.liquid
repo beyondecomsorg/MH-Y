@@ -1,0 +1,73 @@
+{% comment %}
+  ==============================================================================
+  SNIPPET: shop-the-look-card.liquid
+  ==============================================================================
+  Renders an individual product card inside the Shop the Look / Discover More carousel.
+{% endcomment %}
+
+{% liquid
+  assign compare_price = item.compare_at_price
+  assign price = item.price
+  
+  assign discount = 0
+  if compare_price > price and compare_price > 0
+    assign discount = compare_price | minus: price | times: 100.0 | divided_by: compare_price | round
+  endif
+
+  # Metafield or tag badge (e.g. "Value Styles", "Selling Fast")
+  assign badge_tag = item.metafields.custom.product_badge.value | default: item.metafields.custom.badge.value
+  if badge_tag == blank
+    for tag in item.tags
+      if tag contains 'badge:'
+        assign badge_tag = tag | remove: 'badge:'
+        break
+      elsif tag == 'Value Styles' or tag == 'Selling Fast'
+        assign badge_tag = tag
+        break
+      endif
+    endfor
+  endif
+%}
+
+<div class="stl-card" data-product-id="{{ item.id }}">
+  <div class="stl-card-media">
+    {% if discount > 0 %}
+      <div class="stl-save-badge">SAVE {{ discount }}%</div>
+    {% endif %}
+
+    <a href="{{ item.url }}" class="stl-card-img-link">
+      <img
+        src="{{ item.featured_image | image_url: width: 600 }}"
+        alt="{{ item.title | escape }}"
+        loading="lazy"
+        width="300"
+        height="400"
+      />
+    </a>
+
+    <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="stl-card-info">
+    <div class="stl-title-price-row">
+      <h5 class="stl-card-title">
+        <a href="{{ item.url }}">{{ item.title }}</a>
+      </h5>
+      <div class="stl-card-price">
+        <span class="stl-price-current">{{ item.price | money }}</span>
+        {% if compare_price > price %}
+          <span class="stl-price-compare">{{ compare_price | money }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if badge_tag != blank %}
+      <div class="stl-badge-tag">{{ badge_tag }}</div>
+    {% endif %}
+  </div>
+</div>

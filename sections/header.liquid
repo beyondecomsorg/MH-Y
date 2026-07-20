@@ -253,19 +253,7 @@
                      hover: 'var(--cart-links)' %}
                 </a>
               </li>
-              <li class="cart-links__link-account customer-accounts">
-                <a href="{{ routes.account_logout_url }}">
-                  <span class="customer-words vib-center">{{ 'general.customer.log_out' | t }}</span>
-                  {% render 'snip-icons',
-                     wrapper: '.cart-links__link-account',
-                     type: 'apollo',
-                     icon: 'user-logout',
-                     classes: 'cart-links__link-account--icon vib-center',
-                     size: '16px',
-                     fill: 'var(--cart-links)',
-                     hover: 'var(--cart-links)' %}
-                </a>
-              </li>
+             
             {% else %}
               <li class="cart-links__link-account customer-accounts">
                 <a href="{{ routes.account_login_url }}">

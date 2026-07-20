@@ -30,11 +30,24 @@
   }
 </template>
 <template data-html="content">
-  <p class="ajax-cart__empty-cart a-center js-cart-empty {{ isEmpty }}">{{ 'cart.general.empty' | t }}</p>
-  {% render 'cart-form',
-     drawer: drawer,
-     modal: modal,
-     page_only: page_only,
-     no_js_cart: no_js_cart,
-     formEmpty: formEmpty %}
+  {% if cart.item_count < 1 %}
+    <div class="ajax-cart__empty-cart a-center js-cart-empty">
+      <div class="ajax-cart__empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+      </div>
+      <p class="ajax-cart__empty-text">{{ 'cart.general.empty' | t }}</p>
+      <a href="/collections/all" class="ajax-cart__continue-btn">Continue Shopping</a>
+    </div>
+  {% else %}
+    {% render 'cart-form',
+       drawer: drawer,
+       modal: modal,
+       page_only: page_only,
+       no_js_cart: no_js_cart,
+       formEmpty: formEmpty %}
+  {% endif %}
 </template>

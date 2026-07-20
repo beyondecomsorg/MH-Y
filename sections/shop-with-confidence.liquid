@@ -1,0 +1,324 @@
+{% comment %}
+  ==============================================================================
+  SECTION: Shop with Confidence (Full Width, 4-Col Desktop, Native Scroll Mobile)
+  ==============================================================================
+  Merchant Setup & Usage:
+  1. Open Shopify Theme Editor (Online Store > Themes > Customize).
+  2. Navigate to any Product Page template using the top dropdown selector.
+  3. In the left sidebar, click "Add section".
+  4. Select "Shop with Confidence" from the section list.
+  5. Drag & position the section directly below your Washcare accordion block.
+  ==============================================================================
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    width: 95%;
+    margin: 0 auto;
+    padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence {
+    width: 95%;
+    max-width: 95%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__divider {
+    border: none;
+    border-top: 1px solid #e5e5e5;
+    margin: 0 0 24px 0;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__heading {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #11172b;
+  }
+
+  /* Desktop Grid: 4 Equal Columns in a Single Row */
+  #shopify-section-{{ section.id }} .shop-confidence__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px 24px;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__item {
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__icon {
+    margin-bottom: 12px;
+    color: #11172b;
+    display: flex;
+    align-items: center;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__icon svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__title {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #11172b;
+    line-height: 1.3;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__description {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #555555;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__footer {
+    margin-top: 32px;
+    font-style: italic;
+    font-size: 13px;
+    color: #666666;
+    line-height: 1.4;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__footer p {
+    margin: 0 0 4px 0;
+  }
+
+  #shopify-section-{{ section.id }} .shop-confidence__footer p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Mobile Layout (<= 749px): Native Touch/Swipe Scroll Snap Carousel */
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .shop-confidence__grid {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 16px;
+      padding-bottom: 8px;
+      margin-bottom: -8px;
+      
+      /* Hide scrollbar across browsers */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE / Edge */
+    }
+
+    #shopify-section-{{ section.id }} .shop-confidence__grid::-webkit-scrollbar {
+      display: none; /* Chrome / Safari / Opera */
+    }
+
+    /* 44% item width shows 2 items + a sliver of the 3rd item as a visual swipe cue */
+    #shopify-section-{{ section.id }} .shop-confidence__item {
+      flex: 0 0 44%;
+      min-width: 44%;
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
+  }
+</style>
+
+<div class="shop-confidence">
+  {% if section.settings.show_top_divider %}
+    <hr class="shop-confidence__divider">
+  {% endif %}
+
+  {% if section.settings.heading != blank %}
+    <h3 class="shop-confidence__heading">
+      {{ section.settings.heading }}
+    </h3>
+  {% endif %}
+
+  <div class="shop-confidence__grid">
+    {% for block in section.blocks %}
+      {% if block.type == 'feature' %}
+        <div class="shop-confidence__item" {{ block.shopify_attributes }}>
+          <div class="shop-confidence__icon">
+            {% case block.settings.icon_type %}
+              {% when 'returns' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/><path d="M3.5 6.5a9 9 0 1 0 13-2.5"/></svg>
+              {% when 'support' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 14v-3a9 9 0 0 1 18 0v3"/><path d="M21 15a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h3v4z"/><path d="M3 15a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H3v4z"/></svg>
+              {% when 'delivery' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg>
+              {% when 'payment' %}
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M15 15l2 2 4-4"/></svg>
+              {% when 'custom' %}
+                {{ block.settings.icon_custom }}
+            {% endcase %}
+          </div>
+          {% if block.settings.title != blank %}
+            <div class="shop-confidence__title">
+              {{ block.settings.title }}
+            </div>
+          {% endif %}
+          {% if block.settings.description != blank %}
+            <div class="shop-confidence__description">
+              {{ block.settings.description }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+
+</div>
+
+{% schema %}
+{
+  "name": "Shop with Confidence",
+  "class": "shopify-section--shop-with-confidence",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP WITH CONFIDENCE"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_divider",
+      "label": "Show top divider line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_line1",
+      "label": "Footer line 1",
+      "default": "Designed & Marketed by: Impulse International Pvt. Ltd."
+    },
+    {
+      "type": "text",
+      "id": "footer_line2",
+      "label": "Footer line 2",
+      "default": "Country of Origin: India"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon Selection",
+          "options": [
+            { "value": "returns", "label": "Box / Returns Arrow" },
+            { "value": "support", "label": "Headset / Support" },
+            { "value": "delivery", "label": "Truck / Free Delivery" },
+            { "value": "payment", "label": "Card / Checkmark" },
+            { "value": "custom", "label": "Custom SVG Code" }
+          ],
+          "default": "returns"
+        },
+        {
+          "type": "html",
+          "id": "icon_custom",
+          "label": "Custom SVG Code",
+          "info": "Used only when 'Custom SVG Code' is selected above."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "FEATURE TITLE"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Short feature description text goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop with Confidence",
+      "settings": {
+        "heading": "SHOP WITH CONFIDENCE",
+        "show_top_divider": true,
+        "footer_line1": "Designed & Marketed by: Impulse International Pvt. Ltd.",
+        "footer_line2": "Country of Origin: India"
+      },
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon_type": "returns",
+            "title": "FREE 60 DAYS RETURNS & EXCHANGES",
+            "description": "If you need a change for absolutely any reason, its easy and hassle free."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_type": "support",
+            "title": "WHITE GLOVE CUSTOMER SUPPORT",
+            "description": "Our team is always available to help you choose better - before and after you buy."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_type": "delivery",
+            "title": "FREE DELIVERY ON ALL ORDERS",
+            "description": "We offer free delivery on all orders - no hidden costs, no surprises."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_type": "payment",
+            "title": "ALL PAYMENT OPTIONS",
+            "description": "Pay your way - UPI, Visa, Mastercard, Amex, Diners, or Cash on Delivery."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

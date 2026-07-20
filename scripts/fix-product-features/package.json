@@ -1,0 +1,15 @@
+{
+  "name": "shopify-metafield-fixer",
+  "version": "2.0.0",
+  "description": "Script to split merged product metafield list entries (e.g. product_feature, wash_care) via Shopify Admin GraphQL API",
+  "main": "fix-metafields.js",
+  "type": "module",
+  "scripts": {
+    "start": "node fix-metafields.js",
+    "write": "node fix-metafields.js --write"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "graphql-request": "^6.1.0"
+  }
+}

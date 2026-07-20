@@ -74,9 +74,7 @@
        .product__section-container{
       padding-top: 0px!important;
     }
-       .product__section-content {
-    padding: 4rem 3.25rem;
-}
+
        #MainContent h1{
       font-size: 1.5rem;
    }
@@ -293,40 +291,41 @@ nav.pdp-breadcrumb.row{
             {% endif %}
           {% endcapture %}
            
-          {% if collection %}
-            <div class="product__nav">
-              {% if collection.previous_product %}
-                <a href="{{ collection.previous_product }}" title="{{ 'general.pagination.prev' | t }}">
-                  {% render 'snip-icons',
-                     wrapper: '.product__nav',
-                     type: 'apollo',
-                     icon: 'left-carrot',
-                     classes: 'product__nav--icon vib-center',
-                     size: '12px',
-                     fill: 'var(--directional-color)',
-                     hover: 'var(--directional-hover-color)' %}
-                </a>
-              {% endif %}
-              {% if collection.next_product %}
-                <a href="{{ collection.next_product }}" title="{{ 'general.pagination.next' | t }}">
-                  {% render 'snip-icons',
-                     wrapper: '.product__nav',
-                     type: 'apollo',
-                     icon: 'right-carrot',
-                     classes: 'product__nav--icon vib-center',
-                     size: '12px',
-                     fill: 'var(--directional-color)',
-                     hover: 'var(--directional-hover-color)' %}
-                </a>
-              {% endif %}
-            </div>
-          {% endif %}
-
           {% if settings.product_show_vendor %}
             <h3 class="product__vendor">{{ product.vendor }}</h3>
           {% endif %}
 
-          <h1 class="product__section-title product-title">{{ product.title }}</h1>
+          <div class="mhy-pdp-title-row">
+            <h1 class="product__section-title product-title">{{ product.title }}</h1>
+            {% if collection %}
+              <div class="product__nav">
+                {% if collection.previous_product %}
+                  <a href="{{ collection.previous_product }}" title="{{ 'general.pagination.prev' | t }}">
+                    {% render 'snip-icons',
+                       wrapper: '.product__nav',
+                       type: 'apollo',
+                       icon: 'left-carrot',
+                       classes: 'product__nav--icon vib-center',
+                       size: '12px',
+                       fill: 'var(--directional-color)',
+                       hover: 'var(--directional-hover-color)' %}
+                  </a>
+                {% endif %}
+                {% if collection.next_product %}
+                  <a href="{{ collection.next_product }}" title="{{ 'general.pagination.next' | t }}">
+                    {% render 'snip-icons',
+                       wrapper: '.product__nav',
+                       type: 'apollo',
+                       icon: 'right-carrot',
+                       classes: 'product__nav--icon vib-center',
+                       size: '12px',
+                       fill: 'var(--directional-color)',
+                       hover: 'var(--directional-hover-color)' %}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
 
           {% render 'product-price', variant: current_variant, product: product %}
 
@@ -641,7 +640,20 @@ nav.pdp-breadcrumb.row{
                 {%- endif -%}
 
                 <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
-                <input class="formQty" type="hidden" name="quantity" value="1" />
+
+                {% unless product.gift_card? %}
+                  <div class="mhy-pdp-qty-container mb4">
+                    <label for="mhy-pdp-qty-input-{{ section.id }}" class="mhy-pdp-qty-label">Quantity</label>
+                    <div class="mhy-pdp-qty-wrapper">
+                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-down js-pdp-qty-down" disabled="disabled" aria-label="Decrease quantity">-</button>
+                      <input id="mhy-pdp-qty-input-{{ section.id }}" type="number" name="quantity" class="mhy-pdp-qty-input js-pdp-qty-input formQty" value="1" min="1" aria-label="Quantity" />
+                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-up js-pdp-qty-up" aria-label="Increase quantity">+</button>
+                    </div>
+                  </div>
+                {% else %}
+                  <input class="formQty" type="hidden" name="quantity" value="1" />
+                {% endunless %}
+
                 <div class="note note-success js-added-msg" style="display: none">
                   <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {{ 'products.product.or' | t }} <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
                 </div>
@@ -649,11 +661,15 @@ nav.pdp-breadcrumb.row{
                   <b class="note__heading">{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;<span class="note__body">{{ 'cart.general.update_qty_error' | t }}</span>
                 </div>
 
-                <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
+                <div class="mhy-pdp-cta-container">
+                  <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit mhy-pdp-primary-btn" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
 
-                {% if settings.show_payment_button %}
-                 {{ form | payment_button }}
-                {% endif %}
+                  {% if settings.show_payment_button %}
+                    <div class="mhy-pdp-secondary-btn-wrapper">
+                      {{ form | payment_button }}
+                    </div>
+                  {% endif %}
+                </div>
               {%-  endform -%}
             </div>
 
@@ -698,6 +714,22 @@ nav.pdp-breadcrumb.row{
           {% when 'complementary_products' %}
             {%
               render 'complementary-product',
+              block: block,
+              section: section,
+              product: product
+            %}
+
+          {% when 'shop_the_look' %}
+            {%
+              render 'shop-the-look',
+              block: block,
+              section: section,
+              product: product
+            %}
+
+          {% when 'available_benefits' %}
+            {%
+              render 'available-benefits',
               block: block,
               section: section,
               product: product
@@ -936,6 +968,90 @@ nav.pdp-breadcrumb.row{
               "label": "Simple"
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "shop_the_look",
+      "name": "Shop the Look Carousel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab1_title",
+          "label": "Tab 1 Title",
+          "default": "SHOP THE LOOK"
+        },
+        {
+          "type": "text",
+          "id": "tab2_title",
+          "label": "Tab 2 Title",
+          "default": "DISCOVER MORE"
+        },
+        {
+          "type": "select",
+          "id": "rec_method",
+          "label": "Recommendation Method",
+          "options": [
+            { "value": "both", "label": "Native Complementary + Category Rule Fallback" },
+            { "value": "native", "label": "Native Complementary Only" },
+            { "value": "rule_based", "label": "Category Rule Fallback Only" }
+          ],
+          "default": "both"
+        },
+        {
+          "type": "collection",
+          "id": "fallback_collection",
+          "label": "Fallback / Discover More Collection"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "min": 2,
+          "max": 10,
+          "step": 1,
+          "label": "Maximum products to show",
+          "default": 6
+        }
+      ]
+    },
+    {
+      "type": "available_benefits",
+      "name": "Available Benefits",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "AVAILABLE BENEFITS"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code",
+          "label": "Coupon Code",
+          "default": "ONLYEXCHANGE"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Offer Description",
+          "default": "Extra 5% off on your order - applicable for 1 exchange only, no returns."
+        },
+        {
+          "type": "url",
+          "id": "tnc_url",
+          "label": "T&C Link URL"
+        },
+        {
+          "type": "text",
+          "id": "tnc_text",
+          "label": "T&C Link Text",
+          "default": "T & C"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Coupon Code Accent Color",
+          "default": "#b8860b"
         }
       ]
     },

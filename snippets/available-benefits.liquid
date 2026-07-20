@@ -1,0 +1,202 @@
+{% comment %}
+  ==============================================================================
+  SNIPPET: available-benefits.liquid
+  ==============================================================================
+  Renders an "Available Benefits" coupon display card with click-to-copy functionality.
+{% endcomment %}
+
+{% liquid
+  assign block_id = block.id | default: section.id
+  assign heading = block.settings.heading | default: "AVAILABLE BENEFITS"
+  assign coupon_code = block.settings.coupon_code | default: "ONLYEXCHANGE"
+  assign description = block.settings.description | default: "Extra 5% off on your order - applicable for 1 exchange only, no returns."
+  assign tnc_url = block.settings.tnc_url | default: "#"
+  assign tnc_text = block.settings.tnc_text | default: "T & C"
+  assign accent_color = block.settings.accent_color | default: "#b8860b"
+%}
+
+<style>
+  #ab-block-{{ block_id }} {
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+
+  #ab-block-{{ block_id }} .ab-heading {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: #11172b;
+  }
+
+  #ab-block-{{ block_id }} .ab-card {
+    border: 1px dashed #d1d1d1;
+    padding: 14px 16px;
+    background-color: #fafafa;
+    border-radius: 2px;
+    box-sizing: border-box;
+  }
+
+  #ab-block-{{ block_id }} .ab-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  #ab-block-{{ block_id }} .ab-code-wrapper {
+    font-size: 13px;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #ab-block-{{ block_id }} .ab-code-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: {{ accent_color }};
+    text-decoration: underline;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    transition: opacity 0.15s ease;
+  }
+
+  #ab-block-{{ block_id }} .ab-code-btn:hover {
+    opacity: 0.8;
+  }
+
+  #ab-block-{{ block_id }} .ab-copy-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background-color: #11172b;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  #ab-block-{{ block_id }} .ab-code-btn.copied .ab-copy-badge {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #ab-block-{{ block_id }} .ab-tnc-link {
+    font-size: 12px;
+    color: #555555;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  #ab-block-{{ block_id }} .ab-tnc-link:hover {
+    color: #11172b;
+  }
+
+  #ab-block-{{ block_id }} .ab-description {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #555555;
+    margin: 0;
+  }
+</style>
+
+<div id="ab-block-{{ block_id }}" class="ab-container" {{ block.shopify_attributes }}>
+  {% if heading != blank %}
+    <h4 class="ab-heading">{{ heading }}</h4>
+  {% endif %}
+
+  <div class="ab-card">
+    <div class="ab-row-top">
+      <div class="ab-code-wrapper">
+        <span>Use code</span>
+        <button
+          type="button"
+          class="ab-code-btn js-ab-code-btn"
+          title="Click to copy coupon code {{ coupon_code }}"
+          aria-label="Click to copy coupon code {{ coupon_code }}"
+        >
+          <span class="js-ab-code-text" data-code="{{ coupon_code }}">{{ coupon_code }}</span>
+          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+        </button>
+      </div>
+
+      {% if tnc_text != blank %}
+        <a href="{{ tnc_url }}" class="ab-tnc-link">{{ tnc_text }}</a>
+      {% endif %}
+    </div>
+
+    {% if description != blank %}
+      <p class="ab-description">{{ description }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  (function() {
+    const container = document.getElementById('ab-block-{{ block_id }}');
+    if (!container) return;
+
+    const btn = container.querySelector('.js-ab-code-btn');
+    const feedback = container.querySelector('.js-ab-copy-feedback');
+    const codeSpan = container.querySelector('.js-ab-code-text');
+
+    if (!btn || !codeSpan) return;
+
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const codeToCopy = codeSpan.getAttribute('data-code') || codeSpan.textContent.trim();
+
+      const handleSuccess = () => {
+        btn.classList.add('copied');
+        if (feedback) feedback.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          if (feedback) feedback.textContent = '';
+        }, 1800);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(codeToCopy).then(handleSuccess).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+
+      function fallbackCopy() {
+        const textarea = document.createElement('textarea');
+        textarea.value = codeToCopy;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          handleSuccess();
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textarea);
+      }
+    });
+  })();
+</script>
