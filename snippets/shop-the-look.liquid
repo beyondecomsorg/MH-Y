@@ -144,8 +144,8 @@
     position: absolute;
     top: 12px;
     left: 12px;
-    background-color: #ffe500;
-    color: #000000;
+    background-color: #1a2b4c;
+    color: #fff;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -157,35 +157,56 @@
   /* Overlaid Navigation Arrows */
   #stl-block-{{ block_id }} .stl-nav-arrow {
     position: absolute;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #ffffff;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 3;
-    opacity: 0.8;
-    transition: opacity 0.2s ease, background 0.2s ease;
+    width: 40px;
+    height: 40px;
+    background: #ffffff !important;
+    color: #11172b !important;
+    border: 1px solid rgba(17, 23, 43, 0.08) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
   }
 
   #stl-block-{{ block_id }} .stl-nav-arrow:hover {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.5);
+    background: #11172b !important;
+    color: #ffffff !important;
+    transform: translateY(-50%) scale(1.05) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18) !important;
   }
 
-  #stl-block-{{ block_id }} .stl-prev-arrow { left: 8px; }
-  #stl-block-{{ block_id }} .stl-next-arrow { right: 8px; }
+  #stl-block-{{ block_id }} .stl-prev-arrow { left: 8px !important; }
+  #stl-block-{{ block_id }} .stl-next-arrow { right: 8px !important; }
 
   #stl-block-{{ block_id }} .stl-nav-arrow svg {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2.5;
+    width: 18px !important;
+    height: 18px !important;
+    stroke: currentColor !important;
+    fill: none !important;
+    stroke-width: 2.5 !important;
+    display: block !important;
+  }
+
+  #stl-block-{{ block_id }} .stl-nav-arrow svg path {
+    stroke: currentColor !important;
+    fill: none !important;
+  }
+
+  #stl-block-{{ block_id }} .stl-nav-arrow:hover svg {
+    stroke: #ffffff !important;
+  }
+
+  #stl-block-{{ block_id }} .stl-nav-arrow:hover svg path {
+    stroke: #ffffff !important;
   }
 
   /* Card Text Info */
@@ -260,6 +281,9 @@
   <!-- Tab 1: Shop the Look (Complementary Products) -->
   <div id="stl-tab-content-look-{{ block_id }}" class="stl-tab-content active">
     <div class="stl-carousel-wrapper">
+      <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
       <div class="stl-carousel js-stl-carousel">
         {% liquid
           assign look_count = 0
@@ -319,12 +343,27 @@
           {% endfor %}
         {% endif %}
       </div>
+      <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="20"
+     height="20"
+     viewBox="0 0 24 24"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="3"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <path d="M15 18L9 12L15 6"/>
+</svg>      </button>
     </div>
   </div>
 
   <!-- Tab 2: Discover More (Collection / Related Products) -->
   <div id="stl-tab-content-discover-{{ block_id }}" class="stl-tab-content">
     <div class="stl-carousel-wrapper">
+      <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
       <div class="stl-carousel js-stl-carousel">
         {% if main_collection != blank %}
           {% for item in main_collection.products limit: limit %}
@@ -340,6 +379,19 @@
           {% endfor %}
         {% endif %}
       </div>
+      <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="20"
+     height="20"
+     viewBox="0 0 24 24"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="3"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <path d="M9 18L15 12L9 6"/>
+</svg>
+      </button>
     </div>
   </div>
 

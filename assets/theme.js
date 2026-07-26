@@ -4600,9 +4600,25 @@ theme.ProductForm = function (context, sectionId, events, Product) {
 
       if ( config.swatches == 'swatches' ) {
         const swatches = Array.from(varSelectors);
-        options = swatches.map((swatch) => {
-          return Array.from(swatch.querySelectorAll('input')).find((radio) => radio.checked).value;
+        options = new Array(Product.options.length);
+        swatches.forEach((swatch) => {
+          const optIndexAttr = swatch.getAttribute('data-option-index');
+          if (optIndexAttr !== null) {
+            const optIndex = parseInt(optIndexAttr, 10) - 1;
+            const checkedInput = Array.from(swatch.querySelectorAll('input')).find((radio) => radio.checked);
+            if (checkedInput && optIndex >= 0 && optIndex < options.length) {
+              options[optIndex] = checkedInput.value;
+            }
+          }
         });
+        const fallbackVariant = Product.variants.find(v => v.available) || Product.variants[0];
+        if (fallbackVariant) {
+          for (let idx = 0; idx < options.length; idx++) {
+            if (options[idx] === undefined) {
+              options[idx] = fallbackVariant.options[idx];
+            }
+          }
+        }
       } else {
         options = Array.from(context.querySelectorAll('select.js-variant-selector'), (select) => select.value);
       }

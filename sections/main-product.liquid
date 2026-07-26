@@ -851,17 +851,73 @@ nav.pdp-breadcrumb.row{
 
   <div class="mhy-sticky-atc" data-mhy-sticky-atc hidden>
     <div class="mhy-sticky-atc__inner">
-      <div class="mhy-sticky-atc__meta">
+      
+      <!-- 1. Product Image Thumbnail -->
+      {% if product.featured_media.preview_image != blank %}
+        <a href="{{ product.url }}" class="mhy-sticky-atc__image-link" aria-label="View product">
+          <img class="mhy-sticky-atc__image" data-mhy-sticky-image src="{{ product.featured_media.preview_image | image_url: width: 160 }}" alt="{{ product.title | escape }}" width="80" height="80" loading="lazy" />
+        </a>
+      {% endif %}
+      
+      <!-- 2. Product Info -->
+      <div class="mhy-sticky-atc__info">
+        {% if product.vendor != blank %}
+          <div class="mhy-sticky-atc__vendor">{{ product.vendor }}</div>
+        {% endif %}
         <div class="mhy-sticky-atc__title">{{ product.title }}</div>
-        <div class="mhy-sticky-atc__pricing" data-mhy-sticky-pricing>
-          <span class="mhy-sticky-atc__price-current" data-mhy-sticky-price-current>{{ current_variant.price | money }}</span>
-          <span class="mhy-sticky-atc__price-compare" data-mhy-sticky-price-compare{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</span>
-          <span class="mhy-sticky-atc__save" data-mhy-sticky-save{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>Save {{ mhy_sticky_discount }}%</span>
+        <div class="mhy-sticky-atc__selections">
+          {%- for option in product.options_with_values -%}
+            <span class="mhy-sticky-atc__selection-item" data-sticky-option-index="{{ forloop.index0 }}">
+              <span class="mhy-sticky-atc__selection-label">{{ option.name }}:</span>
+              <span class="mhy-sticky-atc__selection-value" data-sticky-option-value="{{ forloop.index0 }}">{{ option.selected_value }}</span>
+            </span>
+          {%- endfor -%}
         </div>
       </div>
-      <button class="mhy-sticky-atc__btn" type="button" data-mhy-sticky-atc-btn>
-        {{ 'products.product.add_to_cart' | t }}
-      </button>
+      
+      <!-- 3. Price & Discount Block -->
+      <div class="mhy-sticky-atc__price-block">
+        <div class="mhy-sticky-atc__pricing" data-mhy-sticky-pricing>
+          <div class="mhy-sticky-atc__price-current" data-mhy-sticky-price-current>{{ current_variant.price | money }}</div>
+          <div class="mhy-sticky-atc__sale-info" data-mhy-sticky-sale-info{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>
+            <span class="mhy-sticky-atc__price-compare" data-mhy-sticky-price-compare>{{ current_variant.compare_at_price | money }}</span>
+            <span class="mhy-sticky-atc__save" data-mhy-sticky-save>Save {{ mhy_sticky_discount }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Premium Quantity Selector -->
+      <div class="mhy-sticky-atc__qty-selector">
+        <button type="button" class="mhy-sticky-atc__qty-btn" data-qty-decrement aria-label="Decrease quantity">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <span class="mhy-sticky-atc__qty-value" data-mhy-sticky-qty-value>1</span>
+        <button type="button" class="mhy-sticky-atc__qty-btn" data-qty-increment aria-label="Increase quantity">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <!-- 5. Actions Wrapper -->
+      <div class="mhy-sticky-atc__actions">
+        {% if product.variants.size > 1 %}
+          <select class="mhy-sticky-atc__variant-select" data-mhy-sticky-variant-select aria-label="Select variant">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endif %}
+        <button class="mhy-sticky-atc__btn" type="button" data-mhy-sticky-atc-btn>
+          <span class="mhy-sticky-atc__btn-text">{{ 'products.product.add_to_cart' | t }}</span>
+          <span class="mhy-sticky-atc__btn-loader" hidden>
+            <svg class="mhy-spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+            </svg>
+          </span>
+        </button>
+      </div>
+      
     </div>
   </div>
 </section>
@@ -1214,6 +1270,8 @@ nav.pdp-breadcrumb.row{
       "limit": 1,
       "settings": []
     },
+
+
     {
       "type": "stock_levels",
       "name": "Stock levels",

@@ -490,6 +490,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const stickyBtn = document.querySelector("[data-mhy-sticky-atc-btn]");
     if (!sticky || !stickyBtn) return;
 
+    const stickyImage = sticky.querySelector("[data-mhy-sticky-image]");
+    const stickyVariantTitle = sticky.querySelector("[data-mhy-sticky-variant-title]");
+    const stickySelect = sticky.querySelector("[data-mhy-sticky-variant-select]");
+    const variantIdInput = document.querySelector(".formVariantId");
+
     const stickyPriceCurrent = sticky.querySelector("[data-mhy-sticky-price-current]");
     const stickyPriceCompare = sticky.querySelector("[data-mhy-sticky-price-compare]");
     const stickySave = sticky.querySelector("[data-mhy-sticky-save]");
@@ -502,7 +507,47 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sticky.dataset.mhyInit === "true") return;
     sticky.dataset.mhyInit = "true";
 
+    // Move to body to prevent stacking context bugs (e.g. parent transform/filter/will-change)
+    if (sticky.parentNode !== document.body) {
+      document.body.appendChild(sticky);
+    }
+
+    let productData = null;
+    try {
+      const productJsonEl = document.querySelector(".product-json");
+      if (productJsonEl) productData = JSON.parse(productJsonEl.innerHTML || "null");
+    } catch (e) {
+      console.warn("Could not parse product data JSON", e);
+    }
+
     let footerInView = false;
+
+    const stickyQtyVal = sticky.querySelector("[data-mhy-sticky-qty-value]");
+
+    function syncStickyVariantDetails() {
+      if (!productData || !variantIdInput) return;
+      const variantId = variantIdInput.value;
+      const variant = productData.variants.find(v => String(v.id) === String(variantId));
+      if (!variant) return;
+
+      // Update selected options text representation
+      if (variant.options) {
+        variant.options.forEach((optValue, idx) => {
+          const valEl = sticky.querySelector(`[data-sticky-option-value="${idx}"]`);
+          if (valEl) {
+            valEl.textContent = optValue;
+          }
+        });
+      }
+
+      if (stickyImage && variant.featured_image && variant.featured_image.src) {
+        stickyImage.src = variant.featured_image.src;
+      }
+
+      if (stickySelect) {
+        stickySelect.value = variantId;
+      }
+    }
 
     function syncStickyPricing() {
       if (!mainPrice || !stickyPriceCurrent) return;
@@ -526,6 +571,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       stickyPriceCurrent.textContent = currentText;
 
+      const saleInfoEl = sticky.querySelector("[data-mhy-sticky-sale-info]");
+      if (saleInfoEl) {
+        saleInfoEl.hidden = !compareText;
+      }
+
       if (stickyPriceCompare) {
         if (compareText) {
           stickyPriceCompare.textContent = compareText;
@@ -547,15 +597,46 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    function syncStickyButtonState() {
-      const label = mainAtc.value || mainAtc.textContent || "Add to cart";
-      stickyBtn.textContent = label;
-      if (mainAtc.hasAttribute("disabled") || mainAtc.classList.contains("disabled")) {
-        stickyBtn.setAttribute("disabled", "disabled");
-      } else {
-        stickyBtn.removeAttribute("disabled");
+    function syncStickyQuantity() {
+      const mainQtyInput = document.querySelector(".template-product input[name='quantity']");
+      if (mainQtyInput && stickyQtyVal) {
+        stickyQtyVal.textContent = mainQtyInput.value || "1";
       }
+    }
+
+    function syncStickyButtonState() {
+      if (!mainAtc || !stickyBtn) return;
+
+      const isDisabled = mainAtc.hasAttribute("disabled") || mainAtc.classList.contains("disabled");
+      const btnVal = (mainAtc.value || mainAtc.textContent || "").trim().toUpperCase();
+      const isAdding = btnVal.indexOf("ADDING") > -1 || mainAtc.classList.contains("loading") || mainAtc.classList.contains("is-loading");
+      const isAdded = btnVal.indexOf("ADDED") > -1;
+
+      stickyBtn.disabled = isDisabled;
+      stickyBtn.classList.toggle("disabled", isDisabled);
+
+      const btnTextEl = stickyBtn.querySelector(".mhy-sticky-atc__btn-text");
+      const loaderEl = stickyBtn.querySelector(".mhy-sticky-atc__btn-loader");
+
+      if (isAdding) {
+        if (btnTextEl) btnTextEl.textContent = "";
+        if (loaderEl) loaderEl.hidden = false;
+        stickyBtn.classList.add("mhy-btn-loading");
+      } else if (isAdded) {
+        if (btnTextEl) btnTextEl.textContent = "✓ Added to Cart";
+        if (loaderEl) loaderEl.hidden = true;
+        stickyBtn.classList.remove("mhy-btn-loading");
+        stickyBtn.classList.add("mhy-btn-success");
+      } else {
+        if (btnTextEl) btnTextEl.textContent = mainAtc.value || mainAtc.textContent || "Add to Cart";
+        if (loaderEl) loaderEl.hidden = true;
+        stickyBtn.classList.remove("mhy-btn-loading");
+        stickyBtn.classList.remove("mhy-btn-success");
+      }
+
       syncStickyPricing();
+      syncStickyVariantDetails();
+      syncStickyQuantity();
     }
 
     function setVisible(visible) {
@@ -595,6 +676,54 @@ document.addEventListener("DOMContentLoaded", function () {
       syncStickyButtonState();
     });
     mo.observe(mainAtc, { attributes: true, attributeFilter: ["disabled", "value", "class"] });
+
+    document.querySelectorAll(".formVariantId").forEach((input) => {
+      input.addEventListener("change", function () {
+        syncStickyButtonState();
+      });
+    });
+
+    if (stickySelect) {
+      stickySelect.addEventListener("change", function () {
+        const val = this.value;
+        if (variantIdInput) {
+          variantIdInput.value = val;
+          variantIdInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      });
+    }
+
+    // Sync quantity updates from main inputs to sticky text
+    document.querySelectorAll(".template-product input[name='quantity']").forEach((input) => {
+      input.addEventListener("change", function () {
+        syncStickyQuantity();
+      });
+      input.addEventListener("input", function () {
+        syncStickyQuantity();
+      });
+    });
+
+    // Handle sticky quantity increment/decrement clicks
+    sticky.addEventListener("click", function (e) {
+      const decBtn = e.target.closest("[data-qty-decrement]");
+      const incBtn = e.target.closest("[data-qty-increment]");
+
+      if (decBtn || incBtn) {
+        let currentQty = parseInt(stickyQtyVal.textContent, 10) || 1;
+        if (decBtn && currentQty > 1) {
+          currentQty--;
+        } else if (incBtn) {
+          currentQty++;
+        }
+        stickyQtyVal.textContent = currentQty;
+
+        // Sync back to all main quantity inputs
+        document.querySelectorAll(".template-product input[name='quantity']").forEach((input) => {
+          input.value = currentQty;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+      }
+    });
 
     if (mainPrice) {
       const priceObserver = new MutationObserver(function () {
