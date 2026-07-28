@@ -84,8 +84,8 @@
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
-            "tab1_title": "SHOP THE LOOK",
-            "tab2_title": "DISCOVER MORE",
+            "tab1_title": "Selected For You",
+            "tab2_title": "",
             "rec_method": "both",
             "fallback_collection": "",
             "limit": 6
