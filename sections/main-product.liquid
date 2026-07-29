@@ -838,46 +838,58 @@ nav.pdp-breadcrumb.row{
                         var raw = list.getAttribute('data-raw') || '';
                         var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
 
-                        function splitFeatures(text) {
-                          if (text.length < 30) return [text];
-                          
-                          var words = text.trim().split(/\s+/);
-                          var features = [];
-                          var currentFeature = [];
-                          
+                        function splitGeneric(text) {
+                          text = text.replace(/"/g, '').trim();
+                          if (text.length < 15) return [text];
+
+                          var hasPunctuation = /[\n;•\u00b7]|\.\s+/.test(text);
+
+                          if (hasPunctuation) {
+                            var lines = text.split(/[\n;•\u00b7]|\s+[-*]\s+/);
+                            var results = [];
+                            lines.forEach(function(line) {
+                              var sentences = line.split(/\.\s+/);
+                              sentences.forEach(function(s) {
+                                s = s.trim().replace(/\.$/, '');
+                                if (s) results.push(s);
+                              });
+                            });
+                            return results;
+                          }
+
+                          var words = text.split(/\s+/);
+                          var results = [];
+                          var current = [];
+
                           for (var i = 0; i < words.length; i++) {
                             var word = words[i];
-                            var isUppercase = /^[A-Z]/.test(word);
-                            
-                            if (isUppercase && currentFeature.length > 0) {
-                              var lastWord = currentFeature[currentFeature.length - 1];
-                              var lastWordIsLowercase = /^[a-z]/.test(lastWord);
-                              
-                              if (lastWordIsLowercase || currentFeature.length >= 2) {
-                                features.push(currentFeature.join(' '));
-                                currentFeature = [word];
+                            var isCapitalized = /^[A-Z][a-z]/.test(word);
+
+                            if (isCapitalized && current.length > 0) {
+                              var lastWord = current[current.length - 1];
+                              var precededByLowercase = /[a-z]$/.test(lastWord);
+
+                              if (precededByLowercase || current.length >= 2) {
+                                results.push(current.join(' '));
+                                current = [word];
                                 continue;
                               }
                             }
-                            
-                            currentFeature.push(word);
+                            current.push(word);
                           }
-                          
-                          if (currentFeature.length > 0) {
-                            features.push(currentFeature.join(' '));
+
+                          if (current.length > 0) {
+                            results.push(current.join(' '));
                           }
-                          
-                          return features;
+
+                          return results;
                         }
 
                         var bullets = [];
                         if (items.length === 1) {
-                          bullets = splitFeatures(items[0]);
+                          bullets = splitGeneric(items[0]);
                         } else {
-                          items.forEach(function(item) {
-                            var sub = splitFeatures(item);
-                            sub.forEach(function(s) { bullets.push(s); });
-                          });
+                          bullets = items;
                         }
 
                         var html = '';
@@ -908,74 +920,60 @@ nav.pdp-breadcrumb.row{
                             if (!list) return;
 
                             var raw = list.getAttribute('data-raw') || '';
-                            // Split by our sentinel delimiter and clean up
                             var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
 
-                            // Keywords that signal a new instruction sentence
-                            var SPLIT_KEYWORDS = [
-                              'Use ', 'Avoid ', 'Do not ', 'To remove ', 'Machine wash', 'Wash ',
-                              'Line dry', 'Low heat', 'Iron ', 'Hand wash', 'Dry clean', 'Tumble dry',
-                              'Cold water', 'Warm water', 'Rinse', 'Soak', 'Bleach', 'Fabric softener',
-                              'Wring', 'Squeeze', 'Hang', 'Lay flat', 'Gentle cycle', 'Normal spin'
-                            ];
+                            function splitGeneric(text) {
+                              text = text.replace(/"/g, '').trim();
+                              if (text.length < 15) return [text];
 
-                            function smartSplit(text) {
-                              // If the text is short (single instruction), just return it as-is
-                              if (text.length < 60) return [text];
+                              var hasPunctuation = /[\n;•\u00b7]|\.\s+/.test(text);
 
-                              var results = [];
-                              var current = '';
-                              var i = 0;
-
-                              while (i < text.length) {
-                                // Check if any keyword starts at this position
-                                var matched = false;
-                                if (current.trim().length > 0) {
-                                  for (var k = 0; k < SPLIT_KEYWORDS.length; k++) {
-                                    var kw = SPLIT_KEYWORDS[k];
-                                    if (text.substr(i, kw.length).toLowerCase() === kw.toLowerCase()) {
-                                      // Save current chunk if non-empty
-                                      var chunk = current.trim().replace(/[.,\s]+$/, '');
-                                      if (chunk) results.push(chunk);
-                                      current = '';
-                                      matched = true;
-                                      break;
-                                    }
-                                  }
-                                }
-
-                                // Also split on full-stop followed by a space + uppercase letter
-                                if (!matched && text[i] === '.' && i + 2 < text.length && text[i + 1] === ' ' && text[i + 2] === text[i + 2].toUpperCase() && text[i + 2] !== ' ') {
-                                  var chunk = current.trim();
-                                  if (chunk) results.push(chunk);
-                                  current = '';
-                                  i++; // skip the dot
-                                  continue;
-                                }
-
-                                current += text[i];
-                                i++;
+                              if (hasPunctuation) {
+                                var lines = text.split(/[\n;•\u00b7]|\s+[-*]\s+/);
+                                var results = [];
+                                lines.forEach(function(line) {
+                                  var sentences = line.split(/\.\s+/);
+                                  sentences.forEach(function(s) {
+                                    s = s.trim().replace(/\.$/, '');
+                                    if (s) results.push(s);
+                                  });
+                                });
+                                return results;
                               }
 
-                              // Push last chunk
-                              var last = current.trim().replace(/[.,\s]+$/, '');
-                              if (last) results.push(last);
+                              var words = text.split(/\s+/);
+                              var results = [];
+                              var current = [];
 
-                              return results.length > 0 ? results : [text];
+                              for (var i = 0; i < words.length; i++) {
+                                var word = words[i];
+                                var isCapitalized = /^[A-Z][a-z]/.test(word);
+
+                                if (isCapitalized && current.length > 0) {
+                                  var lastWord = current[current.length - 1];
+                                  var precededByLowercase = /[a-z]$/.test(lastWord);
+
+                                  if (precededByLowercase || current.length >= 2) {
+                                    results.push(current.join(' '));
+                                    current = [word];
+                                    continue;
+                                  }
+                                }
+                                current.push(word);
+                              }
+
+                              if (current.length > 0) {
+                                results.push(current.join(' '));
+                              }
+
+                              return results;
                             }
 
                             var bullets = [];
-
                             if (items.length === 1) {
-                              // Single item — may be a long concatenated string. Smart-split it.
-                              bullets = smartSplit(items[0]);
+                              bullets = splitGeneric(items[0]);
                             } else {
-                              // Multiple list items from Shopify metafield — use as-is, but
-                              // still run smart-split in case any single item has multiple instructions.
-                              items.forEach(function(item) {
-                                var sub = smartSplit(item);
-                                sub.forEach(function(s) { bullets.push(s); });
-                              });
+                              bullets = items;
                             }
 
                             // Render
