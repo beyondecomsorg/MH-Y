@@ -2,32 +2,14 @@
   ==============================================================================
   SNIPPET: shop-the-look.liquid
   ==============================================================================
-  Renders "Shop the Look" & "Discover More" complementary products carousel block.
+  Renders "Shop the Look" collection product carousel block.
 {% endcomment %}
 
 {% liquid
   assign block_id = block.id | default: section.id
-  assign tab1_title = block.settings.tab1_title | default: "SHOP THE LOOK"
-  assign tab2_title = block.settings.tab2_title | default: "DISCOVER MORE"
+  assign heading = block.settings.heading | default: "Selected For You"
   assign limit = block.settings.limit | default: 6
-  assign rec_method = block.settings.rec_method | default: "both"
-
-  # Determine current product type/category
-  assign current_type = product.type | downcase
-  assign current_title = product.title | downcase
-  
-  assign target_category = ""
-  if current_type contains "shirt" or current_title contains "shirt"
-    assign target_category = "pant,trouser,bottom"
-  elsif current_type contains "pant" or current_type contains "trouser" or current_title contains "pant" or current_title contains "trouser"
-    assign target_category = "shirt,top,upper"
-  endif
-
-  # Fallback collection
-  assign main_collection = product.collections.first
-  if block.settings.fallback_collection != blank
-    assign main_collection = block.settings.fallback_collection
-  endif
+  assign selected_collection = collections[block.settings.collection]
 %}
 
 <style>
@@ -38,54 +20,16 @@
     box-sizing: border-box;
   }
 
-  #stl-block-{{ block_id }} .stl-tabs-header {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    border-bottom: 1px solid #e5e5e5;
-    padding-bottom: 0;
-    margin-bottom: 20px;
-    width: 100%;
-    
-  }
-
-  #stl-block-{{ block_id }} .stl-tab-btn {
-    background: transparent;
-    border: none;
-    padding: 0 0 10px 0;
+  #stl-block-{{ block_id }} .stl-heading {
     font-size: 13px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    font-weight: 600;
-    color: #888888;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.2s ease;
-  }
-
-  #stl-block-{{ block_id }} .stl-tab-btn.active {
-    color: #11172b;
     font-weight: 700;
-  }
-
-  #stl-block-{{ block_id }} .stl-tab-btn.active::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: 0;
+    color: #11172b;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
     width: 100%;
-    height: 2px;
-    background-color: #11172b;
-    box-shadow: 0 3px 0 #11172b;
-  }
-
-  #stl-block-{{ block_id }} .stl-tab-content {
-    display: none;
-    width: 100%;
-  }
-
-  #stl-block-{{ block_id }} .stl-tab-content.active {
-    display: block;
   }
 
   /* Carousel Grid & Scroll Snap */
@@ -270,131 +214,44 @@
 
 <div id="stl-block-{{ block_id }}" class="stl-block-container" {{ block.shopify_attributes }}>
   
-  <!-- Tabs Header -->
-  <div class="stl-tabs-header">
-    <button type="button" class="stl-tab-btn active" data-tab="look-{{ block_id }}">
-      {{ tab1_title }}
+  {% if heading != blank %}
+    <h3 class="stl-heading">{{ heading }}</h3>
+  {% endif %}
+
+  <div class="stl-carousel-wrapper">
+    <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
-    <button type="button" class="stl-tab-btn" data-tab="discover-{{ block_id }}">
-      {{ tab2_title }}
+    <div class="stl-carousel js-stl-carousel">
+      {% liquid
+        if selected_collection != blank
+          for item in selected_collection.products limit: limit
+            unless item.id == product.id
+              render 'shop-the-look-card', item: item
+            endunless
+          endfor
+        else
+          for item in collections.all.products limit: limit
+            unless item.id == product.id
+              render 'shop-the-look-card', item: item
+            endunless
+          endfor
+        endif
+      %}
+    </div>
+    <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="20"
+           height="20"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="3"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+          <path d="M15 18L9 12L15 6"/>
+      </svg>
     </button>
-  </div>
-
-  <!-- Tab 1: Shop the Look (Complementary Products) -->
-  <div id="stl-tab-content-look-{{ block_id }}" class="stl-tab-content active">
-    <div class="stl-carousel-wrapper">
-      <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="stl-carousel js-stl-carousel">
-        {% liquid
-          assign look_count = 0
-          
-          # Native complementary products check
-          assign comp_products = product.metafields.shopify--discovery--product_recommendations.complementary_products.value
-          if comp_products != blank
-            for comp in comp_products limit: limit
-              assign look_count = look_count | plus: 1
-              render 'shop-the-look-card', item: comp
-            endfor
-          endif
-        %}
-
-        {% if look_count == 0 and recommendations.performed and recommendations.products_count > 0 %}
-          {% for rec in recommendations.products limit: limit %}
-            {% assign look_count = look_count | plus: 1 %}
-            {% render 'shop-the-look-card', item: rec %}
-          {% endfor %}
-        {% endif %}
-
-        {% comment %} Rule-based fallback if no native recommendations found {% endcomment %}
-        {% if look_count == 0 and main_collection != blank %}
-          {% assign targets = target_category | split: ',' %}
-          {% for item in main_collection.products limit: 20 %}
-            {% unless item.id == product.id %}
-              {% assign item_type = item.type | downcase %}
-              {% assign item_title = item.title | downcase %}
-              {% assign is_match = false %}
-              
-              {% if target_category == "" %}
-                {% assign is_match = true %}
-              {% else %}
-                {% for t in targets %}
-                  {% if item_type contains t or item_title contains t %}
-                    {% assign is_match = true %}
-                    {% break %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-
-              {% if is_match %}
-                {% assign look_count = look_count | plus: 1 %}
-                {% render 'shop-the-look-card', item: item %}
-                {% if look_count >= limit %}{% break %}{% endif %}
-              {% endif %}
-            {% endunless %}
-          {% endfor %}
-        {% endif %}
-
-        {% comment %} Ultimate fallback: Render first items from collection {% endcomment %}
-        {% if look_count == 0 and main_collection != blank %}
-          {% for item in main_collection.products limit: limit %}
-            {% unless item.id == product.id %}
-              {% render 'shop-the-look-card', item: item %}
-            {% endunless %}
-          {% endfor %}
-        {% endif %}
-      </div>
-      <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="20"
-     height="20"
-     viewBox="0 0 24 24"
-     fill="none"
-     stroke="currentColor"
-     stroke-width="3"
-     stroke-linecap="round"
-     stroke-linejoin="round">
-    <path d="M15 18L9 12L15 6"/>
-</svg>      </button>
-    </div>
-  </div>
-
-  <!-- Tab 2: Discover More (Collection / Related Products) -->
-  <div id="stl-tab-content-discover-{{ block_id }}" class="stl-tab-content">
-    <div class="stl-carousel-wrapper">
-      <button type="button" class="stl-nav-arrow stl-prev-arrow" aria-label="Previous">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="stl-carousel js-stl-carousel">
-        {% if main_collection != blank %}
-          {% for item in main_collection.products limit: limit %}
-            {% unless item.id == product.id %}
-              {% render 'shop-the-look-card', item: item %}
-            {% endunless %}
-          {% endfor %}
-        {% else %}
-          {% for item in collections.all.products limit: limit %}
-            {% unless item.id == product.id %}
-              {% render 'shop-the-look-card', item: item %}
-            {% endunless %}
-          {% endfor %}
-        {% endif %}
-      </div>
-      <button type="button" class="stl-nav-arrow stl-next-arrow" aria-label="Next">
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="20"
-     height="20"
-     viewBox="0 0 24 24"
-     fill="none"
-     stroke="currentColor"
-     stroke-width="3"
-     stroke-linecap="round"
-     stroke-linejoin="round">
-    <path d="M9 18L15 12L9 6"/>
-</svg>
-      </button>
-    </div>
   </div>
 
 </div>
@@ -403,22 +260,6 @@
   (function() {
     const container = document.getElementById('stl-block-{{ block_id }}');
     if (!container) return;
-
-    const tabBtns = container.querySelectorAll('.stl-tab-btn');
-    const tabContents = container.querySelectorAll('.stl-tab-content');
-
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-tab');
-        
-        tabBtns.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
-
-        this.classList.add('active');
-        const activeContent = container.querySelector('#stl-tab-content-' + targetId);
-        if (activeContent) activeContent.classList.add('active');
-      });
-    });
 
     // Arrow navigation handlers
     container.addEventListener('click', function(e) {

@@ -98,10 +98,8 @@
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
-            "tab1_title": "Selected For You",
-            "tab2_title": "",
-            "rec_method": "both",
-            "fallback_collection": "bestseller",
+            "heading": "Selected For You",
+            "collection": "bestseller",
             "limit": 6
           }
         }

@@ -244,6 +244,10 @@
   visibility: visible;
   pointer-events: auto;
 }
+.stl-next-arrow svg {
+    transform: rotate(180deg);
+    transform-origin: center;
+}
 
 /* Hide sticky add-to-cart when any side drawer (like cart drawer) is open */
 .slideout-right--open .mhy-sticky-atc,
@@ -3554,4 +3558,30 @@ h1.product-title {
   text-transform: none !important;
   text-align: center !important;
 }
+
+/* Wash Care & Product Feature Smart Lists */
+ul.wash-care-list,
+ul.product-feature-list {
+  list-style: disc !important;
+  padding-left: 20px !important;
+  margin: 8px 0 !important;
+}
+
+ul.wash-care-list li,
+ul.product-feature-list li {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #444 !important;
+  margin-bottom: 6px !important;
+  background: transparent !important;
+  padding: 0 !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+}
+
+ul.wash-care-list li:last-child,
+ul.product-feature-list li:last-child {
+  margin-bottom: 0 !important;
+}
+
 

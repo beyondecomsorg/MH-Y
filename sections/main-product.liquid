@@ -826,22 +826,167 @@ nav.pdp-breadcrumb.row{
                         <h5 class="accordion-thumb">Product Feature</h5>
                         <div class="accordion-panel">
                             {% assign product_feature_array = product.metafields.custom.product_feature.value %}
-                              {% for item in product_feature_array %}
-                                <p>{{ item }}</p>
-                              {% endfor %}
+                            <ul class="product-feature-list" id="product-feature-{{ product.id }}" data-raw="{% for item in product_feature_array %}{{ item | remove: '"' | strip }}|||{% endfor %}">
+                            </ul>
                         </div>
                     </li>
-                      {% endif %}
+                    <script>
+                      (function() {
+                        var list = document.getElementById('product-feature-{{ product.id }}');
+                        if (!list) return;
+
+                        var raw = list.getAttribute('data-raw') || '';
+                        var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
+
+                        function splitFeatures(text) {
+                          if (text.length < 30) return [text];
+                          
+                          var words = text.trim().split(/\s+/);
+                          var features = [];
+                          var currentFeature = [];
+                          
+                          for (var i = 0; i < words.length; i++) {
+                            var word = words[i];
+                            var isUppercase = /^[A-Z]/.test(word);
+                            
+                            if (isUppercase && currentFeature.length > 0) {
+                              var lastWord = currentFeature[currentFeature.length - 1];
+                              var lastWordIsLowercase = /^[a-z]/.test(lastWord);
+                              
+                              if (lastWordIsLowercase || currentFeature.length >= 2) {
+                                features.push(currentFeature.join(' '));
+                                currentFeature = [word];
+                                continue;
+                              }
+                            }
+                            
+                            currentFeature.push(word);
+                          }
+                          
+                          if (currentFeature.length > 0) {
+                            features.push(currentFeature.join(' '));
+                          }
+                          
+                          return features;
+                        }
+
+                        var bullets = [];
+                        if (items.length === 1) {
+                          bullets = splitFeatures(items[0]);
+                        } else {
+                          items.forEach(function(item) {
+                            var sub = splitFeatures(item);
+                            sub.forEach(function(s) { bullets.push(s); });
+                          });
+                        }
+
+                        var html = '';
+                        bullets.forEach(function(b) {
+                          var clean = b.replace(/"/g, '').trim().replace(/[.,]+$/, '');
+                          if (clean) html += '<li>' + clean + '</li>';
+                        });
+                        list.innerHTML = html;
+                      })();
+                    </script>
+                    {% endif %}
                       {% if product.metafields.custom.wash_care != blank %}
                         <li class="accordion-item">
                           <h5 class="accordion-thumb">Washcare</h5>
                           <div class="accordion-panel">
-                            {% assign wash_care_array = product.metafields.custom.wash_care.value %}
-                              {% for item in wash_care_array %}
-                                <p>{{ item }}</p>
-                              {% endfor %}
+                            {% assign wash_care_value = product.metafields.custom.wash_care.value %}
+                            {%- comment -%}
+                              Output raw items as JSON-safe data. JS will handle smart splitting.
+                              Handles both List (multiple items) and a single long string.
+                            {%- endcomment -%}
+                            <ul class="wash-care-list" id="wash-care-{{ product.id }}" data-raw="{% for item in wash_care_value %}{{ item | remove: '"' | strip }}|||{% endfor %}">
+                            </ul>
                           </div>
                         </li>
+                        <script>
+                          (function() {
+                            var list = document.getElementById('wash-care-{{ product.id }}');
+                            if (!list) return;
+
+                            var raw = list.getAttribute('data-raw') || '';
+                            // Split by our sentinel delimiter and clean up
+                            var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
+
+                            // Keywords that signal a new instruction sentence
+                            var SPLIT_KEYWORDS = [
+                              'Use ', 'Avoid ', 'Do not ', 'To remove ', 'Machine wash', 'Wash ',
+                              'Line dry', 'Low heat', 'Iron ', 'Hand wash', 'Dry clean', 'Tumble dry',
+                              'Cold water', 'Warm water', 'Rinse', 'Soak', 'Bleach', 'Fabric softener',
+                              'Wring', 'Squeeze', 'Hang', 'Lay flat', 'Gentle cycle', 'Normal spin'
+                            ];
+
+                            function smartSplit(text) {
+                              // If the text is short (single instruction), just return it as-is
+                              if (text.length < 60) return [text];
+
+                              var results = [];
+                              var current = '';
+                              var i = 0;
+
+                              while (i < text.length) {
+                                // Check if any keyword starts at this position
+                                var matched = false;
+                                if (current.trim().length > 0) {
+                                  for (var k = 0; k < SPLIT_KEYWORDS.length; k++) {
+                                    var kw = SPLIT_KEYWORDS[k];
+                                    if (text.substr(i, kw.length).toLowerCase() === kw.toLowerCase()) {
+                                      // Save current chunk if non-empty
+                                      var chunk = current.trim().replace(/[.,\s]+$/, '');
+                                      if (chunk) results.push(chunk);
+                                      current = '';
+                                      matched = true;
+                                      break;
+                                    }
+                                  }
+                                }
+
+                                // Also split on full-stop followed by a space + uppercase letter
+                                if (!matched && text[i] === '.' && i + 2 < text.length && text[i + 1] === ' ' && text[i + 2] === text[i + 2].toUpperCase() && text[i + 2] !== ' ') {
+                                  var chunk = current.trim();
+                                  if (chunk) results.push(chunk);
+                                  current = '';
+                                  i++; // skip the dot
+                                  continue;
+                                }
+
+                                current += text[i];
+                                i++;
+                              }
+
+                              // Push last chunk
+                              var last = current.trim().replace(/[.,\s]+$/, '');
+                              if (last) results.push(last);
+
+                              return results.length > 0 ? results : [text];
+                            }
+
+                            var bullets = [];
+
+                            if (items.length === 1) {
+                              // Single item — may be a long concatenated string. Smart-split it.
+                              bullets = smartSplit(items[0]);
+                            } else {
+                              // Multiple list items from Shopify metafield — use as-is, but
+                              // still run smart-split in case any single item has multiple instructions.
+                              items.forEach(function(item) {
+                                var sub = smartSplit(item);
+                                sub.forEach(function(s) { bullets.push(s); });
+                              });
+                            }
+
+                            // Render
+                            var html = '';
+                            bullets.forEach(function(b) {
+                              var clean = b.replace(/"/g, '').trim().replace(/[.,]+$/, '');
+                              if (clean) html += '<li>' + clean + '</li>';
+                            });
+                            list.innerHTML = html;
+                          })();
+                        </script>
                       {% endif %}
                   </ul>
                   
@@ -1064,31 +1209,14 @@ nav.pdp-breadcrumb.row{
       "settings": [
         {
           "type": "text",
-          "id": "tab1_title",
-          "label": "Tab 1 Title",
-          "default": "SHOP THE LOOK"
-        },
-        {
-          "type": "text",
-          "id": "tab2_title",
-          "label": "Tab 2 Title",
-          "default": "DISCOVER MORE"
-        },
-        {
-          "type": "select",
-          "id": "rec_method",
-          "label": "Recommendation Method",
-          "options": [
-            { "value": "both", "label": "Native Complementary + Category Rule Fallback" },
-            { "value": "native", "label": "Native Complementary Only" },
-            { "value": "rule_based", "label": "Category Rule Fallback Only" }
-          ],
-          "default": "both"
+          "id": "heading",
+          "label": "Section Heading",
+          "default": "Selected For You"
         },
         {
           "type": "collection",
-          "id": "fallback_collection",
-          "label": "Fallback / Discover More Collection"
+          "id": "collection",
+          "label": "Collection"
         },
         {
           "type": "range",
