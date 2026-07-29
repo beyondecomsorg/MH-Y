@@ -372,6 +372,7 @@
   <script src="{{ 'theme.js' | asset_url }}" defer></script>
 
   {% section 'mailing-popup' %}
+  {% section 'welcome-popup' %}
 
   {%- if request.page_type contains 'customers/' or template == 'cart' -%}
     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>

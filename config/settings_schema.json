@@ -910,6 +910,134 @@
     },
     {
       "type": "header",
+      "content": "Cart Promo Alert"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_promo_alert",
+      "label": "Show cart promo alert",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "cart_promo_alert_text",
+      "label": "Promo text",
+      "default": "<p>Free Reusable Cotton Pouch with Every Purchase</p>"
+    },
+    {
+      "type": "select",
+      "id": "cart_promo_alert_icon",
+      "label": "Choose an icon",
+      "default": "bag",
+      "options": [
+        {
+          "value": "appliance",
+          "label": "Appliance"
+        },
+        {
+          "value": "bag",
+          "label": "Bag"
+        },
+        {
+          "value": "battery",
+          "label": "Battery"
+        },
+        {
+          "value": "bed",
+          "label": "Bed"
+        },
+        {
+          "value": "bell",
+          "label": "Bell"
+        },
+        {
+          "value": "calendar",
+          "label": "Calendar"
+        },
+        {
+          "value": "camera",
+          "label": "Camera"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "chair",
+          "label": "Chair"
+        },
+        {
+          "value": "chat",
+          "label": "Chat"
+        },
+        {
+          "value": "checkmark",
+          "label": "Checkmark"
+        },
+        {
+          "value": "gift",
+          "label": "Gift"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "menu-dots",
+          "label": "Menu dots"
+        },
+        {
+          "value": "money",
+          "label": "Money"
+        },
+        {
+          "value": "promo",
+          "label": "Promo"
+        },
+        {
+          "value": "sale-tag",
+          "label": "Sale tag"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "secure",
+          "label": "Secure"
+        },
+        {
+          "value": "share",
+          "label": "Share"
+        },
+        {
+          "value": "ship-truck",
+          "label": "Ship truck"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        },
+        {
+          "value": "user",
+          "label": "User"
+        },
+        {
+          "value": "wish",
+          "label": "Wish"
+        },
+        {
+          "value": "wish-focus",
+          "label": "Wish focus"
+        }
+      ]
+    },
+    {
+      "type": "header",
       "content": "Shipping Calculator"
     },
     {

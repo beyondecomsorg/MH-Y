@@ -26,9 +26,34 @@
             "show_gift_card_recipient": false
           }
         },
+        "product_feature_icons_new": {
+          "type": "product_feature_icons",
+          "settings": {}
+        },
+        "available_benefits_4EjjVW": {
+          "type": "available_benefits",
+          "settings": {
+            "heading": "AVAILABLE BENEFITS",
+            "coupon_code": "ONLYEXCHANGE",
+            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
+            "tnc_url": "",
+            "tnc_text": "T & C",
+            "accent_color": "#b8860b"
+          }
+        },
         "share_WKEqCy": {
           "type": "share",
           "settings": {}
+        },
+        "promo_alert_default": {
+          "type": "promo_alert",
+          "settings": {
+            "text": "<p>Free Reusable Cotton Pouch with Every Purchase</p>",
+            "icon": "bag",
+            "background_color": "#f8f8f8",
+            "text_color": "#121212",
+            "border_color": "rgba(0,0,0,0)"
+          }
         },
         "complementary_products_BMGWQw": {
           "type": "complementary_products",
@@ -70,24 +95,13 @@
             "tab_text": "<p>{{ product.metafields.custom.wash_care | metafield_text }}</p>"
           }
         },
-        "available_benefits_4EjjVW": {
-          "type": "available_benefits",
-          "settings": {
-            "heading": "AVAILABLE BENEFITS",
-            "coupon_code": "ONLYEXCHANGE",
-            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
-            "tnc_url": "",
-            "tnc_text": "T & C",
-            "accent_color": "#b8860b"
-          }
-        },
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
-            "tab1_title": "SHOP THE LOOK",
-            "tab2_title": "DISCOVER MORE",
+            "tab1_title": "",
+            "tab2_title": "Selected For You",
             "rec_method": "both",
-            "fallback_collection": "",
+            "fallback_collection": "bestseller",
             "limit": 6
           }
         }
@@ -95,13 +109,15 @@
       "block_order": [
         "896887d5-6a65-431c-9081-550cbc1a6676",
         "569acd10-43ac-4854-adc8-bc64927b54bb",
+        "product_feature_icons_new",
+        "available_benefits_4EjjVW",
         "share_WKEqCy",
+        "promo_alert_default",
         "complementary_products_BMGWQw",
         "tab_content_ncpXRU",
         "tab_content_bXpzM3",
         "tab_content_XMD97A",
         "tab_content_PpLMqd",
-        "available_benefits_4EjjVW",
         "shop_the_look_QyHztr"
       ],
       "custom_css": [
@@ -316,11 +332,6 @@
         "section_description": ""
       }
     },
-    "product_feature_svg_tAQb8G": {
-      "type": "product-feature-svg",
-      "name": "Fabric Properties",
-      "settings": {}
-    },
     "product_icon_feature_section_Y9aDmk": {
       "type": "product-icon-feature-section",
       "disabled": true,
@@ -434,7 +445,6 @@
     "related-products",
     "1625846216758d1de0",
     "product_icon_grid_Rx4X74",
-    "product_feature_svg_tAQb8G",
     "product_icon_feature_section_Y9aDmk",
     "product-recommendations",
     "opinew-reviews-product-page-code",

@@ -251,6 +251,30 @@
   {% endif %}
   <div class="ajax-cart__summary-wrapper span-12 auto {% if cart.item_count < 1 %}hide{% endif %} js-cart-summary">
     <div class="ajax-cart__final-details">
+      {%- if settings.show_cart_promo_alert -%}
+        {% liquid
+          assign icon = settings.cart_promo_alert_icon
+          assign type = 'fash-theme'
+          case icon
+          when 'bag', 'cart', 'chat', 'checkmark', 'gift', 'grid', 'home', 'menu-dots', 'money', 'promo', 'sale-tag', 'search', 'secure', 'share', 'ship-truck', 'star', 'user', 'wish', 'wish-focus'
+            assign type = 'apollo'
+          endcase
+        %}
+        <div class="product__section--promo-alert" style="background-color: #f8f8f8; color: #121212; border: 1px solid rgba(0,0,0,0); margin: 0 0 15px 0 !important; width: 100%;">
+          <div class="promo-alert__icon">
+            {% render 'snip-icons',
+              wrapper: '.promo-alert__icon',
+              type: type,
+              icon: icon,
+              size: '18px',
+              fill: '#121212',
+              hover: '#121212' %}
+          </div>
+          <div class="promo-alert__text">
+            {{ settings.cart_promo_alert_text }}
+          </div>
+        </div>
+      {%- endif -%}
       <div class="subtotal">
         <p class="title a-left mb0">{{ 'cart.general.subtotal' | t }}</p>
         <p class="subtotal-price a-right mb0"><span class="cart-original-total cart-price block js-cart-subtotal">{{ cart.items_subtotal_price | money }}</span></p>

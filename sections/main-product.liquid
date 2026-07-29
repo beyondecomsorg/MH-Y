@@ -727,6 +727,11 @@ nav.pdp-breadcrumb.row{
               product: product
             %}
 
+          {% when 'product_feature_icons' %}
+            <div class="product__section--product_feature_icons product__section--element" {{ block.shopify_attributes }}>
+              {% render 'product-feature-svg' %}
+            </div>
+
           {% when 'available_benefits' %}
             {%
               render 'available-benefits',
@@ -763,6 +768,32 @@ nav.pdp-breadcrumb.row{
               {% render 'social' with product %}
             </div>
                  
+
+          {%- when 'promo_alert' -%}
+            {% liquid
+              assign icon = block.settings.icon
+              assign type = 'fash-theme'
+              case icon
+              when 'bag', 'cart', 'chat', 'checkmark', 'gift', 'grid', 'home', 'menu-dots', 'money', 'promo', 'sale-tag', 'search', 'secure', 'share', 'ship-truck', 'star', 'user', 'wish', 'wish-focus'
+                assign type = 'apollo'
+              endcase
+            %}
+            {% unless block.settings.text == blank %}
+              <div class="product__section--promo-alert product__section--element" {{ block.shopify_attributes }} style="background-color: {{ block.settings.background_color }}; color: {{ block.settings.text_color }}; border: 1px solid {{ block.settings.border_color }};">
+                <div class="promo-alert__icon">
+                  {% render 'snip-icons',
+                    wrapper: '.promo-alert__icon',
+                    type: type,
+                    icon: icon,
+                    size: '18px',
+                    fill: block.settings.text_color,
+                    hover: block.settings.text_color %}
+                </div>
+                <div class="promo-alert__text">
+                  {{ block.settings.text }}
+                </div>
+              </div>
+            {% endunless %}
 
           {% when '@app' %}
             <div class="product__section--app product__section--element {{ block.shopify_attributes }}">
@@ -1071,6 +1102,11 @@ nav.pdp-breadcrumb.row{
       ]
     },
     {
+      "type": "product_feature_icons",
+      "name": "Product Feature Icons",
+      "settings": []
+    },
+    {
       "type": "available_benefits",
       "name": "Available Benefits",
       "settings": [
@@ -1270,6 +1306,149 @@ nav.pdp-breadcrumb.row{
       "limit": 1,
       "settings": []
     },
+    {
+      "type": "promo_alert",
+      "name": "Promo Alert",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Free Reusable Cotton Pouch with Every Purchase</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Choose an icon",
+          "default": "bag",
+          "options": [
+            {
+              "value": "appliance",
+              "label": "Appliance"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "battery",
+              "label": "Battery"
+            },
+            {
+              "value": "bed",
+              "label": "Bed"
+            },
+            {
+              "value": "bell",
+              "label": "Bell"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "camera",
+              "label": "Camera"
+            },
+            {
+              "value": "cart",
+              "label": "Cart"
+            },
+            {
+              "value": "chair",
+              "label": "Chair"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "grid",
+              "label": "Grid"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "menu-dots",
+              "label": "Menu dots"
+            },
+            {
+              "value": "money",
+              "label": "Money"
+            },
+            {
+              "value": "promo",
+              "label": "Promo"
+            },
+            {
+              "value": "sale-tag",
+              "label": "Sale tag"
+            },
+            {
+              "value": "search",
+              "label": "Search"
+            },
+            {
+              "value": "secure",
+              "label": "Secure"
+            },
+            {
+              "value": "share",
+              "label": "Share"
+            },
+            {
+              "value": "ship-truck",
+              "label": "Ship truck"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "user",
+              "label": "User"
+            },
+            {
+              "value": "wish",
+              "label": "Wish"
+            },
+            {
+              "value": "wish-focus",
+              "label": "Wish focus"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#f8f8f8"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#121212"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border Color",
+          "default": "rgba(0,0,0,0)"
+        }
+      ]
+    },
+
 
 
     {

@@ -1,0 +1,586 @@
+{%- liquid
+  assign popup_enabled      = section.settings.enable
+  assign popup_delay        = section.settings.delay
+  assign popup_anim         = section.settings.animation_duration
+  assign popup_heading      = section.settings.heading
+  assign popup_subheading   = section.settings.subheading
+  assign popup_description  = section.settings.description
+  assign popup_btn_text     = section.settings.button_text
+  assign popup_success_msg  = section.settings.success_message
+  assign popup_coupon       = section.settings.coupon_code
+  assign popup_min_order    = section.settings.min_order_text
+  assign popup_width        = section.settings.popup_width
+  assign popup_radius       = section.settings.border_radius
+  assign popup_bg           = section.settings.bg_color
+  assign popup_text         = section.settings.text_color
+  assign popup_btn          = section.settings.btn_color
+  assign popup_btn_txt      = section.settings.btn_text_color
+  assign popup_overlay      = section.settings.overlay_opacity | divided_by: 100.0
+  assign popup_panel_bg     = section.settings.panel_bg_color
+  assign popup_panel_accent = section.settings.panel_accent_color
+-%}
+
+<div
+  id="welcome-popup-root"
+  class="wcp-overlay"
+  aria-modal="true"
+  role="dialog"
+  aria-label="Welcome offer popup"
+  data-enabled="{{ popup_enabled }}"
+  data-delay="{{ popup_delay }}"
+  data-anim="{{ popup_anim }}"
+  style="display:none; --wcp-radius:{{ popup_radius }}px; --wcp-overlay:{{ popup_overlay }}; --wcp-anim:{{ popup_anim }}s; --wcp-panel-bg:{{ popup_panel_bg }}; --wcp-panel-accent:{{ popup_panel_accent }}; --wcp-bg:{{ popup_bg }}; --wcp-text:{{ popup_text }}; --wcp-btn:{{ popup_btn }}; --wcp-btn-txt:{{ popup_btn_txt }}; --wcp-width:{{ popup_width }}px;"
+>
+  <div class="wcp-modal">
+
+    <div class="wcp-panel">
+      <div class="wcp-panel__inner">
+        {% if section.settings.logo != blank %}
+          <div class="wcp-panel__logo">
+            <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" loading="lazy" width="120">
+          </div>
+        {% else %}
+          <div class="wcp-panel__brand">{{ shop.name }}</div>
+        {% endif %}
+        <div class="wcp-panel__badge">
+          <span class="wcp-badge__pct">10<span class="wcp-badge__sym">%</span></span>
+          <span class="wcp-badge__label">OFF</span>
+        </div>
+        <p class="wcp-panel__offer">{{ popup_subheading }}</p>
+        <div class="wcp-panel__stars">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="wcp-panel__trust">Trusted by 50,000+ happy customers</p>
+        {% if section.settings.side_image != blank %}
+          <div class="wcp-panel__bg-img" style="background-image:url('{{ section.settings.side_image | image_url: width: 800 }}')"></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="wcp-form-side">
+      <button class="wcp-close" id="wcp-close-btn" aria-label="Close popup">&#x00D7;
+      </button>
+
+      <div class="wcp-form-view" id="wcp-form-view">
+        <div class="wcp-form-top">
+          <div class="wcp-emoji">&#x1F389;</div>
+          <h2 class="wcp-heading">{{ popup_heading }}</h2>
+          <p class="wcp-description">{{ popup_description }}</p>
+        </div>
+
+        {% form 'customer', class: 'wcp-form', id: 'wcp-customer-form' %}
+          <input type="hidden" name="contact[last_name]"  id="wcp-last-name"   value="">
+          <input type="hidden" name="contact[note]"       id="wcp-note-field"  value="">
+          <input type="hidden" name="contact[tags]"       value="prospect, newsletter, welcome-popup, 10-off">
+          <input type="hidden" name="contact[email_marketing_consent][value]"              value="subscribed">
+          <input type="hidden" name="contact[email_marketing_consent][consent_updated_at]" value="" id="wcp-consent-ts">
+
+          <div class="wcp-field">
+            <label class="wcp-label" for="wcp-name">Full Name <span class="wcp-opt">(optional)</span></label>
+            <input class="wcp-input" type="text" id="wcp-name" name="contact[first_name]" placeholder="e.g. Rahul Sharma" autocomplete="name">
+          </div>
+
+          <div class="wcp-field">
+            <label class="wcp-label" for="wcp-email">Email Address <span class="wcp-req">*</span></label>
+            <input class="wcp-input" type="email" id="wcp-email" name="contact[email]" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <div class="wcp-field">
+            <label class="wcp-label" for="wcp-phone">Mobile Number <span class="wcp-opt">(optional)</span></label>
+            <input class="wcp-input" type="tel" id="wcp-phone" name="contact[phone]" placeholder="+91 98765 43210" autocomplete="tel">
+          </div>
+
+          <button type="submit" class="wcp-submit">
+            &#x2714; {{ popup_btn_text }}
+          </button>
+        {% endform %}
+
+        <button class="wcp-decline" id="wcp-decline-btn">No thanks, I'll pay full price</button>
+      </div>
+
+      <div class="wcp-success-view" id="wcp-success-view" style="display:none">
+        <div class="wcp-success__icon">&#x1F38A;</div>
+        <h2 class="wcp-heading">You're in!</h2>
+        <p class="wcp-success__msg">{{ popup_success_msg }}</p>
+        <div class="wcp-coupon-box">
+          <div class="wcp-coupon-inner">
+            <span class="wcp-coupon-code">{{ popup_coupon }}</span>
+            <button class="wcp-copy-btn" id="wcp-copy-btn" data-coupon="{{ popup_coupon }}">Copy</button>
+          </div>
+        </div>
+        {% if popup_min_order != blank %}
+          <p class="wcp-min-order">&#x2714; Valid on orders {{ popup_min_order }}</p>
+        {% endif %}
+        <ul class="wcp-perks">
+          <li>&#x2714; Code applied at checkout</li>
+          <li>&#x2714; Easy 30-day returns</li>
+          <li>&#x2714; Free shipping on eligible orders</li>
+        </ul>
+        <button class="wcp-continue-btn" id="wcp-continue-btn">Start Shopping &rarr;</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.wcp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,var(--wcp-overlay,0.6));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483646;
+  opacity: 0;
+  transition: opacity var(--wcp-anim,.4s) ease;
+  pointer-events: none;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+}
+.wcp-overlay.is-visible { opacity:1; pointer-events:auto; }
+.wcp-modal {
+  display: flex;
+  width: 90%;
+  max-width: var(--wcp-width,820px);
+  min-height: 490px;
+  border-radius: var(--wcp-radius,16px);
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.2);
+  transform: scale(.88) translateY(20px);
+  transition: transform var(--wcp-anim,.4s) cubic-bezier(.16,1,.3,1);
+}
+.wcp-overlay.is-visible .wcp-modal { transform: scale(1) translateY(0); }
+
+/* LEFT PANEL */
+.wcp-panel {
+  width: 42%;
+  flex-shrink: 0;
+  background: var(--wcp-panel-bg,#0d1117);
+  position: relative;
+  overflow: hidden;
+}
+.wcp-panel::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(145deg, rgba(201,168,76,.15) 0%, transparent 60%);
+  z-index:0;
+}
+.wcp-panel::after {
+  content:'';
+  position:absolute;
+  width:300px; height:300px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.05);
+  bottom:-100px; right:-100px;
+  z-index:0;
+}
+.wcp-panel__bg-img {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  opacity:.18; z-index:0;
+}
+.wcp-panel__inner {
+  position:relative; z-index:1;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:40px 28px; text-align:center; height:100%;
+  box-sizing:border-box;
+}
+.wcp-panel__logo img { max-height:38px; object-fit:contain; filter:brightness(0) invert(1); margin-bottom:24px; }
+.wcp-panel__brand { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:28px; }
+.wcp-panel__badge { line-height:1; }
+.wcp-badge__pct { display:block; font-size:88px; font-weight:900; line-height:1; color:var(--wcp-panel-accent,#c9a84c); letter-spacing:-4px; }
+.wcp-badge__sym { font-size:48px; vertical-align:super; }
+.wcp-badge__label { display:block; font-size:26px; font-weight:800; letter-spacing:10px; color:#fff; text-transform:uppercase; margin-top:-6px; margin-bottom:18px; }
+.wcp-panel__offer { font-size:12px; color:rgba(255,255,255,.6); line-height:1.6; margin:0 0 18px; max-width:180px; }
+.wcp-panel__stars { display:flex; gap:3px; color:var(--wcp-panel-accent,#c9a84c); justify-content:center; margin-bottom:7px; }
+.wcp-panel__trust { font-size:10px; color:rgba(255,255,255,.35); letter-spacing:.5px; margin:0; }
+
+/* RIGHT PANEL */
+.wcp-form-side {
+  flex:1; background:var(--wcp-bg,#fff);
+  padding:44px 36px 36px;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative; box-sizing:border-box; overflow-y:auto;
+}
+.wcp-close {
+  position:absolute; top:14px; right:14px;
+  background:#f0f0f0; border:none;
+  width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#333;
+  font-size:20px; line-height:1; font-family:Arial,sans-serif;
+  transition:background .2s,color .2s; padding:0;
+}
+.wcp-close:hover { background:#ddd; color:#000; }
+.wcp-emoji { font-size:34px; margin-bottom:8px; line-height:1; }
+.wcp-heading { font-size:21px; font-weight:800; color:var(--wcp-text,#0d1117); margin:0 0 8px; line-height:1.25; letter-spacing:-.3px; }
+.wcp-description { font-size:12.5px; color:#6b7280; line-height:1.6; margin:0 0 20px; }
+
+/* Form */
+.wcp-form { display:flex; flex-direction:column; gap:11px; }
+.wcp-field { display:flex; flex-direction:column; gap:4px; }
+.wcp-label { font-size:11.5px; font-weight:600; color:#374151; }
+.wcp-opt { font-weight:400; color:#9ca3af; }
+.wcp-req { color:#ef4444; }
+.wcp-input {
+  padding:11px 13px; border:1.5px solid #e5e7eb; border-radius:7px;
+  font-size:13px; font-family:inherit; color:#111827; background:#fafafa;
+  outline:none; transition:border-color .2s,box-shadow .2s; box-sizing:border-box; width:100%;
+}
+.wcp-input::placeholder { color:#d1d5db; }
+.wcp-input:focus { border-color:var(--wcp-btn,#0d1117); background:#fff; box-shadow:0 0 0 3px rgba(13,17,23,.1); }
+.wcp-submit {
+  background:var(--wcp-btn,#0d1117); color:var(--wcp-btn-txt,#fff);
+  border:none; padding:14px 20px; border-radius:8px;
+  font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer;
+  width:100%; margin-top:2px; letter-spacing:.2px;
+  transition:opacity .2s,transform .15s;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wcp-submit:hover { opacity:.9; }
+.wcp-submit:active { transform:scale(.98); }
+.wcp-decline {
+  background:none; border:none; color:#9ca3af; font-size:12px;
+  font-family:inherit; cursor:pointer; margin-top:11px;
+  text-decoration:underline; text-underline-offset:2px; transition:color .2s; padding:0;
+}
+.wcp-decline:hover{
+display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Success */
+.wcp-success-view { text-align:center; }
+.wcp-success__icon { font-size:44px; margin-bottom:10px; }
+.wcp-success__msg { font-size:13.5px; color:#6b7280; margin:0 0 16px; }
+.wcp-coupon-box { background:linear-gradient(135deg,#fefce8,#fef3c7); border:2px dashed var(--wcp-panel-accent,#c9a84c); border-radius:10px; padding:12px 16px; margin:0 0 12px; }
+.wcp-coupon-inner { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.wcp-coupon-code { font-size:22px; font-weight:900; letter-spacing:2px; color:#0d1117; }
+.wcp-copy-btn { display: flex; align-items: center; background:var(--wcp-btn,#0d1117); color:var(--wcp-btn-txt,#fff); border:none; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:700; font-family:inherit; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:opacity .2s; }
+.wcp-copy-btn:hover { opacity:.85; }
+.wcp-min-order { font-size:12px; color:#059669; font-weight:500; margin:0 0 12px; }
+.wcp-perks { list-style:none; padding:0; margin:0 0 18px; display:flex; flex-direction:column; gap:5px; text-align:left; }
+.wcp-perks li { font-size:12px; color:#374151; }
+.wcp-continue-btn { display: flex; align-items: center; justify-content: center; background:var(--wcp-btn,#0d1117); color:var(--wcp-btn-txt,#fff); border:none; padding:13px 20px; border-radius:8px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; width:100%; transition:opacity .2s; }
+.wcp-continue-btn:hover { opacity:.9; }
+
+
+@media (max-width:680px) {
+  .wcp-modal { flex-direction:column; width:96%; min-height:auto; max-height:94vh; overflow-y:auto; }
+  .wcp-panel { width:100%; }
+  .wcp-panel__inner { flex-direction:row; flex-wrap:wrap; justify-content:center; padding:16px 18px; gap:8px; }
+  .wcp-panel__logo, .wcp-panel__brand, .wcp-panel__stars, .wcp-panel__trust { display:none; }
+  .wcp-badge__pct { font-size:40px; }
+  .wcp-badge__sym { font-size:20px; }
+  .wcp-badge__label { font-size:14px; letter-spacing:4px; margin-bottom:0; }
+  .wcp-panel__offer { font-size:11px; max-width:150px; margin:0; }
+  .wcp-form-side { padding:28px 18px 22px; }
+  .wcp-heading { font-size:18px; }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+  var KEY_SUB  = 'wcp_subscribed';
+  var KEY_DISS = 'wcp_dismissed';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var root = document.getElementById('welcome-popup-root');
+    if (!root) return;
+    if (root.getAttribute('data-enabled') !== 'true') return;
+    if (localStorage.getItem(KEY_SUB) === '1') return;
+    if (sessionStorage.getItem(KEY_DISS) === '1') return;
+
+    var delayMs = parseInt(root.getAttribute('data-delay') || '5', 10) * 1000;
+    setTimeout(showPopup, delayMs);
+
+    function showPopup() {
+      root.style.display = 'flex';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { root.classList.add('is-visible'); });
+      });
+    }
+
+    var animMs = parseFloat(root.getAttribute('data-anim') || '0.4') * 1000;
+
+    function closePopup(permanent) {
+      root.classList.remove('is-visible');
+      setTimeout(function() { root.style.display = 'none'; }, animMs);
+      if (permanent) { localStorage.setItem(KEY_SUB, '1'); }
+      else           { sessionStorage.setItem(KEY_DISS, '1'); }
+    }
+
+    var closeBtn    = document.getElementById('wcp-close-btn');
+    var declineBtn  = document.getElementById('wcp-decline-btn');
+    var continueBtn = document.getElementById('wcp-continue-btn');
+    if (closeBtn)    closeBtn.addEventListener('click', function() { closePopup(false); });
+    if (declineBtn)  declineBtn.addEventListener('click', function() { closePopup(false); });
+    if (continueBtn) continueBtn.addEventListener('click', function() { closePopup(true); });
+    root.addEventListener('click', function(e) { if (e.target === root) closePopup(false); });
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && root.classList.contains('is-visible')) closePopup(false);
+    });
+
+    /* -- Form submit ---------------------------------------- */
+    var form        = document.getElementById('wcp-customer-form');
+    var formView    = document.getElementById('wcp-form-view');
+    var successView = document.getElementById('wcp-success-view');
+
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        /* Read visible inputs */
+        var fullName = ((document.getElementById('wcp-name')  || {}).value || '').trim();
+        var phone    = ((document.getElementById('wcp-phone') || {}).value || '').trim();
+
+        /* Split full name into first + last */
+        var parts    = fullName ? fullName.split(/\s+/) : [];
+        var lastName = parts.length > 1 ? parts.slice(1).join(' ') : '';
+
+        /* Build structured note */
+        var now     = new Date();
+        var dateStr = now.toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+        var timeStr = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+        var noteArr = [
+          '--- Welcome Popup Submission ---',
+          fullName ? ('Name: ' + fullName)   : null,
+          phone    ? ('Mobile: ' + phone)    : null,
+          'Source: Welcome Offer Popup',
+          'Offer Claimed: 10% OFF Above \u20b92,999',
+          'Submitted On: ' + dateStr + ' at ' + timeStr
+        ];
+        var noteText = noteArr.filter(Boolean).join('\n');
+
+        /* Inject into hidden fields BEFORE FormData snapshot */
+        var lastNameEl  = document.getElementById('wcp-last-name');
+        var noteFieldEl = document.getElementById('wcp-note-field');
+        var consentEl   = document.getElementById('wcp-consent-ts');
+        if (lastNameEl)  lastNameEl.value  = lastName;
+        if (noteFieldEl) noteFieldEl.value = noteText;
+        if (consentEl)   consentEl.value   = now.toISOString();
+
+        /* Capture all fields AFTER injection */
+        var fd = new FormData(form);
+
+        /* Show success immediately */
+        formView.style.display    = 'none';
+        successView.style.display = 'block';
+        localStorage.setItem(KEY_SUB, '1');
+
+        /* Auto-close after 8 seconds */
+        setTimeout(function() { closePopup(true); }, 8000);
+
+        /* Send to Shopify */
+        fetch(form.getAttribute('action') || '/contact', {
+          method: 'POST',
+          body: fd,
+          headers: { 'Accept': 'text/html, application/xhtml+xml' }
+        }).catch(function(err) { console.error('[WCP] submit error:', err); });
+      });
+    }
+
+    /* -- Copy coupon ---------------------------------------- */
+    var copyBtn = document.getElementById('wcp-copy-btn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        var code = copyBtn.getAttribute('data-coupon');
+        var done = function() {
+          copyBtn.textContent = '\u2713 Copied!';
+          setTimeout(function() { copyBtn.textContent = 'Copy'; }, 2000);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(code).then(done).catch(fb);
+        } else { fb(); }
+        function fb() {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          try { document.execCommand('copy'); done(); } catch(x) {}
+          document.body.removeChild(ta);
+        }
+      });
+    }
+
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Welcome Popup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable Welcome Popup",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "sec",
+      "label": "Delay before showing",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo (shown on dark panel)"
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Left Panel Background Image",
+      "info": "Optional � overlaid at low opacity."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to Our Store!"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Join our community and get early access to new arrivals, exclusive offers, and your personal discount code."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Left Panel Offer Text",
+      "default": "On your first order above \u20b92,999"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "CTA Button Text",
+      "default": "Claim My 10% OFF"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Here is your exclusive welcome code:"
+    },
+    {
+      "type": "text",
+      "id": "coupon_code",
+      "label": "Coupon Code",
+      "default": "WELCOME10"
+    },
+    {
+      "type": "text",
+      "id": "min_order_text",
+      "label": "Minimum Order Note",
+      "default": "above \u20b92,999"
+    },
+    {
+      "type": "range",
+      "id": "popup_width",
+      "min": 500,
+      "max": 960,
+      "step": 20,
+      "unit": "px",
+      "label": "Popup Max Width",
+      "default": 820
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "panel_bg_color",
+      "label": "Left Panel Background",
+      "default": "#0d1117"
+    },
+    {
+      "type": "color",
+      "id": "panel_accent_color",
+      "label": "Left Panel Accent Colour",
+      "default": "#c9a84c"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Form Panel Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#0d1117"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button Colour",
+      "default": "#0d1117"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Backdrop Opacity",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 0.2,
+      "max": 1.0,
+      "step": 0.1,
+      "unit": "sec",
+      "label": "Animation Duration",
+      "default": 0.4
+    }
+  ]
+}
+{% endschema %}

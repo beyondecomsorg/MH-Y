@@ -129,8 +129,24 @@
 
   #ab-block-{{ block_id }} .ab-marquee-wrapper {
     width: 100%;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
     position: relative;
+  }
+
+  /* Thin scrollbar for desktop */
+  @media screen and (min-width: 741px) {
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar {
+      height: 4px;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 2px;
+    }
   }
 
   #ab-block-{{ block_id }} .ab-marquee-track {
