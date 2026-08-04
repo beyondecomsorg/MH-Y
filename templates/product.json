@@ -55,14 +55,6 @@
             "border_color": "rgba(0,0,0,0)"
           }
         },
-        "complementary_products_BMGWQw": {
-          "type": "complementary_products",
-          "settings": {
-            "heading": "Pair it with",
-            "limit": 2,
-            "appearance": "simple"
-          }
-        },
         "tab_content_ncpXRU": {
           "type": "tab_content",
           "disabled": true,
@@ -102,6 +94,14 @@
             "collection": "bestseller",
             "limit": 6
           }
+        },
+        "complementary_products_BMGWQw": {
+          "type": "complementary_products",
+          "settings": {
+            "heading": "Pair it with",
+            "limit": 2,
+            "appearance": "simple"
+          }
         }
       },
       "block_order": [
@@ -111,12 +111,12 @@
         "available_benefits_4EjjVW",
         "share_WKEqCy",
         "promo_alert_default",
-        "complementary_products_BMGWQw",
         "tab_content_ncpXRU",
         "tab_content_bXpzM3",
         "tab_content_XMD97A",
         "tab_content_PpLMqd",
-        "shop_the_look_QyHztr"
+        "shop_the_look_QyHztr",
+        "complementary_products_BMGWQw"
       ],
       "custom_css": [
         ".product__section--text p {background: red; color: white; font-weight: 800; font-size: 16px; padding: 12px; text-transform: uppercase; text-align: center;}",
