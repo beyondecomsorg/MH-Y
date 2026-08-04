@@ -48,11 +48,9 @@
           "type": "available_benefits",
           "settings": {
             "heading": "AVAILABLE BENEFITS",
+            "accent_color": "#b8860b",
             "coupon_code": "ONLYEXCHANGE",
-            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
-            "tnc_url": "",
-            "tnc_text": "T & C",
-            "accent_color": "#b8860b"
+            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns."
           }
         },
         "tab_content_ncpXRU": {
@@ -95,6 +93,18 @@
             "appearance": "simple"
           }
         },
+        "product_info_image_eLmYBB": {
+          "type": "product_info_image",
+          "settings": {
+            "enable_block": true,
+            "image": "shopify://shop_images/final_pouch_website_image.png",
+            "alt_text": "",
+            "desktop_width": "100%",
+            "top_spacing": 16,
+            "bottom_spacing": 16,
+            "border_radius": 4
+          }
+        },
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
@@ -116,6 +126,7 @@
         "tab_content_XMD97A",
         "tab_content_PpLMqd",
         "complementary_products_BMGWQw",
+        "product_info_image_eLmYBB",
         "shop_the_look_QyHztr"
       ],
       "custom_css": [

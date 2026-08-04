@@ -3445,17 +3445,21 @@ h1.product-title {
 /* 6. PRIMARY & SECONDARY CTA BUTTONS */
 .mhy-pdp-cta-container {
   display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
   width: 100% !important;
   margin-top: 12px !important;
   padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .mhy-pdp-primary-btn,
 #addToCart.mhy-pdp-primary-btn {
-  width: 100% !important;
-  height: 52px !important;
+  flex: 1 1 150px !important;
+  width: auto !important;
+  height: 56px !important;
+  min-height: 56px !important;
   background-color: #1a2b4c !important;
   color: #ffffff !important;
   font-size: 15px !important;
@@ -3471,6 +3475,9 @@ h1.product-title {
   letter-spacing: 0.05em !important;
   box-shadow: none !important;
   margin: 0 !important;
+  padding: 0 15px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
 }
 
 .mhy-pdp-primary-btn:hover:not([disabled]),
@@ -3485,13 +3492,26 @@ h1.product-title {
 }
 
 .mhy-pdp-secondary-btn-wrapper {
-  width: 100% !important;
+  flex: 1 1 150px !important;
+  width: auto !important;
   margin: 0 !important;
+  box-sizing: border-box !important;
 }
 
+.mhy-pdp-secondary-btn-wrapper .shopify-payment-button {
+  width: 100% !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.mhy-pdp-secondary-btn-wrapper .shopify-payment-button__button,
 .mhy-pdp-secondary-btn-wrapper .shopify-payment-button__button--unbranded {
   width: 100% !important;
-  height: 52px !important;
+  height: 56px !important;
+  min-height: 56px !important;
   background-color: #ffffff !important;
   color: #1a2b4c !important;
   border: 2px solid #1a2b4c !important;
@@ -3503,8 +3523,15 @@ h1.product-title {
   transition: all 0.2s ease !important;
   box-shadow: none !important;
   margin: 0 !important;
+  padding: 0 15px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
 }
 
+.mhy-pdp-secondary-btn-wrapper .shopify-payment-button__button:hover:not([disabled]),
 .mhy-pdp-secondary-btn-wrapper .shopify-payment-button__button--unbranded:hover:not([disabled]) {
   background-color: #1a2b4c !important;
   color: #ffffff !important;
@@ -3583,5 +3610,253 @@ ul.wash-care-list li:last-child,
 ul.product-feature-list li:last-child {
   margin-bottom: 0 !important;
 }
+
+/* ==========================================================================
+   PRODUCT DETAIL PAGE TYPOGRAPHY COLORS (BRAND COLOR #1A2B4C OVERRIDES)
+   ========================================================================== */
+.product-template,
+.product-template h1,
+.product-template h2,
+.product-template h3,
+.product-template h4,
+.product-template h5,
+.product-template h6,
+.product-template .product__title,
+.product-template p,
+.product-template li,
+.product-template label,
+.product-template .mhy-pdp-qty-label,
+.product-template .option-label,
+.product-template .swatch-title,
+.product-template .price-item--regular,
+.product-template span[data-regular-price],
+.product-template .price-item[data-regular-price],
+.product-template .product__tabs a,
+.product-template .js-tab-trigger,
+.product-template .product__tab-trigger a,
+.product-template .accordion-title,
+.product-template .accordion-header,
+.product-template .product-accordion-trigger,
+.product-template .ab-card,
+.product-template .ab-description,
+.product-template .ab-code-wrapper span,
+.product-template .ab-tnc-link,
+.product-template .benefit-text,
+.product-template .coupon-text,
+.product-template .share-text,
+.product-template .rte,
+.product-template .rte p,
+.product-template .rte li,
+.product-template .rte span,
+.product-template .pdp-breadcrumb,
+.product-template .pdp-breadcrumb a,
+.product-template .bc-current,
+.product-template .bc-sep,
+.product-template ul.wash-care-list li,
+.product-template ul.product-feature-list li,
+.product-template .size-chart,
+.product-template .size-chart a {
+  color: #1A2B4C !important;
+}
+
+/* Explicitly preserve red/sale, green/savings, and system colors */
+.product-template .price-item--sale,
+.product-template .price-item--sale *,
+.product-template .price__badge--sale,
+.product-template .price__badge--sale *,
+.product-template .mhy-pdp-savings-badge,
+.product-template .mhy-pdp-savings-badge *,
+.product-template .note-success,
+.product-template .note-success *,
+.product-template .note-error,
+.product-template .note-error *,
+.product-template .price__badge--sold-out,
+.product-template .price__badge--sold-out * {
+  color: inherit !important;
+}
+
+/* ==========================================================================
+   PDP CUSTOM GALLERY OVERLAY SHARE BUTTON & MODAL POPUP STYLING
+   ========================================================================== */
+#slider {
+  position: relative !important;
+}
+
+.pdp-image-share-btn {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  background-color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  padding: 0 !important;
+}
+
+.pdp-image-share-btn:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pdp-image-share-btn svg {
+  vertical-align: middle !important;
+  display: block !important;
+}
+
+@media screen and (max-width: 740px) {
+  .pdp-image-share-btn {
+    width: 40px !important;
+    height: 40px !important;
+    top: 12px !important;
+    right: 12px !important;
+  }
+  .pdp-image-share-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Modal Popup Backdrop */
+.pdp-share-modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(26, 43, 76, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease !important;
+}
+
+.pdp-share-modal-backdrop:not([hidden]) {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Modal Popup Dialog */
+.pdp-share-modal-content {
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+  width: 90% !important;
+  max-width: 400px !important;
+  padding: 28px 24px 24px 24px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  position: relative !important;
+  transform: translateY(20px) !important;
+  transition: transform 0.3s ease !important;
+  box-sizing: border-box !important;
+}
+
+.pdp-share-modal-backdrop:not([hidden]) .pdp-share-modal-content {
+  transform: translateY(0) !important;
+}
+
+.pdp-share-modal-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s ease !important;
+}
+
+.pdp-share-modal-close:hover {
+  transform: scale(1.1) !important;
+}
+
+.pdp-share-modal-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #1A2B4C !important;
+  margin-top: 0 !important;
+  margin-bottom: 20px !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+}
+
+.pdp-share-options {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.pdp-share-option-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 16px !important;
+  border: 1px solid rgba(26, 43, 76, 0.15) !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+  color: #1A2B4C !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  background: #ffffff !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+}
+
+.pdp-share-option-link:hover {
+  background-color: rgba(26, 43, 76, 0.05) !important;
+  border-color: #1A2B4C !important;
+  transform: translateY(-1px) !important;
+}
+
+.pdp-share-icon-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 24px !important;
+  height: 24px !important;
+  flex-shrink: 0 !important;
+}
+
+.pdp-share-icon-wrapper svg {
+  display: block !important;
+}
+
+.pdp-share-success-msg {
+  margin-top: 16px !important;
+  padding: 8px !important;
+  background-color: rgba(26, 43, 76, 0.08) !important;
+  color: #1A2B4C !important;
+  border-radius: 4px !important;
+  text-align: center !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  animation: fadeIn 0.3s ease !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 
 
