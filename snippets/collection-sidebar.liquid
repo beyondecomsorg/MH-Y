@@ -19,9 +19,17 @@
   </svg>
   <span>{{ 'collections.filters.filter_button' | t }}</span>
 </a>
-<div class="collection__page-sidebar " id="sidebar">
-  <button class="sidebar-filter-close" aria-label="Close Filters">&times;</button>
-  {% for block in section.blocks %}
+<div class="collection__page-sidebar" id="sidebar">
+  <div class="mhy-sidebar-header">
+    <h3 class="mhy-sidebar-title">Filter</h3>
+    <button type="button" class="sidebar-filter-close js-collection-side-toggle" aria-label="Close Filters">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mhy-sidebar-body">
+    {% for block in section.blocks %}
     {% case block.type %}
 
     {% when 'menu' %}
@@ -450,7 +458,16 @@
       </div>
     {% endcase %}
   {% endfor %}
-</div>
+  </div><!-- /.mhy-sidebar-body -->
+
+  <div class="mhy-sidebar-footer">
+    <a href="{{ collection.url }}" class="mhy-sidebar-footer__clear js-current-filter">Clear all</a>
+    <button type="button" class="mhy-sidebar-footer__apply js-collection-side-toggle">
+      See {{ collection.products_count }} items
+    </button>
+    <div class="mhy-sidebar-footer__handle"></div>
+  </div>
+</div><!-- /#sidebar -->
 
 <!-- Script for sticky sidebar -->
 <script>

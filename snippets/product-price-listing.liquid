@@ -21,7 +21,7 @@
     assign available = true
   endif
 
-  assign money_price = price | money
+  assign money_price = price | money_without_trailing_zeros
 -%}
 
 <div class="price price--listing
@@ -70,9 +70,15 @@
     </dt>
     <dd>
       <s class="price-item price-item--regular">
-        {{ compare_at_price | money }}
+        {{ compare_at_price | money_without_trailing_zeros }}
       </s>
     </dd>
+    {%- if compare_at_price > price -%}
+      {%- assign discount = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round -%}
+      <dd class="price-item--discount-badge">
+        <span>{{ discount }}% OFF</span>
+      </dd>
+    {%- endif -%}
   </dl>
   <dl class="price__unit">
     <dt>
@@ -93,7 +99,7 @@
         </span>
       {%- endcapture -%}
 
-      <span>{{ variant.unit_price | money }}</span>{{- unit_price_separator -}}{{- unit_price_base_unit -}}
+      <span>{{ variant.unit_price | money_without_trailing_zeros }}</span>{{- unit_price_separator -}}{{- unit_price_base_unit -}}
     </dd>
   </dl>
 </div>

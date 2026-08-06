@@ -612,11 +612,258 @@ body.mhy-has-sticky-atc {
   padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
 }
 
-.mhy-collection-sf {
-  display: flex;
-  align-items: stretch;
-  gap: 10px;
-  padding: 10px 0 14px;
+/* =============================================================================
+   DESKTOP TOOLBAR (Horizontal Pill Dropdowns — Image 1 Style)
+   MOBILE TOOLBAR (Sticky Filter & Results Bar — Image 2 Style)
+============================================================================= */
+@media (min-width: 981px) {
+  .mhy-desktop-toolbar {
+    display: block !important;
+    margin-bottom: 24px !important;
+  }
+  .mhy-collection-sf {
+    display: none !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .mhy-desktop-toolbar {
+    display: none !important;
+  }
+  .mhy-collection-sf {
+    display: flex !important;
+    position: sticky !important;
+    top: 50px !important;
+    z-index: 100 !important;
+    background: #fff !important;
+    padding: 10px 8px !important;
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  }
+}
+
+.mhy-desktop-toolbar__form {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+
+.mhy-desktop-toolbar__filters {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.mhy-dt-filter-pill {
+  position: relative !important;
+}
+
+.mhy-dt-filter-pill__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 16px !important;
+  background: #f7f7f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #173250 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.mhy-dt-filter-pill__btn:hover {
+  background: #f0f0f0 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.mhy-dt-filter-dropdown {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  z-index: 1000 !important;
+  min-width: 210px !important;
+  max-height: 320px !important;
+  overflow-y: auto !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+  padding: 12px 14px !important;
+}
+
+.mhy-dt-dropdown__list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.mhy-dt-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  color: #333 !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+.mhy-dt-option__count {
+  font-size: 11px !important;
+  color: #888 !important;
+  margin-left: auto !important;
+}
+
+.mhy-dt-checkbox {
+  width: 16px !important;
+  height: 16px !important;
+  accent-color: #173250 !important;
+  cursor: pointer !important;
+}
+
+.mhy-desktop-toolbar__right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-left: auto !important;
+}
+
+.mhy-dt-item-count {
+  font-size: 13px !important;
+  color: #666 !important;
+  white-space: nowrap !important;
+}
+
+.mhy-dt-pill__badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #173250 !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+}
+
+.mhy-dt-price__inputs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.mhy-dt-price__field {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+
+.mhy-dt-price-input {
+  width: 60px !important;
+  border: 0 !important;
+  outline: none !important;
+  font-size: 12px !important;
+}
+
+/* =============================================================================
+   ACTIVE FILTER CHIPS (User-Friendly Active Tags)
+============================================================================= */
+.filtering__results {
+  margin: 12px 0 24px 0 !important;
+  padding: 0 !important;
+}
+
+.filtering__results .current_tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.filtering__results .current_tag,
+.filtering__results .current_tag--clear {
+  display: inline-flex !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mhy-active-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 7px 14px !important;
+  background: #f4f5f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 999px !important;
+  color: #173250 !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  line-height: 1.2 !important;
+}
+
+.mhy-active-chip strong {
+  font-weight: 600 !important;
+  color: #173250 !important;
+}
+
+.mhy-active-chip:hover {
+  background: #e9ecef !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  color: #173250 !important;
+  text-decoration: none !important;
+}
+
+.mhy-active-chip__close {
+  opacity: 0.6 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.mhy-active-chip:hover .mhy-active-chip__close {
+  opacity: 1 !important;
+}
+
+.mhy-clear-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 7px 16px !important;
+  background: transparent !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  border-radius: 999px !important;
+  color: #555555 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.mhy-clear-chip:hover {
+  background: #173250 !important;
+  border-color: #173250 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.mhy-mobile-count {
+  font-size: 11px !important;
+  color: #666 !important;
+  font-weight: normal !important;
 }
 
 .mhy-collection-sf__control {
@@ -633,6 +880,22 @@ body.mhy-has-sticky-atc {
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
   color: var(--text-color);
   text-align: left;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Styled active state for Filter Button when drawer is open */
+body.sidebar-open .mhy-collection-sf__control.js-collection-side-toggle,
+body.active .mhy-collection-sf__control.js-collection-side-toggle {
+  background: #173250 !important;
+  color: #ffffff !important;
+  border-color: #173250 !important;
+}
+
+/* Styled active state for Sort Button when dropdown is open */
+.mhy-collection-sf__sort:not([hidden]) .mhy-collection-sf__control[aria-expanded="true"] {
+  background: #173250 !important;
+  color: #ffffff !important;
+  border-color: #173250 !important;
 }
 
 .mhy-collection-sf__icon {
@@ -742,46 +1005,215 @@ body.mhy-has-sticky-atc {
   }
 }
 
-@media (max-width: 980px) {
-  .collection__sidebar-mobile-trigger {
-    display: none !important;
-  }
+/* Hide default theme trigger */
+.collection__sidebar-mobile-trigger {
+  display: none !important;
+}
 
+/* Elevate collection section above overlay so sidebar drawer escapes dimmed backdrop */
+section.collection__page {
+  position: relative !important;
+  z-index: 2147482350 !important;
+}
+
+#CollectionSidebarFiltersForm {
+  position: static !important;
+  transform: none !important;
+  contain: none !important;
+  perspective: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Fix duplicate close mark pseudo-elements (X X fix) */
+.mhy-active-chip::after,
+.js-current-filter::after,
+.current_tag a::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Sidebar Drawer - Desktop Slide-Out Drawer & Mobile Bottom Sheet Modal (Screenshot 2 Style) */
+.collection__page-sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  width: min(92vw, 380px) !important;
+  height: 100vh !important;
+  background: #fff !important;
+  z-index: 2147482400 !important;
+  transform: translateX(102%) !important;
+  transition: transform 260ms ease !important;
+  box-shadow: -18px 0 50px rgba(0, 0, 0, 0.18) !important;
+  pointer-events: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.collection__page-sidebar.open,
+.collection__page-sidebar.active {
+  transform: translateX(0) !important;
+}
+
+.mhy-sidebar-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 20px 24px 16px 24px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  flex-shrink: 0 !important;
+}
+
+.mhy-sidebar-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #173250 !important;
+  margin: 0 !important;
+}
+
+.sidebar-filter-close {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: #333 !important;
+  cursor: pointer !important;
+  font-size: 0 !important;
+}
+
+.mhy-sidebar-body {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  padding: 12px 24px 20px 24px !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.mhy-sidebar-footer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 24px calc(16px + env(safe-area-inset-bottom)) 24px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+
+.mhy-sidebar-footer__clear {
+  flex: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 48px !important;
+  border: 1.5px solid #173250 !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: #173250 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.mhy-sidebar-footer__clear:hover {
+  background: #f4f5f7 !important;
+  text-decoration: none !important;
+}
+
+.mhy-sidebar-footer__apply {
+  flex: 1.4 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 48px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: #173250 !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.mhy-sidebar-footer__apply:hover {
+  background: #0f243c !important;
+}
+
+.mhy-sidebar-footer__handle {
+  position: absolute !important;
+  bottom: 6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 36px !important;
+  height: 4px !important;
+  background: #d0d0d0 !important;
+  border-radius: 2px !important;
+}
+
+@media (max-width: 980px) {
   .collection__page-sidebar {
-    display: block !important;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(92vw, 380px);
-    height: 100vh;
-    background: #fff;
-    z-index: 2147482400;
-    transform: translateX(102%);
-    transition: transform 220ms ease;
-    overflow: auto;
-    padding-bottom: calc(18px + env(safe-area-inset-bottom));
-    box-shadow: -18px 0 50px rgba(0, 0, 0, 0.18);
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    max-height: 85vh !important;
+    height: auto !important;
+    border-top-left-radius: 24px !important;
+    border-top-right-radius: 24px !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(102%) !important;
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
   .collection__page-sidebar.open,
   .collection__page-sidebar.active {
-    transform: translateX(0);
+    transform: translateY(0) !important;
   }
 }
 
 .sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.40);
-  z-index: 2147482300;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.40) !important;
+  z-index: 2147482300 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 200ms ease !important;
 }
 
 .sidebar-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure all sidebar filters and options are clickable */
+.collection__page-sidebar,
+.collection__page-sidebar * {
+  pointer-events: auto !important;
+}
+
+.js-collection-side-filter {
+  display: block !important;
+  width: 100% !important;
+  cursor: pointer !important;
+}
+
+.js-collection-side-filter input[type="checkbox"] {
+  pointer-events: auto !important; /* Enable native click triggering */
+}
+
+.js-collection-side-filter label {
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 .sidebar-filter-close {
@@ -802,88 +1234,10 @@ body.mhy-has-sticky-atc {
   display: none !important;
 }
 
-#modal-quickview-cart.modal__container {
-  position: fixed;
-  inset: 0;
-  left: 0;
-  top: 0;
-  transform: none;
-  width: 100%;
-  height: 100%;
-  padding: 18px 12px calc(18px + env(safe-area-inset-bottom));
-  overflow: hidden;
-  z-index: 2147482000;
-}
+/* QV modal container, wrapper, form-wrapper, and container rules
+   are now fully managed by the QUICK VIEW MODAL — COMPLETE FIX block
+   at the end of this file. Do not add conflicting rules here. */
 
-.modal__container#modal-quickview-cart.modal--active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-}
-
-.modal__container#modal-quickview-cart:not(.modal--active) {
-  display: none;
-  opacity: 0;
-}
-
-#modal-quickview-cart .modal__inner-wrapper {
-  width: 95vw;
-  max-width: 1100px;
-  max-height: 90vh;
-  overflow: hidden;
-  border: 0;
-  padding: 0;
-  background: var(--background);
-  border-radius: 18px;
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.30);
-  transform: translateY(10px);
-  opacity: 0;
-  transition: transform 200ms ease, opacity 200ms ease;
-}
-
-.modal__container#modal-quickview-cart.modal--active .modal__inner-wrapper {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-@media (min-width: 740px) and (max-width: 979px) {
-  #modal-quickview-cart .modal__inner-wrapper {
-    width: 90vw;
-  }
-}
-
-@media (min-width: 980px) {
-  #modal-quickview-cart .modal__inner-wrapper {
-    width: min(1100px, 90vw);
-  }
-}
-
-#modal-quickview-cart .modal__inner-content-container {
-  max-height: none;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-}
-
-#modal-quickview-cart .product-quickview__container {
-  max-height: 90vh;
-  overflow: hidden;
-  margin: 0;
-}
-
-#modal-quickview-cart .product-quickview__form-wrapper {
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 90vh;
-}
-
-@media (min-width: 740px) {
-  .product-quickview__container .product__section-container {
-    align-items: center;
-    justify-content: center;
-  }
-}
 
 .pc-card {
   position: relative;
@@ -1401,22 +1755,9 @@ input.pc-btn.pc-btn--atc.js-ajax-submit{
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  #modal-quickview-cart .product__section-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
-  }
+/* Mobile QV column layout now managed by the
+   QUICK VIEW MODAL — COMPLETE FIX block at the end of this file. */
 
-  #modal-quickview-cart .product__section-images,
-  #modal-quickview-cart .product__section-content {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 100%;
-  }
-}
 
 
 .mhy-qv-loader {
@@ -1720,12 +2061,8 @@ input#checkout{
   color: rgba(0, 0, 0, 0.7);
 }
 
-@media (max-width: 900px) {
-  .product__quickview-wrapper .product__section-container {
-    grid-template-columns: 1fr;
-    padding-top: 44px;
-  }
-}
+/* 900px breakpoint now handled by the QUICK VIEW MODAL — COMPLETE FIX block */
+
 .color-swatch li.color {
     width: 20px !important;
     height: 20px !important;
@@ -1776,8 +2113,8 @@ input#checkout{
 }
 .flickity-button .flickity-button-icon{
     height: 15px;
-    fill: #fafafa;
-   margin-bottom: 0.5rem;
+    fill: #020202;
+   margin-bottom: 2px;
 }
 .pc-title {
     font-size: 17px;
@@ -3857,6 +4194,1176 @@ ul.product-feature-list li:last-child {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ============================================================================
+  PREMIUM PRODUCT CARD REDESIGN & QUICK SHOP OVERLAYS
+==============================================================================*/
+
+/* 1. Base Product Card Styling */
+.product-index {
+  position: relative !important;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important, 
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important, 
+              border-color 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.product-index:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05) !important;
+  border-color: #d1d5db !important;
+}
+
+/* 2. Product Image & Smooth Hover Zoom */
+.product-index .prod-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 12px !important;
+  width: 100% !important;
+  aspect-ratio: auto !important; 
+}
+
+.product-index .prod-image {
+  overflow: hidden !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.product-index .prod-image img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.product-index:hover .prod-image img {
+  transform: scale(1.03) !important;
+}
+
+/* 3. Wishlist Badge - Top Right Circle Icon (HulkApps) */
+.mhy-wishlist-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important, 
+              box-shadow 0.25s ease !important, 
+              background-color 0.25s ease !important,
+              color 0.25s ease !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03) !important;
+  padding: 0 !important;
+  color: #6b7280 !important;
+  overflow: visible !important;
+}
+
+.mhy-wishlist-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08) !important;
+  color: #ef4444 !important;
+  background-color: #fff !important;
+}
+
+/* ── HulkApps inner button: transparent wrapper, pass-through ── */
+.mhy-wishlist-btn .hulkapps-wishlist-btn,
+.mhy-wishlist-btn [class*="hulkapps"],
+.mhy-wishlist-btn [class*="hulk-wishlist"],
+.mhy-wishlist-btn button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: inherit !important;
+  position: static !important;
+  border-radius: 0 !important;
+}
+
+/* ── HulkApps inner SVG/icon: match our heart icon size ── */
+.mhy-wishlist-btn svg,
+.mhy-wishlist-btn [class*="hulkapps"] svg,
+.mhy-wishlist-btn [class*="hulk-wishlist"] svg,
+.mhy-wishlist-btn img {
+  width: 17px !important;
+  height: 17px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2px !important;
+  display: block !important;
+}
+
+/* ── When HulkApps marks item as wishlisted: red fill heart ── */
+.mhy-wishlist-btn.hulkapps-wishlisted,
+.mhy-wishlist-btn [class*="active"],
+.mhy-wishlist-btn [class*="wishlisted"],
+.mhy-wishlist-btn [class*="added"] {
+  color: #ef4444 !important;
+}
+.mhy-wishlist-btn.hulkapps-wishlisted svg,
+.mhy-wishlist-btn [class*="active"] svg {
+  fill: #ef4444 !important;
+  stroke: #ef4444 !important;
+}
+
+.mhy-wishlist-icon {
+  width: 17px !important;
+  height: 17px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2px !important;
+}
+
+/* ── Header Wishlist Icon ── */
+.cart-links__link-wishlist {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mhy-header-wishlist-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--cart-links) !important;
+  text-decoration: none !important;
+  transition: color 0.25s ease, transform 0.2s ease !important;
+  position: relative !important;
+}
+
+.mhy-header-wishlist-btn:hover {
+  color: #ef4444 !important;
+  transform: scale(1.1) !important;
+}
+
+.mhy-header-wishlist-icon {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.8 !important;
+}
+.image_portrait .box-ratio{
+    padding-bottom: 139% !important;
+}
+
+/* ── HulkApps header count badge (if injected by app) ── */
+.hulkapps-wishlist-header .hulkapps-count,
+.hulkapps-wishlist-header [class*="count"] {
+  position: absolute !important;
+  top: -6px !important;
+  right: -8px !important;
+  background: #173250 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
 
 
+/* 4. Quick Shop - Floating Button Overlay on Desktop, Below Image on Mobile */
+.product-index .product-listing__quickview-trigger {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 16px !important;
+  transform: translate(-50%, 12px) !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  color: #ffffff !important;
+  padding: 10px 24px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  border-radius: 999px !important;
+  height: 42px !important;
+  line-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  max-width: 85% !important;
+  text-transform: none !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.3s ease !important, 
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important, 
+              background-color 0.25s ease !important;
+  cursor: pointer !important;
+  z-index: 8 !important;
+}
+
+.product-index:hover .product-listing__quickview-trigger {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate(-50%, 0) !important;
+}
+
+.product-index .product-listing__quickview-trigger:hover {
+  background: #173250 !important;
+}
+
+/* Mobile Quick Shop button overrides */
+@media screen and (max-width: 768px) {
+  .product-index .product-listing__quickview-trigger {
+    position: relative !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 12px 0 0 0 !important;
+    height: 38px !important;
+    line-height: 38px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+    background: rgba(23, 50, 80, 0.06) !important;
+    color: #173250 !important;
+    box-shadow: none !important;
+    border-radius: 999px !important;
+  }
+  
+  .product-index .product-listing__quickview-trigger:hover {
+    background: rgba(23, 50, 80, 0.1) !important;
+  }
+}
+
+/* 5. Product Information Hierarchy */
+.product-index .product-info {
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  margin-top: 12px !important;
+  text-align: left !important;
+}
+
+.product-index .product-info h2 {
+  font-family: var(--custom-heading-family), 'futura-light-bt', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #173250 !important;
+  margin: 0 0 6px 0 !important;
+  height: 1.8em !important; /* Forces 2-lines vertical height symmetry */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-transform: none !important;
+}
+
+@media only screen and (max-width: 767px){
+  .product-index .product-info h2 {
+       height: 2.8em !important; 
+  } 
+}
+/* Price Hierarchy — all three items on one row */
+.product-index .product-info .price {
+  margin: 0 0 8px 0 !important;
+  font-size: 14px !important;
+}
+
+/* Make the sale price row a flex container so all 3 sit inline */
+.product-index .product-info .price__sale {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+/* Hide the regular-price-only row when on sale (shown via price__sale instead) */
+.product-index .product-info .price--on-sale .price__regular {
+  display: none !important;
+}
+
+/* Selling price — biggest, bold, navy */
+.product-index .product-info .price-item--sale {
+  color: #173250 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+/* Compare-at price — smaller, grey, struck through */
+.product-index .product-info .price-item--regular {
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  text-decoration: line-through !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+/* % OFF badge — compact, inline, vertically centred */
+.product-index .product-info .price-item--discount-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  background-color: #f0fdf4 !important;
+  color: #16a34a !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+/* Push Add to Cart container to bottom */
+.product-index .product-info .product--grid_add {
+  margin-top: auto !important;
+  padding-top: 0px !important;
+  width: 100% !important;
+}
+
+/* 6. Option A: Full-width Pill Add to Cart Buttons */
+.product--grid_add .js-ajax-submit,
+.product--grid_add .select--options {
+  background: #173250 !important;
+  color: #ffffff !important;
+  border: 1px solid #173250 !important;
+  text-transform: none !important; /* No uppercase text */
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  height: 34px !important;
+  line-height: 44px !important;
+  border-radius: 999px !important; /* Full pill shape */
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease !important;
+  margin: 0 !important;
+}
+
+.product--grid_add .js-ajax-submit:hover,
+.product--grid_add .select--options:hover {
+  background: #6E7C45 !important; /* Olive Green background */
+  border-color: #6E7C45 !important;
+  color: #ffffff !important;
+}
+
+.product--grid_add .js-ajax-submit:active,
+.product--grid_add .select--options:active {
+  transform: scale(0.98) !important;
+}
+
+.mhy-cart-btn-icon {
+  flex-shrink: 0;
+  stroke-width: 2.2 !important;
+}
+
+
+/* =============================================================================
+   QUICK VIEW MODAL — COMPLETE FIX
+   Overrides all conflicting rules from stylesheet.css and previous custom.css
+   Brand: MH&Y  |  Colors: Navy #173250, Olive #6E7C45
+============================================================================= */
+
+/* ── 1. MODAL BACKDROP / CONTAINER ── */
+#modal-quickview-cart.modal__container {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+  z-index: 2147482000 !important;
+  transform: none !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  box-sizing: border-box !important;
+}
+
+.modal__container#modal-quickview-cart.modal--active {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+}
+
+.modal__container#modal-quickview-cart:not(.modal--active) {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* ── 2. MODAL INNER WRAPPER ── */
+#modal-quickview-cart .modal__inner-wrapper {
+  position: relative !important;
+  width: min(1100px, 92vw) !important;
+  max-width: 1100px !important;
+  max-height: 88vh !important;
+  height: auto !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.28) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  /* Entrance animation */
+  transform: translateY(12px) scale(0.98) !important;
+  opacity: 0 !important;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 260ms ease !important;
+}
+
+.modal__container#modal-quickview-cart.modal--active .modal__inner-wrapper {
+  transform: translateY(0) scale(1) !important;
+  opacity: 1 !important;
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #modal-quickview-cart .modal__inner-wrapper {
+    width: 90vw !important;
+    max-height: 88vh !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  #modal-quickview-cart.modal__container {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  #modal-quickview-cart .modal__inner-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    transform: translateY(40px) !important;
+    margin: 0 !important;
+  }
+  .modal__container#modal-quickview-cart.modal--active .modal__inner-wrapper {
+    transform: translateY(0) !important;
+  }
+}
+
+/* ── 3. INNER CONTENT CONTAINER (strips any margin/overflow from base theme) ── */
+#modal-quickview-cart .modal__inner-content-container {
+  all: unset !important;
+  display: block !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+/* ── 4. QUICKVIEW CONTAINER (the section rendered inside the template) ── */
+#modal-quickview-cart .product-quickview__container {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 88vh !important;
+  overflow: visible !important; /* must NOT be hidden — close btn is absolutely positioned inside */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+@media (max-width: 767px) {
+  #modal-quickview-cart .product-quickview__container {
+    max-height: 92vh !important;
+  }
+}
+
+
+/* ── 5. FORM WRAPPER — this is the scrollable body ── */
+#modal-quickview-cart .product-quickview__form-wrapper,
+.js-quickview-content .product-quickview__form-wrapper {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  max-height: 88vh !important; /* cap height so it scrolls rather than overflows the modal */
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+}
+
+@media (max-width: 767px) {
+  #modal-quickview-cart .product-quickview__form-wrapper,
+  .js-quickview-content .product-quickview__form-wrapper {
+    max-height: 92vh !important;
+  }
+}
+
+
+/* ── 6. CLOSE BUTTON — positioned absolute inside the inner wrapper ── */
+.slideout__trigger--close.slideout__trigger-quickview__wrapper {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  z-index: 100 !important;
+}
+
+#modal-quickview-cart .slideout__trigger-quickview,
+#slideout-quickview-cart .slideout__trigger-quickview,
+#modal-quickview-cart button.js-modal-close,
+#slideout-quickview-cart button.js-slideout-close {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.10) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  position: static !important;
+}
+
+#modal-quickview-cart button.js-modal-close:hover,
+#slideout-quickview-cart button.js-slideout-close:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16) !important;
+}
+
+.icn-close:before,
+.icn-close:after {
+  background-color: #111111 !important;
+}
+
+/* ── 7. PRODUCT QUICKVIEW WRAPPER — the rendered product template ── */
+.product__quickview-wrapper.product__inner-wrapper {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ── 8. TWO-COLUMN LAYOUT — Desktop ── */
+.product__quickview-wrapper .product__section-container {
+  display: grid !important;
+  grid-template-columns: 45% 1fr !important;
+  gap: 0 !important;
+  align-items: start !important;  /* start: let each column size itself naturally */
+  justify-content: unset !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+
+/* ── 9. LEFT COLUMN — IMAGE GALLERY ── */
+.product__quickview-wrapper .product__section-images {
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #f8f7f4 !important;
+  border-radius: 18px 0 0 18px !important;
+}
+
+/*
+  IMPORTANT: The gallery uses `.box-ratio` which works via `height:0` + `padding-bottom`
+  percentage of WIDTH. Do NOT set height:100% on these elements — it breaks the ratio trick.
+  Let the image render at its natural aspect ratio; the left column height will follow.
+*/
+.product__quickview-wrapper .product__section-images #slider {
+  width: 100% !important;
+}
+
+.product__quickview-wrapper .product__section-images .slides,
+.product__quickview-wrapper .product__section-images .carousel-main {
+  width: 100% !important;
+}
+
+/* carousel-cell: Flickity makes these position:absolute — the .box-ratio wrapper
+   provides the height via its padding-bottom. Don't override height here. */
+.product__quickview-wrapper .product__section-images .carousel-cell {
+  width: 100% !important;
+}
+
+/* box-ratio itself: let it keep its padding-bottom height trick */
+.product__quickview-wrapper .product__section-images .box-ratio {
+  height: 0 !important; /* keep the padding trick intact */
+}
+.product__quickview-wrapper .flickity-button .flickity-button-icon{
+    margin-bottom: 5px;
+}
+.product__quickview-wrapper .pdp-image-share-btn{
+ display: none !important;
+}
+/* Images inside box-ratio use position:absolute + full coverage */
+.product__quickview-wrapper .product__section-images .box-ratio img {
+  position: absolute !important; 
+  top: -1.2rem !important;
+  left: 0 !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+}
+
+/* circle-zoom wrapper needs full dimensions too */
+.product__quickview-wrapper .product__section-images .circle-zoom-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* Flickity arrows — always centered vertically */
+.product-quickview__container .flickity-prev-next-button {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 50% !important;
+}
+
+.product-quickview__container .flickity-prev-next-button.previous {
+  left: 10px !important;
+}
+
+.product-quickview__container .flickity-prev-next-button.next {
+  right: 10px !important;
+}
+
+.product-quickview__container #slider.thumbs_bottom .flickity-prev-next-button.previous {
+  left: 10px !important;
+}
+.product-quickview__container #slider.thumbs_bottom .flickity-prev-next-button.next {
+  right: 10px !important;
+}
+
+/* Thumbnails strip */
+.product__quickview-wrapper #thumbnails {
+  display: none !important;
+}
+
+/* ── 10. RIGHT COLUMN — PRODUCT DETAILS ── */
+.product__quickview-wrapper .product__section-content {
+  padding: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: 88vh !important;
+  box-sizing: border-box !important;
+  border-radius: 0 18px 18px 0 !important;
+}
+
+.product__quickview-wrapper .product__section-details {
+  padding: 52px 28px 28px 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ── 11. PRODUCT HEADER ── */
+.product__quickview-wrapper .product__section--header {
+  margin-bottom: 12px !important;
+}
+
+.product__quickview-wrapper .product__vendor,
+.product__quickview-wrapper h4.product__vendor {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #6b7280 !important;
+  margin: 0 0 6px 0 !important;
+}
+
+.product__quickview-wrapper .product__section-title.product-title,
+.product__quickview-wrapper h3.product__section-title {
+  font-family: var(--custom-heading-family), 'futura-light-bt', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: #173250 !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.product__quickview-wrapper .product__section-title a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* ── 12. PRICE DISPLAY ── */
+.product__quickview-wrapper .price {
+  margin: 0 0 4px 0 !important;
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.product__quickview-wrapper .price-item--sale {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #173250 !important;
+}
+
+.product__quickview-wrapper .price-item--regular {
+  font-size: 15px !important;
+  color: #9ca3af !important;
+  text-decoration: line-through !important;
+}
+
+.product__quickview-wrapper .mhy-qv__discount {
+  display: none !important;
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 3px 10px !important;
+  border-radius: 6px !important;
+  margin: 8px 0 !important;
+  width: fit-content !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ── 13. VARIANT SELECTORS ── */
+.product__quickview-wrapper .product__variants-swatches,
+.product__quickview-wrapper .product__variants-select {
+  margin: 14px 0 !important;
+}
+
+.product__quickview-wrapper .product-form__input--dropdown {
+  margin-bottom: 12px !important;
+}
+
+.product__quickview-wrapper .form__label {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #173250 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  display: block !important;
+  margin-bottom: 8px !important;
+}
+
+.product__quickview-wrapper .styled-select {
+  width: 100% !important;
+  height: 46px !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 0 14px !important;
+  font-size: 14px !important;
+  color: #173250 !important;
+  background: #fff !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  box-sizing: border-box !important;
+}
+
+.product__quickview-wrapper .select {
+  position: relative !important;
+}
+
+.product__quickview-wrapper .select::after {
+  content: '▾' !important;
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  color: #6b7280 !important;
+  font-size: 14px !important;
+}
+
+/* ── 14. SIZE VALIDATION ── */
+.product__quickview-wrapper .mhy-qv__validation {
+  margin: 8px 0 !important;
+  font-size: 13px !important;
+  color: #b42318 !important;
+  font-weight: 600 !important;
+  background: rgba(180, 35, 24, 0.06) !important;
+  border: 1px solid rgba(180, 35, 24, 0.16) !important;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+}
+
+/* ── 15. QUANTITY SELECTOR ── */
+.product__quickview-wrapper .product__section--qty {
+  margin: 12px 0 !important;
+}
+
+.product__quickview-wrapper .product__section--qty > label {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #173250 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  display: block !important;
+  margin-bottom: 8px !important;
+}
+
+.product__quickview-wrapper .product__quantity--wrapper {
+  display: flex !important;
+  align-items: center !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  width: fit-content !important;
+  overflow: hidden !important;
+}
+
+.product__quickview-wrapper .quantity-control-down,
+.product__quickview-wrapper .quantity-control-up {
+  width: 42px !important;
+  height: 42px !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  color: #173250 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease !important;
+}
+
+.product__quickview-wrapper .quantity-control-down:hover,
+.product__quickview-wrapper .quantity-control-up:hover {
+  background: rgba(23, 50, 80, 0.06) !important;
+}
+
+.product__quickview-wrapper .formQty.quantity {
+  width: 48px !important;
+  height: 42px !important;
+  border: 0 !important;
+  border-left: 1px solid #e5e7eb !important;
+  border-right: 1px solid #e5e7eb !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  color: #173250 !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+}
+
+/* ── 16. ADD TO BAG / BUY NOW BUTTONS ── */
+.product__quickview-wrapper .product__section--buttons {
+  margin-top: 16px !important;
+}
+
+.product__quickview-wrapper .mhy-qv__actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+/* Primary CTA — Add to Bag */
+.product__quickview-wrapper #addToCart,
+.js-quickview-content #addToCart {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 50px !important;
+  background: #173250 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: none !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.3s ease, transform 0.15s ease !important;
+  line-height: 1 !important;
+  max-height: none !important;
+}
+
+.product__quickview-wrapper #addToCart:hover:not([disabled]),
+.js-quickview-content #addToCart:hover:not([disabled]) {
+  background: #6E7C45 !important;
+  transform: translateY(-1px) !important;
+}
+
+.product__quickview-wrapper #addToCart:active:not([disabled]),
+.js-quickview-content #addToCart:active:not([disabled]) {
+  transform: scale(0.98) !important;
+}
+
+.product__quickview-wrapper #addToCart[disabled],
+.js-quickview-content #addToCart[disabled] {
+  background: #9ca3af !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+
+/* ── 17. SPI PAYMENT BANNER ── */
+.product__quickview-wrapper .spi-banner {
+  margin: 8px 0 0 0 !important;
+}
+
+/* ── 18. ERROR MESSAGES ── */
+.product__quickview-wrapper .note-error {
+  font-size: 13px !important;
+  color: #b42318 !important;
+  margin: 8px 0 !important;
+}
+
+/* ── 19. STORE AVAILABILITY ── */
+.product__quickview-wrapper .product-single__store-availability-container {
+  margin-top: 14px !important;
+  padding-top: 14px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+/* =============================================================================
+   TABLET OVERRIDES (768px–1023px)
+============================================================================= */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .product__quickview-wrapper .product__section-container {
+    grid-template-columns: 42% 1fr !important;
+  }
+
+  .product__quickview-wrapper .product__section-details {
+    padding: 52px 20px 20px 20px !important;
+  }
+
+  .product__quickview-wrapper .product__section-title.product-title,
+  .product__quickview-wrapper h3.product__section-title {
+    font-size: 17px !important;
+  }
+}
+
+/* =============================================================================
+   MOBILE OVERRIDES (<768px) — Single-column stacked layout
+============================================================================= */
+@media (max-width: 767px) {
+
+  #modal-quickview-cart .product-quickview__container {
+    max-height: 92vh !important;
+    overflow: hidden !important;
+  }
+
+  #modal-quickview-cart .product-quickview__form-wrapper,
+  .js-quickview-content .product-quickview__form-wrapper {
+    overflow-y: auto !important;
+    max-height: none !important;
+  }
+
+  /* Switch to single column — scrolls as one column */
+  .product__quickview-wrapper .product__section-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding-top: 0 !important;
+    grid-template-columns: none !important;
+    overflow-y: auto !important;
+    max-height: 92vh !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+
+  /* Image — let box-ratio do its job; just set full width and clip radius */
+  .product__quickview-wrapper .product__section-images {
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-height: none !important; /* do NOT fight box-ratio padding-bottom */
+    min-height: 0 !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .product__quickview-wrapper .product__section-images .box-ratio img {
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+
+
+  /* Content panel */
+  .product__quickview-wrapper .product__section-content {
+    overflow-y: visible !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+  }
+
+  .product__quickview-wrapper .product__section-details {
+    padding: 16px 20px 32px 20px !important;
+  }
+
+  .product__quickview-wrapper .product__section-title.product-title,
+  .product__quickview-wrapper h3.product__section-title {
+    font-size: 16px !important;
+  }
+
+  .product__quickview-wrapper .price-item--sale {
+    font-size: 19px !important;
+  }
+
+  /* Close button on mobile — keep inside top-right */
+  .slideout__trigger--close.slideout__trigger-quickview__wrapper {
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 200 !important;
+  }
+
+  /* Arrows on mobile */
+  .product-quickview__container .flickity-prev-next-button {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* =============================================================================
+   QV LOADER
+============================================================================= */
+.mhy-qv-loader {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 320px !important;
+  padding: 24px !important;
+}
+
+@media (max-width: 767px) {
+  .mhy-qv-loader {
+    min-height: 240px !important;
+  }
+}
+
+
+/* =============================================================================
+   COLLECTION PAGE — Premium Product Grid Spacing
+   Matches luxury fashion standard: Rare Rabbit / COS / Zara / MHY India
+   Overrides stylesheet.css defaults (1px column-gap, 60px row-gap)
+============================================================================= */
+
+/* Desktop: 24px horizontal gutters, 32px vertical gutters */
+.collection__page-products.product-loop {
+  grid-column-gap: 24px !important;
+  grid-row-gap: 32px !important;
+}
+
+/* Tablet (741px – 1024px): 20px gutters */
+@media screen and (min-width: 741px) and (max-width: 1024px) {
+  .collection__page-products.product-loop {
+    grid-column-gap: 20px !important;
+    grid-row-gap: 28px !important;
+  }
+}
+
+/* Mobile (≤740px): 16px gutters */
+@media screen and (max-width: 740px) {
+  .collection__page-products.product-loop {
+    grid-column-gap: 16px !important;
+    grid-row-gap: 24px !important;
+  }
+}
+
+/* =============================================================================
+   CART NOTICE — Hide success banner permanently.
+   Error notices (data-type="error") still display for stock/quantity errors.
+============================================================================= */
+
+/* Hide the notice container entirely when it's a success type */
+.ajax-cart__notice[data-type="success"] {
+  display: none !important;
+}
+
+/* Also ensure the notice stays hidden unless it's an error type that JS made visible */
+.ajax-cart__notice[aria-hidden="true"] {
+  display: none !important;
+}
+
+/* Error notices remain visible */
+.ajax-cart__notice[data-type="error"][aria-hidden="false"] {
+  display: block !important;
+}
+
+/* =============================================================================
+   DESKTOP GRID & FILTER STYLING EXTENSIONS
+============================================================================= */
+
+/* Hide sidebar form wrapper on desktop to prevent it from taking up empty grid columns */
+@media (min-width: 981px) {
+  #CollectionSidebarFiltersForm {
+    display: none !important;
+  }
+}
+
+/* Style Sort dropdown on desktop to prevent clipping, narrow wrapping, or alignment issues */
+@media (min-width: 981px) {
+  .mhy-dt-sort-pill {
+    position: relative !important;
+  }
+  .mhy-dt-sort-pill .mhy-collection-sf__dropdown {
+    left: auto !important;
+    right: 0 !important;
+    min-width: 220px !important;
+    width: max-content !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+    padding: 6px 0 !important;
+  }
+  .mhy-dt-sort-pill .mhy-collection-sf__dropdown-inner {
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* Force collection product grid and product listings to be visible even if AOS fails or delays */
+#main-collection-product-grid[data-aos],
+.collection__page-product[data-aos],
+[data-section-type="collection-section"] .item[data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
 

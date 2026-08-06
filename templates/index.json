@@ -114,20 +114,7 @@
         "section_padding": "both"
       }
     },
-    "featured_collection_HcMDME": {
-      "type": "featured-collection",
-      "disabled": true,
-      "settings": {
-        "heading": "BESTSELLER",
-        "collection": "new-arrival",
-        "carousel": true,
-        "show_view_all": false,
-        "reduce_width": false,
-        "grid": 4,
-        "limit": 12,
-        "section_padding": "both"
-      }
-    },
+
     "custom_grid_collection_3de4Vk": {
       "type": "custom-grid-collection",
       "blocks": {
@@ -962,12 +949,76 @@
         "overlay_opacity": 26,
         "section_padding": "top"
       }
+    },
+    "premium_customer_reviews": {
+      "type": "premium-reviews",
+      "settings": {
+        "heading": "Loved by Our Customers",
+        "sub_heading": "Real experiences from our valued customers.",
+        "show_overall_rating": true,
+        "overall_score": "4.9",
+        "overall_count": "Based on 2,000+ Reviews",
+        "bg_color": "#FFFFFF",
+        "card_bg_color": "#FFFFFF",
+        "text_color_primary": "#173250",
+        "text_color_secondary": "#173250",
+        "border_color": "#E5E7EB",
+        "accent_color": "#173250",
+        "star_color": "#D4AF37",
+        "cta_text": "View All Reviews",
+        "cta_link": "/collections/all",
+        "btn_bg_color": "#1F1F1F",
+        "btn_text_color": "#FFFFFF",
+        "btn_hover_color": "#6E7C45",
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "section_padding": "both"
+      },
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Kabir Malhotra",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Exceptional fit and fabric",
+            "review_text": "I bought three linen shirts and they exceeded my expectations. The fabric is extremely breathable, and the stitching is top-notch. Truly a luxury experience."
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Vikram Aditya",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Timeless designs",
+            "review_text": "MH&Y’s attention to detail is remarkable. The styling is minimal and sophisticated. Perfect for both office wear and evening events."
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Rohan Sen",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Highly recommended",
+            "review_text": "Outstanding customer service and premium quality. The knit polo has an amazing drape and structure. I will definitely be a returning customer."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ]
     }
   },
   "order": [
     "slideshow_dPzTCE",
     "new_feature_collection_MVqbCC",
-    "featured_collection_HcMDME",
     "custom_grid_collection_3de4Vk",
     "slideshow",
     "collection_list_X6mgdk",
@@ -989,6 +1040,7 @@
     "e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611",
     "16267282748dfbd59a",
     "custom_shop_the_look_RRr8K7",
-    "image_with_text_overlay_LjcknF"
+    "image_with_text_overlay_LjcknF",
+    "premium_customer_reviews"
   ]
 }

@@ -137,16 +137,28 @@ Usage:
           name="button"
           {{ quickview_settings }}
           data-product-url="{{ product.url }}?view=quick">
-          {{ 'products.product.add_to_cart' | t }}
+          <svg class="mhy-cart-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Add to Bag</span>
         </button>
+        {% render 'hulkapps-wishlist-collection-btn', productId: product.id, variantId: product.selected_or_first_available_variant.id %}
       {% else %}
-        <input
+        <button
           type="button"
           class="button select--options add AddtoCart js-ajax-submit"
           name="button"
           data-quick-add
-          value="{{ 'products.product.add_to_cart' | t }}"
         >
+          <svg class="mhy-cart-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Add to Bag</span>
+        </button>
         {%- liquid
           if quickview_type == 'modal'
             assign quickview_classes = 'js-modal-open'
@@ -161,8 +173,14 @@ Usage:
           name="button"
           {{ quickview_settings }}
           data-product-url="{{ product.url }}?view=quick">
-          {{ 'products.product.add_to_cart' | t }}
+          <svg class="mhy-cart-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Add to Bag</span>
         </button>
+        {% render 'hulkapps-wishlist-collection-btn', productId: product.id, variantId: product.selected_or_first_available_variant.id %}
       {% endif %}
     {% endform %}
   </div>
@@ -182,6 +200,13 @@ Usage:
        type="button"
        name="button"
        {{ quickview_settings }}
-       data-product-url="{{ product.url }}?view=quick">{{ 'products.product.add_to_cart' | t }}</button>
+       data-product-url="{{ product.url }}?view=quick">
+       <svg class="mhy-cart-btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+         <line x1="3" y1="6" x2="21" y2="6"></line>
+         <path d="M16 10a4 4 0 0 1-8 0"></path>
+       </svg>
+       <span>Add to Bag</span>
+     </button>
 </div>
 {% endif %}

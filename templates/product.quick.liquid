@@ -72,7 +72,7 @@
        { "money_format": {{ shop.money_format | json }},
          "enable_history": false,
          "sold_out": {{ "products.product.sold_out" | t | json }},
-         "button": {{ 'products.product.add_to_cart' | t | json }},
+         "button": "Add to Bag",
          "unavailable": {{ 'products.product.unavailable' | t | json }},
          "savings": {{ 'products.general.savings' | t | json }},
          "quickview": true,
@@ -247,7 +247,7 @@
 
                     {%- liquid
 
-                      assign call_to_action = 'products.product.add_to_cart' | t
+                      assign call_to_action = 'Add to Bag'
                       unless current_variant.available
                         assign call_to_action = 'products.product.sold_out' | t
                       endunless

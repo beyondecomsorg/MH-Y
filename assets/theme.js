@@ -2789,14 +2789,8 @@ Shopify.theme.ajaxCart = {
 
           Shopify.theme.ajaxCart.updateView(config, Cart);
 
-          if (openCartFromQuickview) {
-            Shopify.theme.ajaxCart.setCartNotice(config, {
-              type: 'success',
-              title: 'Added to bag',
-              message: response.product_title || response.title || '',
-              autoHideMs: 8000
-            });
-          }
+          // Cart drawer opens directly — no success banner needed.
+
         });
       })
       .catch((error) => {
@@ -6553,7 +6547,7 @@ theme.StoreAvailability = function(context, Product, events) {
 theme.Collection = (function() {
   function Collection(container) {
 
-    if ( container.querySelector("[data-collection-filters]") || container.querySelector("[data-collection-sidebar-filters]") ) {
+    if ( container.querySelector("[data-collection-filters]") || container.querySelector("[data-collection-sidebar-filters]") || container.querySelector("[data-mhy-collection-sf]") ) {
       theme.CollectionFilters.init(container, container.dataset.sectionId);
     }
 
@@ -6565,17 +6559,17 @@ theme.Collection = (function() {
 theme.CollectionFilters = {
 	init: function init(container, sectionId) {
 
-		if ( container.querySelector("[data-collection-filters-hz]") || container.querySelector("[data-collection-sort-by]") ) {
+		if ( container.querySelector("[data-collection-filters-hz]") || container.querySelector("[data-collection-sort-by]") || container.querySelector("[data-mhy-collection-sf]") ) {
 			theme.CollectionFilters.horizontalFilters();
 			theme.CollectionFilters.currentFilters();
 		}
 		if ( container.querySelector("[data-collection-filters-price-range]") ) {
 			theme.CollectionFilters.priceRange();
-      theme.CollectionFilters.priceSlider();
+			theme.CollectionFilters.priceSlider();
 		}
-    if ( container.querySelector("[data-collection-sidebar-filters]") ) {
-      theme.CollectionFilters.sidebarFilters();
-    }
+		if ( container.querySelector("[data-collection-sidebar-filters]") || container.querySelector("[data-mhy-collection-sf]") ) {
+			theme.CollectionFilters.sidebarFilters();
+		}
 
 		this.filterData = [];
 
@@ -6829,14 +6823,28 @@ theme.CollectionFilters = {
 
 		filters.forEach((item, i) => {
 			item.addEventListener('click', (event) => {
-				event.preventDefault();
+				const checkbox = item.querySelector('input[type="checkbox"]');
+				if (!checkbox) return;
 
-				if ( item.querySelector('input[type="checkbox"]').checked ) {
-					item.classList.remove('current');
-					item.querySelector('input[type="checkbox"]').checked = false;
+				// If user clicked directly on the checkbox, let the default behavior happen 
+				// and only trigger form submission, otherwise toggle manually
+				if (event.target !== checkbox) {
+					event.preventDefault();
+					if (checkbox.checked) {
+						item.classList.remove('current');
+						checkbox.checked = false;
+					} else {
+						item.classList.add('current');
+						checkbox.checked = true;
+					}
+					checkbox.dispatchEvent(new Event('change', { bubbles: true }));
 				} else {
-					item.classList.add('current');
-					item.querySelector('input[type="checkbox"]').checked = true;
+					// User clicked on checkbox directly
+					if (checkbox.checked) {
+						item.classList.add('current');
+					} else {
+						item.classList.remove('current');
+					}
 				}
 
 				const formData = new FormData(item.closest('form'));
@@ -6846,29 +6854,30 @@ theme.CollectionFilters = {
 			});
 		});
 
-    // Mobile sidebar Trigger
-    const sidebarToggle = document.querySelector('.js-collection-side-toggle');
-
-    if (!sidebarToggle) return false;
-
-    sidebarToggle.addEventListener('click', function(event){
-     event.preventDefault();
-     theme.Helpers.toggleClass("sidebar", "open");
-    });
+    // Mobile sidebar Trigger (supports multiple toggles)
+    const sidebarToggles = document.querySelectorAll('.js-collection-side-toggle');
+    if (sidebarToggles.length > 0) {
+      sidebarToggles.forEach((btn) => {
+        btn.addEventListener('click', function(event){
+          event.preventDefault();
+          theme.Helpers.toggleClass("sidebar", "open");
+        });
+      });
+    }
 
 	},
 	renderFilters: function renderFilters() {
-    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
+    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") || document.querySelector("[data-mhy-collection-sf]") ) {
 			theme.CollectionFilters.horizontalFilters();
 			theme.CollectionFilters.currentFilters();
 		}
 		if ( document.querySelector("[data-collection-filters-price-range]") ) {
 			theme.CollectionFilters.priceRange();
-      theme.CollectionFilters.priceSlider();
+			theme.CollectionFilters.priceSlider();
 		}
-    if ( document.querySelector("[data-collection-sidebar-filters]") ) {
-      theme.CollectionFilters.sidebarFilters();
-    }
+		if ( document.querySelector("[data-collection-sidebar-filters]") || document.querySelector("[data-mhy-collection-sf]") ) {
+			theme.CollectionFilters.sidebarFilters();
+		}
     if ( document.querySelector("[data-collection-sort-by]") ) {
 			if ( document.querySelector("[data-collection-sort-by]").querySelector('.current') ) {
         const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
@@ -6877,6 +6886,9 @@ theme.CollectionFilters = {
 		}
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init();
+    if (typeof window.initCollectionSortFilterUI === "function") {
+      window.initCollectionSortFilterUI();
+    }
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 		fetch(url)

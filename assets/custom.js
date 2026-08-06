@@ -766,8 +766,109 @@ document.addEventListener("DOMContentLoaded", function () {
 
 (function () {
   function initCollectionSortFilterUI() {
+    // 1. Desktop Toolbar Pill Dropdowns
+    const desktopForm = document.getElementById("CollectionFiltersForm");
+    if (desktopForm && !desktopForm.dataset.mhyDtInit) {
+      desktopForm.dataset.mhyDtInit = "true";
+
+      // Restore previously open dropdown if index is saved
+      if (typeof window.mhyLastOpenDropdownIndex === "number" && window.mhyLastOpenDropdownIndex !== -1) {
+        const pills = desktopForm.querySelectorAll("[data-mhy-dt-filter]");
+        if (pills[window.mhyLastOpenDropdownIndex]) {
+          const dropdown = pills[window.mhyLastOpenDropdownIndex].querySelector("[data-mhy-dt-dropdown]");
+          if (dropdown) dropdown.hidden = false;
+        }
+      }
+
+      desktopForm.addEventListener("click", function (e) {
+        const trigger = e.target.closest("[data-mhy-dt-trigger]");
+        if (trigger) {
+          e.preventDefault();
+          const pill = trigger.closest("[data-mhy-dt-filter]");
+          const dropdown = pill ? pill.querySelector("[data-mhy-dt-dropdown]") : null;
+          if (dropdown) {
+            const isHidden = dropdown.hidden;
+            desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+            dropdown.hidden = !isHidden;
+
+            if (!isHidden) {
+              window.mhyLastOpenDropdownIndex = -1;
+            } else {
+              const pills = Array.from(desktopForm.querySelectorAll("[data-mhy-dt-filter]"));
+              window.mhyLastOpenDropdownIndex = pills.indexOf(pill);
+            }
+          }
+          return;
+        }
+
+        const sortTrigger = e.target.closest("[data-mhy-sort-trigger]");
+        if (sortTrigger) {
+          e.preventDefault();
+          const sortPill = sortTrigger.closest("[data-mhy-sort]");
+          const sortDropdown = sortPill ? sortPill.querySelector("[data-mhy-sort-dropdown]") : null;
+          if (sortDropdown) {
+            const isHidden = sortDropdown.hidden;
+            desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+            sortDropdown.hidden = !isHidden;
+            window.mhyLastOpenDropdownIndex = -1;
+          }
+          return;
+        }
+
+        const sortOption = e.target.closest("[data-mhy-sort-option]");
+        if (sortOption) {
+          e.preventDefault();
+          const value = sortOption.getAttribute("data-mhy-sort-option");
+          const name = sortOption.getAttribute("data-mhy-sort-name") || sortOption.textContent;
+          const params = new URLSearchParams(window.location.search);
+
+          const currentFormData = new FormData(desktopForm);
+          for (let [k, v] of currentFormData.entries()) {
+            if (k !== "sort_by") params.set(k, v);
+          }
+          params.set("sort_by", value);
+
+          document.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          document.querySelectorAll("[data-mhy-sort-active]").forEach(el => el.textContent = (name || "").trim());
+
+          window.mhyLastOpenDropdownIndex = -1;
+
+          if (window.theme && theme.CollectionFilters && typeof theme.CollectionFilters.renderPage === "function") {
+            theme.CollectionFilters.renderPage(params.toString());
+          } else {
+            window.location.search = params.toString();
+          }
+          return;
+        }
+
+        if (!e.target.closest("[data-mhy-dt-filter]") && !e.target.closest("[data-mhy-sort]")) {
+          desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+          desktopForm.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          window.mhyLastOpenDropdownIndex = -1;
+        }
+      });
+
+      desktopForm.addEventListener("change", function (e) {
+        const formData = new FormData(desktopForm);
+        const searchParams = new URLSearchParams(formData).toString();
+        if (window.theme && theme.CollectionFilters && typeof theme.CollectionFilters.renderPage === "function") {
+          theme.CollectionFilters.renderPage(searchParams);
+        }
+      });
+
+      document.addEventListener("click", function (e) {
+        if (desktopForm && !desktopForm.contains(e.target)) {
+          desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+          desktopForm.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          window.mhyLastOpenDropdownIndex = -1;
+        }
+      });
+    }
+
+    // 2. Mobile Toolbar & Sidebar UI
     const toolbar = document.querySelector("[data-mhy-collection-sf]");
     if (!toolbar) return;
+    
     if (toolbar.dataset.mhyInit === "true") return;
     toolbar.dataset.mhyInit = "true";
 
@@ -815,6 +916,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const value = optionBtn.getAttribute("data-mhy-sort-option");
         const name = optionBtn.getAttribute("data-mhy-sort-name") || optionBtn.textContent;
         const params = new URLSearchParams(window.location.search);
+        
+        const sideForm = document.getElementById("CollectionSidebarFiltersForm");
+        if (sideForm) {
+          const sideData = new FormData(sideForm);
+          for (let [k, v] of sideData.entries()) {
+            if (k !== "sort_by") params.append(k, v);
+          }
+        }
         params.set("sort_by", value);
 
         if (sortActive) sortActive.textContent = (name || "").trim();
@@ -855,6 +964,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!sidebar || !overlay) return;
       const isOpen = sidebar.classList.contains("open") || sidebar.classList.contains("active");
       overlay.classList.toggle("active", isOpen);
+      document.body.classList.toggle("sidebar-open", isOpen);
     }
 
     if (sidebar) {
@@ -868,9 +978,11 @@ document.addEventListener("DOMContentLoaded", function () {
       sidebar.classList.remove("open");
       sidebar.classList.remove("active");
       overlay.classList.remove("active");
+      document.body.classList.remove("sidebar-open");
     });
   }
 
+  window.initCollectionSortFilterUI = initCollectionSortFilterUI;
   document.addEventListener("DOMContentLoaded", initCollectionSortFilterUI);
   document.addEventListener("shopify:section:load", initCollectionSortFilterUI);
 })();
@@ -1239,12 +1351,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else if (cartConfig.cart_action === "modal_cart") {
                   Shopify.theme.ajaxCart.showModal(cartConfig);
                 }
-                Shopify.theme.ajaxCart.setCartNotice(cartConfig, {
-                  type: "success",
-                  title: "Product added successfully",
-                  message: "",
-                  autoHideMs: 3500,
-                });
+                // Cart drawer opens directly — no success banner needed.
+
                 setValidation("");
               })
               .catch((err) => {
