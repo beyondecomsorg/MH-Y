@@ -225,51 +225,8 @@ data-collection-link="{{ collection_link }}">
         </form>
       </div>
 
-      {%- comment -%} MOBILE TOOLBAR (Sticky Bar — Image 2 Style) {%- endcomment -%}
-      <div class="mhy-collection-sf span-12 md-span-12 auto" data-mhy-collection-sf>
-        {%- if show_sidebar -%}
-          <button class="mhy-collection-sf__control js-collection-side-toggle" type="button" aria-controls="sidebar">
-            <span class="mhy-collection-sf__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="9"/>
-                <line x1="8" y1="12" x2="16" y2="12"/>
-              </svg>
-            </span>
-            <span class="mhy-collection-sf__text">
-              <span class="mhy-collection-sf__label">Filter &nbsp;<span class="mhy-mobile-count">{{ collection.products_count }} Results</span></span>
-            </span>
-            {%- if filter_count > 0 -%}
-              <span class="mhy-collection-sf__badge" aria-label="{{ filter_count }} active filters">{{ filter_count }}</span>
-            {%- endif -%}
-          </button>
-        {%- endif -%}
 
-        <div class="mhy-collection-sf__sort" data-mhy-sort>
-          <button class="mhy-collection-sf__control" type="button" data-mhy-sort-trigger aria-haspopup="listbox" aria-expanded="false">
-            <span class="mhy-collection-sf__text">
-              <span class="mhy-collection-sf__value">Sort: <span data-mhy-sort-active>{{ mhy_active_sort_name }}</span></span>
-            </span>
-            <svg class="mhy-dt-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left: 6px;">
-              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
 
-          <div class="mhy-collection-sf__dropdown" data-mhy-sort-dropdown hidden>
-            <div class="mhy-collection-sf__dropdown-inner" role="listbox">
-              {%- for option in collection.sort_options -%}
-                <button
-                  class="mhy-collection-sf__option{% if option.value == collection.sort_by %} is-active{% endif %}"
-                  type="button"
-                  data-mhy-sort-option="{{ option.value | escape }}"
-                  data-mhy-sort-name="{{ option.name | escape }}"
-                >
-                  {{ option.name }}
-                </button>
-              {%- endfor -%}
-            </div>
-          </div>
-        </div>
-      </div>
 
       {% if show_sidebar %}
         <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto" data-collection-sidebar-filters>
@@ -376,7 +333,11 @@ data-collection-link="{{ collection_link }}">
       {% endunless %}
     </div>
   {% endpaginate %}
+
 </section>
+
+{%- comment -%} ── New Mobile Filter & Sort UI (mobile-only) ── {%- endcomment -%}
+{% render 'mf-mobile-filter', collection: collection %}
 
 {% schema %}
 {

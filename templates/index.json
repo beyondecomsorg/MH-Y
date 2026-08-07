@@ -9,174 +9,6 @@
  */
 {
   "sections": {
-    "slideshow_dPzTCE": {
-      "type": "slideshow",
-      "blocks": {
-        "image_yk4ib3": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0471.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_video": "shopify://files/videos/WhatsApp Video 2026-06-06 at 9.13.19 PM.mp4",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/shackets-1",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
-        "image_wL87mR": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_0481.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/IMG_0592.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/shackets-1",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
-        "image_TAK3Dg": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_0595.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 19,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/IMG_0593.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/polos-tees",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        }
-      },
-      "block_order": [
-        "image_yk4ib3",
-        "image_wL87mR",
-        "image_TAK3Dg"
-      ],
-      "name": "Slideshow",
-      "settings": {
-        "full_width": true,
-        "slideshow_size": "natural",
-        "desktop_height": 900,
-        "mobile_height": 600,
-        "caption_below": false,
-        "pager": "dots",
-        "show_animation": true,
-        "transition": "fade",
-        "slider_speed": 5,
-        "enable_stop_pause_on_mobile": true,
-        "slide_heading_size": 22,
-        "subheading_size": 14,
-        "section_padding": "both"
-      }
-    },
-    "new_feature_collection_MVqbCC": {
-      "type": "new-feature-collection",
-      "name": "Featured collection 2",
-      "settings": {
-        "heading": "Featured collection",
-        "collection": "new-arrival",
-        "carousel": true,
-        "show_view_all": true,
-        "reduce_width": false,
-        "grid": 4,
-        "limit": 12,
-        "section_padding": "both"
-      }
-    },
-
-    "custom_grid_collection_3de4Vk": {
-      "type": "custom-grid-collection",
-      "blocks": {
-        "combo_item_XYFAzA": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/1_1_8437134d-b7b4-4ca7-8563-66d77ddc64a1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_wHGadg": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/4_1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_jyEWnG": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/3_1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_7DFrhx": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/2_3.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "combo_item_XYFAzA",
-        "combo_item_wHGadg",
-        "combo_item_jyEWnG",
-        "combo_item_7DFrhx"
-      ],
-      "name": "High Value Combos",
-      "settings": {
-        "heading": "HIGH VALUE COMBOS",
-        "heading_color": "#173250",
-        "heading_size": 18,
-        "bg_color": "#ffffff",
-        "section_width": 1400,
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "items_to_show": 4,
-        "grid_gap": 3,
-        "card_aspect": "1/1",
-        "card_radius": 0,
-        "label_size": 10
-      }
-    },
     "slideshow": {
       "type": "slideshow",
       "blocks": {
@@ -271,6 +103,190 @@
         "section_padding": "none"
       }
     },
+    "slideshow_dPzTCE": {
+      "type": "slideshow",
+      "blocks": {
+        "image_yk4ib3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/IMG_0471.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_video": "shopify://files/videos/WhatsApp Video 2026-06-06 at 9.13.19 PM.mp4",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/shackets-1",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
+        "image_wL87mR": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/IMG_0481.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/IMG_0592.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/shackets-1",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        },
+        "image_TAK3Dg": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/IMG_0595.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 19,
+            "caption_position": "middle_center",
+            "mobile_image": "shopify://shop_images/IMG_0593.jpg",
+            "hide_caption_background": false,
+            "heading": "",
+            "subheading": "",
+            "link": "shopify://collections/polos-tees",
+            "button_text": "",
+            "second_link": "",
+            "second_button_text": "Button 2 text",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_background": "#000000",
+            "caption_background": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "image_yk4ib3",
+        "image_wL87mR",
+        "image_TAK3Dg"
+      ],
+      "disabled": true,
+      "name": "Slideshow",
+      "settings": {
+        "full_width": true,
+        "slideshow_size": "natural",
+        "desktop_height": 900,
+        "mobile_height": 600,
+        "caption_below": false,
+        "pager": "dots",
+        "show_animation": true,
+        "transition": "fade",
+        "slider_speed": 5,
+        "enable_stop_pause_on_mobile": true,
+        "slide_heading_size": 22,
+        "subheading_size": 14,
+        "section_padding": "both"
+      }
+    },
+    "new_feature_collection_MVqbCC": {
+      "type": "new-feature-collection",
+      "disabled": true,
+      "name": "Featured collection 2",
+      "settings": {
+        "heading": "Featured collection",
+        "collection": "new-arrival",
+        "carousel": true,
+        "show_view_all": true,
+        "reduce_width": false,
+        "grid": 4,
+        "limit": 12,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_q6ChHR": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Best Seller",
+        "collection": "bestseller",
+        "carousel": false,
+        "show_view_all": false,
+        "reduce_width": false,
+        "grid": 4,
+        "limit": 4,
+        "section_padding": "both"
+      }
+    },
+    "custom_grid_collection_3de4Vk": {
+      "type": "custom-grid-collection",
+      "blocks": {
+        "combo_item_XYFAzA": {
+          "type": "combo_item",
+          "settings": {
+            "image": "shopify://shop_images/1_1_8437134d-b7b4-4ca7-8563-66d77ddc64a1.png",
+            "label": "",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "combo_item_wHGadg": {
+          "type": "combo_item",
+          "settings": {
+            "image": "shopify://shop_images/4_1.png",
+            "label": "",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "combo_item_jyEWnG": {
+          "type": "combo_item",
+          "settings": {
+            "image": "shopify://shop_images/3_1.png",
+            "label": "",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "combo_item_7DFrhx": {
+          "type": "combo_item",
+          "settings": {
+            "image": "shopify://shop_images/2_3.png",
+            "label": "",
+            "sublabel": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "combo_item_XYFAzA",
+        "combo_item_wHGadg",
+        "combo_item_jyEWnG",
+        "combo_item_7DFrhx"
+      ],
+      "disabled": true,
+      "name": "High Value Combos",
+      "settings": {
+        "heading": "HIGH VALUE COMBOS",
+        "heading_color": "#173250",
+        "heading_size": 18,
+        "bg_color": "#ffffff",
+        "section_width": 1400,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "items_to_show": 4,
+        "grid_gap": 3,
+        "card_aspect": "1/1",
+        "card_radius": 0,
+        "label_size": 10
+      }
+    },
     "collection_list_X6mgdk": {
       "type": "collection-list",
       "blocks": {
@@ -347,7 +363,8 @@
         "custom_class": "hero_baner-video",
         "desktop_video": "shopify://files/videos/desktop-intro.mp4",
         "mobile_video": "shopify://files/videos/mobile-intro.mp4",
-        "title": "The  ISLE OF MAN",
+        "sub_title": "The",
+        "title": "ISLE OF MAN",
         "subtitle": "",
         "button_link": "shopify://collections/the-isle-of-man",
         "button_text": "EXPLORE"
@@ -370,12 +387,27 @@
     },
     "new_feature_collection_Ch9JmQ": {
       "type": "new-feature-collection",
+      "disabled": true,
       "name": "Featured collection 2",
       "settings": {
         "heading": "Featured collection",
         "collection": "casual-shirts",
         "carousel": true,
         "show_view_all": true,
+        "reduce_width": false,
+        "grid": 4,
+        "limit": 4,
+        "section_padding": "both"
+      }
+    },
+    "featured_collection_TF4yJz": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "NEW COLLECTION",
+        "collection": "the-isle-of-man",
+        "carousel": false,
+        "show_view_all": false,
         "reduce_width": false,
         "grid": 4,
         "limit": 4,
@@ -482,39 +514,6 @@
         "accent_color": "#173250",
         "padding_top": 80,
         "padding_bottom": 72
-      }
-    },
-    "grid_layout_NYDdJm": {
-      "type": "grid-layout",
-      "disabled": true,
-      "settings": {
-        "img1": "shopify://shop_images/3_2e595f50-c736-4143-8b08-34914c24bbef.png",
-        "text1": "Knitwear",
-        "img2": "shopify://shop_images/1_e6d8ac09-47ac-4a2c-af0b-33d0cdc64414.png",
-        "text2": "Casual",
-        "img3": "shopify://shop_images/1_ef6855bf-fa49-4d2c-930c-88928b37aae7.png",
-        "text3": "Trousers",
-        "text4": "Polos",
-        "img5": "shopify://shop_images/2_f173c68c-edfd-4268-9e25-02ec2b1512fb.png",
-        "text5": "Suits",
-        "img6": "shopify://shop_images/2_637a7a11-011b-4d08-99b7-01a1ec7b1c26.png",
-        "text6": "Loafers"
-      }
-    },
-    "guarantee": {
-      "type": "guarantee",
-      "disabled": true,
-      "settings": {
-        "img1": "shopify://shop_images/003-return.png",
-        "text1": "",
-        "img2": "shopify://shop_images/004-delivery-truck.png",
-        "text2": "",
-        "img3": "shopify://shop_images/002-gift.png",
-        "text3": "",
-        "img4": "shopify://shop_images/001-handshake.png",
-        "text4": "",
-        "text5": "",
-        "text6": ""
       }
     },
     "background_video_zxAxbM": {
@@ -902,7 +901,6 @@
     },
     "custom_shop_the_look_RRr8K7": {
       "type": "custom-shop-the-look",
-      "disabled": true,
       "custom_css": [
         "@media only screen and (min-width: 600px) {.collection--carousel_image .box-ratio {height: 700px; }}"
       ],
@@ -952,60 +950,35 @@
     },
     "premium_customer_reviews": {
       "type": "premium-reviews",
-      "settings": {
-        "heading": "Loved by Our Customers",
-        "sub_heading": "Real experiences from our valued customers.",
-        "show_overall_rating": true,
-        "overall_score": "4.9",
-        "overall_count": "Based on 2,000+ Reviews",
-        "bg_color": "#FFFFFF",
-        "card_bg_color": "#FFFFFF",
-        "text_color_primary": "#173250",
-        "text_color_secondary": "#173250",
-        "border_color": "#E5E7EB",
-        "accent_color": "#173250",
-        "star_color": "#D4AF37",
-        "cta_text": "View All Reviews",
-        "cta_link": "/collections/all",
-        "btn_bg_color": "#1F1F1F",
-        "btn_text_color": "#FFFFFF",
-        "btn_hover_color": "#6E7C45",
-        "autoplay_speed": 5,
-        "show_arrows": true,
-        "show_dots": true,
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "section_padding": "both"
-      },
       "blocks": {
         "review_1": {
           "type": "testimonial",
           "settings": {
-            "author_name": "Kabir Malhotra",
+            "author_name": "Prateek rana",
             "verified_buyer": true,
             "rating": 5,
-            "review_title": "Exceptional fit and fabric",
-            "review_text": "I bought three linen shirts and they exceeded my expectations. The fabric is extremely breathable, and the stitching is top-notch. Truly a luxury experience."
+            "review_title": "The fabric quality is very good",
+            "review_text": "I’m very happy with the product. The fabric quality is very good—soft, comfortable, and feels durable. The fit is nice, and the overall finish of the T-shirt is impressive. Overall, I really like the product and would recommend it to others looking for good-quality casual wear."
           }
         },
         "review_2": {
           "type": "testimonial",
           "settings": {
-            "author_name": "Vikram Aditya",
+            "author_name": "CHANDRIKA SANGHVI",
             "verified_buyer": true,
             "rating": 5,
-            "review_title": "Timeless designs",
-            "review_text": "MH&Y’s attention to detail is remarkable. The styling is minimal and sophisticated. Perfect for both office wear and evening events."
+            "review_title": "Style, comfort, and quality",
+            "review_text": "Overall, MH&Y is a great option for men who value understated style, comfort, and quality. I’d definitely recommend starting with their linen shirts or chinos to get a feel for what they offer."
           }
         },
         "review_3": {
           "type": "testimonial",
           "settings": {
-            "author_name": "Rohan Sen",
+            "author_name": "Shweta",
             "verified_buyer": true,
             "rating": 5,
-            "review_title": "Highly recommended",
-            "review_text": "Outstanding customer service and premium quality. The knit polo has an amazing drape and structure. I will definitely be a returning customer."
+            "review_title": "Loved the event and enjoyed it",
+            "review_text": "Amazing collection!! The fabric is next to skin and is of superior quality.\nLoved the event and enjoyed it.\nWill surely refer to my friends"
           }
         }
       },
@@ -1013,21 +986,46 @@
         "review_1",
         "review_2",
         "review_3"
-      ]
+      ],
+      "settings": {
+        "heading": "Loved by Our Customers",
+        "sub_heading": "Real experiences from our valued customers.",
+        "show_overall_rating": true,
+        "overall_score": "4.9",
+        "overall_count": "Based on 2,000+ Reviews",
+        "bg_color": "#ffffff",
+        "card_bg_color": "#ffffff",
+        "text_color_primary": "#173250",
+        "text_color_secondary": "#173250",
+        "border_color": "#e5e7eb",
+        "accent_color": "#173250",
+        "star_color": "#d4af37",
+        "cta_text": "View All Reviews",
+        "cta_link": "/collections/all",
+        "btn_bg_color": "#1f1f1f",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#6e7c45",
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "section_padding": "both"
+      }
     }
   },
   "order": [
+    "slideshow",
     "slideshow_dPzTCE",
     "new_feature_collection_MVqbCC",
+    "featured_collection_q6ChHR",
     "custom_grid_collection_3de4Vk",
-    "slideshow",
     "collection_list_X6mgdk",
     "full_video_section_JQXE4c",
     "featured_collection_xh7DWj",
     "new_feature_collection_Ch9JmQ",
+    "featured_collection_TF4yJz",
     "animating_cards_8L4tqe",
-    "grid_layout_NYDdJm",
-    "guarantee",
     "background_video_zxAxbM",
     "rich_text_caamGM",
     "image_gallery_QyTUt6",

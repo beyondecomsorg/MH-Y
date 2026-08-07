@@ -209,6 +209,7 @@
 
   .premium-reviews-section-{{ section.id }} .premium-card-avatar-wrapper {
     width: 54px;
+    display: none;
     height: 54px;
     border-radius: 50%;
     overflow: hidden;
@@ -455,7 +456,7 @@
                 
                 <!-- Card Header: Profile Info -->
                 <div class="premium-card-header">
-                  <div class="premium-card-avatar-wrapper">
+                  {% comment %} <div class="premium-card-avatar-wrapper">
                     {%- if block.settings.image != blank -%}
                       {{ block.settings.image | image_url: width: 120, height: 120 | image_tag: 
                         class: 'premium-card-avatar', 
@@ -477,7 +478,7 @@
                         {{ block.settings.author_name | slice: 0 | upcase }}
                       </div>
                     {%- endif -%}
-                  </div>
+                  </div> {% endcomment %}
                   
                   <div class="premium-card-meta">
                     <div class="premium-card-author-name">{{ block.settings.author_name | escape }}</div>

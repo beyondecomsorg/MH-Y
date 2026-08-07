@@ -1,4 +1,4 @@
-{%- liquid
+{% comment %} {%- liquid
   assign popup_enabled      = section.settings.enable
   assign popup_delay        = section.settings.delay
   assign popup_anim         = section.settings.animation_duration
@@ -288,9 +288,9 @@ display: flex;
   .wcp-form-side { padding:28px 18px 22px; }
   .wcp-heading { font-size:18px; }
 }
-</style>
+</style> {% endcomment %}
 
-<script>
+{% comment %} <script>
 (function() {
   'use strict';
   var KEY_SUB  = 'wcp_subscribed';
@@ -418,7 +418,7 @@ display: flex;
 
   });
 })();
-</script>
+</script> {% endcomment %}
 
 {% schema %}
 {

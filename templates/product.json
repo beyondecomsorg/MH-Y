@@ -36,6 +36,18 @@
             "border_color": "rgba(0,0,0,0)"
           }
         },
+        "product_info_image_eLmYBB": {
+          "type": "product_info_image",
+          "settings": {
+            "enable_block": true,
+            "image": "shopify://shop_images/final_pouch_website_image.png",
+            "alt_text": "",
+            "desktop_width": "100%",
+            "top_spacing": 16,
+            "bottom_spacing": 16,
+            "border_radius": 4
+          }
+        },
         "product_feature_icons_new": {
           "type": "product_feature_icons",
           "settings": {}
@@ -50,7 +62,23 @@
             "heading": "AVAILABLE BENEFITS",
             "accent_color": "#b8860b",
             "coupon_code": "ONLYEXCHANGE",
-            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns."
+            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
+            "coupon_code_1": "WELCOME10",
+            "description_1": "Get 10% OFF on your first order.",
+            "tnc_text_1": "T & C",
+            "tnc_url_1": "",
+            "coupon_code_2": "EXTRA15",
+            "description_2": "Get an Extra 15% OFF today only. Valid till 11:59 PM.",
+            "tnc_text_2": "T & C",
+            "tnc_url_2": "",
+            "coupon_code_3": "FREESHIP",
+            "description_3": "Free Shipping on your order.",
+            "tnc_text_3": "T & C",
+            "tnc_url_3": "",
+            "coupon_code_4": "MHY10",
+            "description_4": "Shop for ₹10,000 and get an additional 10% OFF.",
+            "tnc_text_4": "T & C",
+            "tnc_url_4": ""
           }
         },
         "tab_content_ncpXRU": {
@@ -93,18 +121,6 @@
             "appearance": "simple"
           }
         },
-        "product_info_image_eLmYBB": {
-          "type": "product_info_image",
-          "settings": {
-            "enable_block": true,
-            "image": "shopify://shop_images/final_pouch_website_image.png",
-            "alt_text": "",
-            "desktop_width": "100%",
-            "top_spacing": 16,
-            "bottom_spacing": 16,
-            "border_radius": 4
-          }
-        },
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
@@ -118,6 +134,7 @@
         "896887d5-6a65-431c-9081-550cbc1a6676",
         "569acd10-43ac-4854-adc8-bc64927b54bb",
         "promo_alert_default",
+        "product_info_image_eLmYBB",
         "product_feature_icons_new",
         "share_WKEqCy",
         "available_benefits_4EjjVW",
@@ -126,7 +143,6 @@
         "tab_content_XMD97A",
         "tab_content_PpLMqd",
         "complementary_products_BMGWQw",
-        "product_info_image_eLmYBB",
         "shop_the_look_QyHztr"
       ],
       "custom_css": [
@@ -187,6 +203,7 @@
         "feature_3Y9MG9",
         "feature_yLCKTr"
       ],
+      "disabled": true,
       "name": "Shop with Confidence",
       "settings": {
         "heading": "SHOP WITH CONFIDENCE",

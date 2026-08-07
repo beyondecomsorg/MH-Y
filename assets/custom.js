@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
 });
 
 (function () {
@@ -765,7 +766,142 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 
 (function () {
+  function mhyNormalizeColorName(name) {
+    if (!name) return '';
+    return name.toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '')
+      .replace(/[-_]/g, '');
+  }
+
+  // ── Built-in color map covering all known store colors ──────────────────────
+  var MHY_BUILTIN_COLORS = {
+    'ashgrey':          '#B2BEB5',
+    'balsamgreen':      '#5F8B6A',
+    'beige':            '#E8D8B7',
+    'black':            '#000000',
+    'blue':             '#0057B7',
+    'bluegrey':         '#6E7F8D',
+    'bordeaux':         '#4A0020',
+    'brown':            '#6B3A2A',
+    'camel':            '#C19A6B',
+    'cedar':            '#9E4B2A',
+    'charcoal':         '#36454F',
+    'charcoalgrey':     '#4A4A4A',
+    'chestnut':         '#954535',
+    'darkblue':         '#00008B',
+    'darkgrey':         '#A9A9A9',
+    'deepblue':         '#003A70',
+    'ecru':             '#F5F0E1',
+    'eggplant':         '#614051',
+    'fern':             '#4F7942',
+    'flintstone':       '#857C73',
+    'gray':             '#808080',
+    'green':            '#2E8B57',
+    'grey':             '#808080',
+    'gunmetal':         '#2C3539',
+    'highrisegrey':     '#A0A0A0',
+    'honeybeige':       '#D4A96A',
+    'iceblue':          '#99C5C4',
+    'icegrey':          '#DCDCDC',
+    'khaki':            '#C3B091',
+    'lavender':         '#B57EDC',
+    'lightblue':        '#ADD8E6',
+    'lightgrayishblue': '#B0C4D8',
+    'lightgrey':        '#D3D3D3',
+    'lilac':            '#C8A2C8',
+    'magnet':           '#424B54',
+    'maroon':           '#800000',
+    'mauve':            '#E0B0FF',
+    'midnightnavy':     '#191970',
+    'mocha':            '#967259',
+    'mustard':          '#FFDB58',
+    'navy':             '#000080',
+    'offwhite':         '#F5F5EF',
+    'olive':            '#808000',
+    'paleyellow':       '#FAFAC8',
+    'pine':             '#2A5C45',
+    'pink':             '#FFC0CB',
+    'powderblue':       '#B0E0E6',
+    'rosebrown':        '#BC8F8F',
+    'rust':             '#B7410E',
+    'sagegreen':        '#B2AC88',
+    'sand':             '#C2B280',
+    'shitake':          '#8B7355',
+    'skyblue':          '#87CEEB',
+    'slateblue':        '#6A5ACD',
+    'spruce':           '#1D4E38',
+    'stonegrey':        '#928E85',
+    'tan':              '#D2B48C',
+    'teal':             '#008080',
+    'terracotta':       '#CC4E32',
+    'umber':            '#635147',
+    'walnut':           '#7B3F00',
+    'white':            '#FFFFFF',
+    'wine':             '#722F37',
+    'wood':             '#A0522D',
+    'yellow':           '#FFD700'
+  };
+
+  function mhyApplyDesktopSwatches() {
+    // Start with the built-in color map
+    var swatches = Object.assign({}, MHY_BUILTIN_COLORS);
+
+    // Override / extend with Theme Customizer blocks if available
+    var dataEl = document.getElementById('mhy-color-swatches-data');
+    if (dataEl) {
+      try {
+        var rawSwatches = JSON.parse(dataEl.textContent);
+        for (var key in rawSwatches) {
+          if (rawSwatches.hasOwnProperty(key)) {
+            var normalized = mhyNormalizeColorName(key);
+            if (normalized && rawSwatches[key]) {
+              swatches[normalized] = rawSwatches[key];
+            }
+          }
+        }
+      } catch(e) {
+        console.log("mhy-swatches: error parsing customizer JSON:", e);
+      }
+    }
+
+    var options = document.querySelectorAll('.mhy-dt-option');
+    options.forEach(function(opt) {
+      if (opt.querySelector('.mhy-swatch-circle')) return;
+
+      var checkbox = opt.querySelector('.mhy-dt-checkbox');
+      if (!checkbox) return;
+
+      var nameAttr = checkbox.getAttribute('name') || '';
+      if (nameAttr.toLowerCase().indexOf('color') === -1 && nameAttr.toLowerCase().indexOf('colour') === -1) {
+        return;
+      }
+
+      var labelEl = opt.querySelector('.mhy-dt-option__label');
+      if (!labelEl) return;
+
+      var colorName = labelEl.textContent.trim();
+      var normalizedFilter = mhyNormalizeColorName(colorName);
+      var finalColor = swatches[normalizedFilter] || '#e0e0e0';
+
+      var swatch = document.createElement('span');
+      swatch.className = 'mhy-swatch-circle';
+      swatch.style.backgroundColor = finalColor;
+
+      opt.insertBefore(swatch, labelEl);
+    });
+  }
+
   function initCollectionSortFilterUI() {
+    // Apply desktop swatches
+    mhyApplyDesktopSwatches();
+
+    // Reload new mobile filters state if defined
+    if (typeof window.mhyMobileFilterReload === "function") {
+      window.mhyMobileFilterReload();
+    }
+
     // 1. Desktop Toolbar Pill Dropdowns
     const desktopForm = document.getElementById("CollectionFiltersForm");
     if (desktopForm && !desktopForm.dataset.mhyDtInit) {

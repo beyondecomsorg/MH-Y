@@ -178,6 +178,7 @@
 
   <div class="js-slideout-overlay site-overlay"></div>
   <div class="js-modal-overlay site-overlay"></div>
+  <div class="mhy-mobile-overlay"></div>
 
   <!-- MOBILE NAVIGATION -->
   <aside class="slideout slideout__drawer-left"
@@ -363,13 +364,12 @@
   └─────────────────────────────────────────────────────────┘
   {%- endcomment -%}
   <script src="{{ 'eventemitter3.min.js' | asset_url }}" defer></script>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
   <script src="{{ 'custom.js' | asset_url }}" defer></script>
 
   {%- if settings.product_grid_video -%}
     <script src="{{ 'vendor-video.js' | asset_url }}" defer></script>
   {%- endif -%}
-
-  <script src="{{ 'theme.js' | asset_url }}" defer></script>
 
   {% section 'mailing-popup' %}
   {% section 'welcome-popup' %}

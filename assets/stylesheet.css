@@ -6038,11 +6038,14 @@ aside#slideout-ajax-cart.has--featured_collection {
 
 /* ---- Global for product block containers ---- */
 .product__section--element {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   display: block;
   width: 100%;
   float: left;
   clear: both;
+}
+.product__section--product_feature_icons.product__section--element{
+  margin-bottom: 1rem;
 }
 
 .product__section--element label {
@@ -7956,7 +7959,7 @@ select.styled-select {
   margin: 0 auto;
   width: 100%;
   display: grid;
-  grid-column-gap: 1px;
+  grid-column-gap: 5px;
   grid-row-gap: 60px;
 }
 
@@ -7966,7 +7969,7 @@ select.styled-select {
   }
   .collection__page-products.product-loop,
   .featured__collection.product-loop {
-    grid-column-gap: 1px;
+    grid-column-gap: 5px;
      grid-row-gap: 40px;
   }
   section.collection__page.row.grid__wrapper{

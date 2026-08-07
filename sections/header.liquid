@@ -117,7 +117,7 @@
 <div class="mobile-menu__trigger mobile-only">
   <div class="slideout__trigger--open text-left mobile-menu-sale-wrapper">
 
-    <span class="sale-badge">Sale</span>
+    {% comment %} <span class="sale-badge">Sale</span> {% endcomment %}
 
     <button
       class="slideout__trigger-mobile-menu js-slideout-open text-left"
@@ -185,6 +185,20 @@
           {% endif %}
         </div>
       </div>
+
+      {%- comment -%} ── Color Swatches JSON payload ── {%- endcomment -%}
+      <script id="mhy-color-swatches-data" type="application/json">
+      {
+        {%- assign is_first = true -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'filter_color_swatches' and block.settings.color_name != blank -%}
+            {%- unless is_first -%},{%- endunless -%}
+            {{ block.settings.color_name | downcase | json }}: "{{ block.settings.swatch_color }}"
+            {%- assign is_first = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      }
+      </script>
 
       {% if section.settings.header_layout == 'left' %}
         <div class="large-search">
@@ -273,13 +287,13 @@
 
           {% if settings.cart_type == 'page_only' %}
             <!-- HulkApps Wishlist Header Icon -->
-            <li class="cart-links__link-wishlist hulkapps-wishlist-header-li">
+            {% comment %} <li class="cart-links__link-wishlist hulkapps-wishlist-header-li">
               <a href="/pages/wishlist" class="hulkapps-wishlist-header mhy-header-wishlist-btn" aria-label="Wishlist">
                 <svg class="mhy-header-wishlist-icon vib-center" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
               </a>
-            </li>
+            </li> {% endcomment %}
 
             <li class="cart-links__link-cart my-cart-link-container">
               <a href="{{ routes.cart_url }}">
@@ -297,13 +311,13 @@
             </li>
           {% else %}
             <!-- HulkApps Wishlist Header Icon -->
-            <li class="cart-links__link-wishlist hulkapps-wishlist-header-li">
+            {% comment %} <li class="cart-links__link-wishlist hulkapps-wishlist-header-li">
               <a href="/pages/wishlist" class="hulkapps-wishlist-header mhy-header-wishlist-btn" aria-label="Wishlist">
                 <svg class="mhy-header-wishlist-icon vib-center" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
               </a>
-            </li>
+            </li> {% endcomment %}
 
             <li class="cart-links__link-cart my-cart-link-container">
               <div class="slideout__trigger--open">
@@ -734,6 +748,24 @@
           "id": "announcement_text",
           "label": "Announcement text",
           "default": "<p>Share a shop announcement or message</p>"
+        }
+      ]
+    },
+    {
+      "type": "filter_color_swatches",
+      "name": "Filter Color Swatch",
+      "settings": [
+        {
+          "type": "text",
+          "id": "color_name",
+          "label": "Color Name",
+          "info": "Case-insensitive (e.g. 'ASH GREY')"
+        },
+        {
+          "type": "color",
+          "id": "swatch_color",
+          "label": "Swatch Color",
+          "default": "#ffffff"
         }
       ]
     }

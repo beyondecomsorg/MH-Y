@@ -17,6 +17,12 @@
       "id": "mobile_video",
       "label": "Mobile Video"
     },
+     {
+      "type": "text",
+      "id": "sub_title",
+      "label": "Sub Title",
+      "default": "The"
+    },
     {
       "type": "text",
       "id": "title",
@@ -106,8 +112,9 @@
   <div class="video-overlay">
     <div class="video-content">
       {% if section.settings.title %}
+        <p class="sub-title">{{ section.settings.sub_title }}</p>
         <h1 class="video-title">{{ section.settings.title }}</h1>
-      {% endif %}
+      {% endif %} 
       {% if section.settings.subtitle %}
         <p class="video-subtitle">{{ section.settings.subtitle }}</p>
       {% endif %}
@@ -119,6 +126,24 @@
 </a>
 
 <style>
+@font-face {
+  font-family: 'Snell BT Regular';
+  src: url('https://cdn.shopify.com/s/files/1/0653/3467/3561/files/Snell-BT-Regular.otf?v=1786023640') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SVN-Miller Banner";
+  src: url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.eot");
+  src: url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.eot?#iefix") format("embedded-opentype"),
+       url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.woff") format("woff"),
+       url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.ttf") format("truetype"),
+       url("https://db.onlinewebfonts.com/t/345a4b9dc453432314209d38245e4bff.svg#SVN-Miller Banner") format("svg");
+}
+
 .video-section1 {
   position: relative;
   width: 100%;
@@ -182,28 +207,69 @@
   color: #fff;
   margin-top:260px;
 }
+.sub-title {
+  font-family: "Snell BT Regular", "Snell Roundhand", "Snell Roundhand LT", "Apple Chancery", "Zapfino", "Lucida Handwriting", cursive !important;
+  font-size: 54px !important;
+  font-weight: 400;
+  margin-bottom: 0px !important;
+  letter-spacing: 0px !important;
+  color: #fff;
+  text-transform: none !important;
+  line-height: 1 !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: block;
+}
 
-/* Typography */
 .video-title {
-  font-size: 36px !important;
+  font-family: "SVN-Miller Banner";
+  font-size: 68px !important;
   font-weight: 400;
-  margin-bottom: 30px;
-  letter-spacing: .15em;
-  color:#fff;
-  text-transform: capitalize;
-  font-family: "Pinyon Script", cursive;
+  margin-bottom: 25px !important;
+  letter-spacing: 1px !important;
+  color: #fff;
+  text-transform: none !important;
+  line-height: 1.15;
+
+=  display: block;
+  margin-top: 5px !important;
+
+  /* OpenType properties */
 }
 
-.video-title>span {
-  font-size: 32px !important;
-  font-weight: 400;
-  margin-bottom: 30px;
-  letter-spacing: .15em;
-  color:#fff;
-  text-transform: capitalize;
-  font-family: "Playfair Display", serif;
+.video-char {
+  display: inline-block;
+  line-height: inherit;
 }
 
+/* Tall elegant I and l */
+
+/* Smaller s and e */
+
+
+.video-title{
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    gap:0;
+    line-height:0.9;
+    font-family:"Miller Banner", serif;
+}
+
+.video-title .video-char{
+    display:inline-block;
+    color:#fff;
+    font-weight:400;
+    line-height:.8;
+    transform-origin:bottom center;
+}
+
+
+.video-title .char-space{
+    width:18px;
+    display:inline-block;
+}
 .video-subtitle {
   font-size: 16px;
   margin-bottom: 30px;
@@ -275,9 +341,16 @@ video::-webkit-media-controls-enclosure {
     margin-top: 0;
   }
 
+  .sub-title {
+    font-size: 38px !important;
+    margin-bottom: -5px !important;
+  }
+
   .video-title {
-    font-size: 26px;
-    line-height: 1.2;
+    font-size: 44px !important;
+    line-height: 1.1 !important;
+    margin-top: 5px !important;
+    margin-bottom: 15px !important;
   }
 
   .video-subtitle {
@@ -303,3 +376,33 @@ video::-webkit-media-controls-enclosure {
   }
 }
 </style>
+
+<script>
+(function() {
+  function splitTitleChars() {
+    var titleEl = document.querySelector('.video-title');
+    if (!titleEl) return;
+    if (titleEl.querySelector('.video-char')) return;
+    
+    var text = titleEl.textContent.trim();
+    var html = '';
+    for (var i = 0; i < text.length; i++) {
+      var char = text[i];
+      if (char === ' ') {
+        html += '<span class="char-space">&nbsp;</span>';
+      } else {
+        var cls = 'char-' + char.toLowerCase();
+        html += '<span class="video-char ' + cls + '">' + char + '</span>';
+      }
+    }
+    titleEl.innerHTML = html;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', splitTitleChars);
+  } else {
+    splitTitleChars();
+  }
+  document.addEventListener('shopify:section:load', splitTitleChars);
+})();
+</script>

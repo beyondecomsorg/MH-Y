@@ -141,35 +141,53 @@
 </nav>
 {% style %} 
 nav.pdp-breadcrumb.row{
-  padding: 10px !important;
+  padding: 10px 15px !important;
 }
 .pdp-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #222;
-  font-family: inherit;
-  margin-bottom: 12px;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 11px !important;
+  color: #222 !important;
+  font-family: inherit !important;
+  margin-bottom: 12px !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+.pdp-breadcrumb::-webkit-scrollbar {
+  display: none !important;
+}
+
+.pdp-breadcrumb a,
+.pdp-breadcrumb span {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .pdp-breadcrumb a {
-  color: #222;
-  text-decoration: none;
+  color: #222 !important;
+  text-decoration: none !important;
 }
 
 .pdp-breadcrumb a:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 .bc-sep {
-  display: flex;
-  align-items: center;
-  opacity: 0.6;
+  display: flex !important;
+  align-items: center !important;
+  opacity: 0.6 !important;
 }
 
 .bc-current {
-  color: #222;
+  color: #777 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 180px !important;
 }
  {% endstyle %}
 <section id="product-{{ product.id }}"
@@ -641,34 +659,38 @@ nav.pdp-breadcrumb.row{
 
                 <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
 
-                {% unless product.gift_card? %}
-                  <div class="mhy-pdp-qty-container mb4">
-                    <label for="mhy-pdp-qty-input-{{ section.id }}" class="mhy-pdp-qty-label">Quantity</label>
-                    <div class="mhy-pdp-qty-wrapper">
-                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-down js-pdp-qty-down" disabled="disabled" aria-label="Decrease quantity">-</button>
-                      <input id="mhy-pdp-qty-input-{{ section.id }}" type="number" name="quantity" class="mhy-pdp-qty-input js-pdp-qty-input formQty" value="1" min="1" aria-label="Quantity" />
-                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-up js-pdp-qty-up" aria-label="Increase quantity">+</button>
+                <div class="mhy-pdp-purchase-row-container">
+                  {% unless product.gift_card? %}
+                    <div class="mhy-pdp-qty-container">
+                      <label for="mhy-pdp-qty-input-{{ section.id }}" class="mhy-pdp-qty-label">Quantity</label>
+                      <div class="mhy-pdp-qty-wrapper">
+                        <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-down js-pdp-qty-down" disabled="disabled" aria-label="Decrease quantity">-</button>
+                        <input id="mhy-pdp-qty-input-{{ section.id }}" type="number" name="quantity" class="mhy-pdp-qty-input js-pdp-qty-input formQty" value="1" min="1" aria-label="Quantity" />
+                        <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-up js-pdp-qty-up" aria-label="Increase quantity">+</button>
+                      </div>
+                    </div>
+                  {% else %}
+                    <input class="formQty" type="hidden" name="quantity" value="1" />
+                  {% endunless %}
+
+                  <div class="mhy-pdp-atc-wrapper">
+                    <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit mhy-pdp-primary-btn" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
+                  </div>
+                </div>
+
+                {% if settings.show_payment_button %}
+                  <div class="mhy-pdp-bin-row">
+                    <div class="mhy-pdp-secondary-btn-wrapper">
+                      {{ form | payment_button }}
                     </div>
                   </div>
-                {% else %}
-                  <input class="formQty" type="hidden" name="quantity" value="1" />
-                {% endunless %}
+                {% endif %}
 
                 <div class="note note-success js-added-msg" style="display: none">
                   <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {{ 'products.product.or' | t }} <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
                 </div>
                 <div class="note note-error js-error-msg" style="display: none" role="alert">
                   <b class="note__heading">{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;<span class="note__body">{{ 'cart.general.update_qty_error' | t }}</span>
-                </div>
-
-                <div class="mhy-pdp-cta-container">
-                  <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit mhy-pdp-primary-btn" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
-
-                  {% if settings.show_payment_button %}
-                    <div class="mhy-pdp-secondary-btn-wrapper">
-                      {{ form | payment_button }}
-                    </div>
-                  {% endif %}
                 </div>
               {%-  endform -%}
             </div>
@@ -728,12 +750,49 @@ nav.pdp-breadcrumb.row{
             </div>
 
           {% when 'available_benefits' %}
-            {%
+                      {%- for block in section.blocks -%}
+                  {%- if block.type == 'product_info_image' and block.settings.enable_block and block.settings.image != blank -%}
+                    {%- liquid
+                      assign block_image = block.settings.image
+                      assign alt = block.settings.alt_text | default: block_image.alt | escape
+                      assign width_style = block.settings.desktop_width
+                    -%}
+                    <div class="product__info-image-block" 
+                         id="pdp-image-block-{{ block.id }}" 
+                         {{ block.shopify_attributes }}
+                         style="margin-top: {{ block.settings.top_spacing }}px; margin-bottom: {{ block.settings.bottom_spacing }}px; text-align: center;">
+                      
+                      {{ block_image | image_url: width: 1200 | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 769px) 50vw, 100vw',
+                        widths: '200, 300, 400, 500, 600, 700, 800, 1000, 1200',
+                        alt: alt,
+                        class: 'product__info-image-el'
+                      }}
+                    </div>
+                    {%- style -%}
+                      #pdp-image-block-{{ block.id }} .product__info-image-el {
+                        width: 100% !important;
+                        max-width: {{ width_style }} !important;
+                        height: auto !important;
+                        display: inline-block !important;
+                        border-radius: {{ block.settings.border_radius }}px !important;
+                      }
+                      @media screen and (max-width: 768px) {
+                        #pdp-image-block-{{ block.id }} .product__info-image-el {
+                          max-width: 100% !important;
+                        }
+                      }
+                    {%- endstyle -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+            {% comment %} {%
               render 'available-benefits',
               block: block,
               section: section,
               product: product
-            %}
+            %} {% endcomment %}
 
           {%- when 'image' -%}
             {% if block.settings.image != blank %}
@@ -756,7 +815,7 @@ nav.pdp-breadcrumb.row{
                   %}
               {% if block.settings.link != blank %}</a>{% endif %}
             </div>
-            {% endif %}
+            {% endif %} 
 
           {%- when 'share' -%}
             {% comment %}
@@ -989,43 +1048,7 @@ nav.pdp-breadcrumb.row{
                   
                 </div>
 
-                {%- for block in section.blocks -%}
-                  {%- if block.type == 'product_info_image' and block.settings.enable_block and block.settings.image != blank -%}
-                    {%- liquid
-                      assign block_image = block.settings.image
-                      assign alt = block.settings.alt_text | default: block_image.alt | escape
-                      assign width_style = block.settings.desktop_width
-                    -%}
-                    <div class="product__info-image-block" 
-                         id="pdp-image-block-{{ block.id }}" 
-                         {{ block.shopify_attributes }}
-                         style="margin-top: {{ block.settings.top_spacing }}px; margin-bottom: {{ block.settings.bottom_spacing }}px; text-align: center;">
-                      
-                      {{ block_image | image_url: width: 1200 | image_tag:
-                        loading: 'lazy',
-                        sizes: '(min-width: 769px) 50vw, 100vw',
-                        widths: '200, 300, 400, 500, 600, 700, 800, 1000, 1200',
-                        alt: alt,
-                        class: 'product__info-image-el'
-                      }}
-                    </div>
-                    {%- style -%}
-                      #pdp-image-block-{{ block.id }} .product__info-image-el {
-                        width: 100% !important;
-                        max-width: {{ width_style }} !important;
-                        height: auto !important;
-                        display: inline-block !important;
-                        border-radius: {{ block.settings.border_radius }}px !important;
-                      }
-                      @media screen and (max-width: 768px) {
-                        #pdp-image-block-{{ block.id }} .product__info-image-el {
-                          max-width: 100% !important;
-                        }
-                      }
-                    {%- endstyle -%}
-                  {%- endif -%}
-                {%- endfor -%}
-
+       
                 {%- for block in section.blocks -%}
                   {%- if block.type == 'shop_the_look' -%}
                     <div class="product__section--shop_the_look product__section--element" {{ block.shopify_attributes }}>

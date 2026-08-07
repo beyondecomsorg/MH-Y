@@ -10,25 +10,8 @@
     - section.blocks (array): An array of blocks that make up the sidebar
 {% endcomment %}
 
-<a class="collection__sidebar-mobile-trigger js-collection-side-toggle" href="#">
-  <svg width="20" height="20" viewBox="0 0 24 24">
-    <g fill="none" fill-rule="evenodd">
-      <rect width="24" height="24"/>
-      <path fill="var(--text-color)" fill-rule="nonzero" d="M6.17070571,5 C6.58254212,3.83480763 7.69378117,3 9,3 C10.3062188,3 11.4174579,3.83480763 11.8292943,5 L20,5 L20,7 L11.8292943,7 C11.4174579,8.16519237 10.3062188,9 9,9 C7.69378117,9 6.58254212,8.16519237 6.17070571,7 L4,7 L4,5 L6.17070571,5 Z M6.17070571,17 C6.58254212,15.8348076 7.69378117,15 9,15 C10.3062188,15 11.4174579,15.8348076 11.8292943,17 L20,17 L20,19 L11.8292943,19 C11.4174579,20.1651924 10.3062188,21 9,21 C7.69378117,21 6.58254212,20.1651924 6.17070571,19 L4,19 L4,17 L6.17070571,17 Z M12.1707057,11 C12.5825421,9.83480763 13.6937812,9 15,9 C16.3062188,9 17.4174579,9.83480763 17.8292943,11 L20,11 L20,13 L17.8292943,13 C17.4174579,14.1651924 16.3062188,15 15,15 C13.6937812,15 12.5825421,14.1651924 12.1707057,13 L4,13 L4,11 L12.1707057,11 Z M15,13 C15.5522847,13 16,12.5522847 16,12 C16,11.4477153 15.5522847,11 15,11 C14.4477153,11 14,11.4477153 14,12 C14,12.5522847 14.4477153,13 15,13 Z M9,19 C9.55228475,19 10,18.5522847 10,18 C10,17.4477153 9.55228475,17 9,17 C8.44771525,17 8,17.4477153 8,18 C8,18.5522847 8.44771525,19 9,19 Z M9,7 C9.55228475,7 10,6.55228475 10,6 C10,5.44771525 9.55228475,5 9,5 C8.44771525,5 8,5.44771525 8,6 C8,6.55228475 8.44771525,7 9,7 Z"/>
-    </g>
-  </svg>
-  <span>{{ 'collections.filters.filter_button' | t }}</span>
-</a>
 <div class="collection__page-sidebar" id="sidebar">
-  <div class="mhy-sidebar-header">
-    <h3 class="mhy-sidebar-title">Filter</h3>
-    <button type="button" class="sidebar-filter-close js-collection-side-toggle" aria-label="Close Filters">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-    </button>
-  </div>
-  <div class="mhy-sidebar-body">
+
     {% for block in section.blocks %}
     {% case block.type %}
 
@@ -201,8 +184,15 @@
             -%}
             <div class="collection__sidebar-block sidebar-filter filter--{{ filter_type }}">
               
-              <p class="h4">{{ filter.label | escape }}{% if filter.operator == 'AND' %}<small>({{ 'collections.filters.match_all' | t }})</small>{% endif %}</p>
-              <ul>
+              <p class="h4 js-mhy-filter-accordion-header">
+                {{ filter.label | escape }}{% if filter.operator == 'AND' %}<small>({{ 'collections.filters.match_all' | t }})</small>{% endif %}
+                <span class="mhy-accordion-chevron">
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </p>
+              <ul class="js-mhy-filter-accordion-panel">
                 {% liquid
                   if filter.operator == 'AND'
                     assign active_values = filter.values | where: 'active', true
@@ -320,8 +310,15 @@
             -%}
 
             <div class="collection__sidebar-block sidebar-filter filter--price-range" data-collection-filters-price-range>
-              <p class="h4">{{ filter.label | escape }}</p>
-              <div class="filter-range__boxes js-price-range">
+              <p class="h4 js-mhy-filter-accordion-header">
+                {{ filter.label | escape }}
+                <span class="mhy-accordion-chevron">
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </p>
+              <div class="filter-range__boxes js-price-range js-mhy-filter-accordion-panel">
                 <div class="filter-range__field">
                   <label class="filter-range__field__label visually-hidden" for="SB-Filter-{{ filter.label | escape }}-{{ forloop.index }}-GTE">{{ 'collections.filters.from' | t }}</label>
                   <span class="filter-range__field__currency">{{ cart.currency.symbol }}</span>
@@ -458,71 +455,4 @@
       </div>
     {% endcase %}
   {% endfor %}
-  </div><!-- /.mhy-sidebar-body -->
-
-  <div class="mhy-sidebar-footer">
-    <a href="{{ collection.url }}" class="mhy-sidebar-footer__clear js-current-filter">Clear all</a>
-    <button type="button" class="mhy-sidebar-footer__apply js-collection-side-toggle">
-      See {{ collection.products_count }} items
-    </button>
-    <div class="mhy-sidebar-footer__handle"></div>
-  </div>
-</div><!-- /#sidebar -->
-
-<!-- Script for sticky sidebar -->
-<script>
-// document.addEventListener("DOMContentLoaded", function () {
-//   const banner = document.querySelector(".collection__section--banner");
-//   const sidebar = document.querySelector("#sidebar");
-//   const footer = document.querySelector(".custom_footer__section"); 
-
-//   window.addEventListener("scroll", function () {
-//     const bannerBottom = banner.getBoundingClientRect().bottom;
-//     if (bannerBottom <= 100) {
-//       sidebar.classList.add("sticky");
-//     } else {
-//       sidebar.classList.remove("sticky");
-//     }
-
-//     const footerRect = footer.getBoundingClientRect();
-//     const windowHeight = window.innerHeight; 
-//     const footerVisibleHeight = windowHeight - footerRect.top;
-
-//     if (footerVisibleHeight >= footerRect.height * 0.2) {
-//       sidebar.classList.add("footer_sticky");
-//     } else {
-//       sidebar.classList.remove("footer_sticky");
-//     }
-//   });
-// });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const filterBtn = document.querySelector('.collection__sidebar-mobile-trigger');
-    const sidebar = document.querySelector('#sidebar');
-    const closeBtn = document.querySelector('.sidebar-filter-close');
-
-    // Optional: create an overlay if it doesn't exist
-    let overlay = document.createElement('div');
-    overlay.classList.add('sidebar-overlay');
-    document.body.appendChild(overlay);
-
-    filterBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      sidebar.classList.add('active');
-      overlay.classList.add('active');
-    });
-
-    closeBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      sidebar.classList.remove('active');
-      sidebar.classList.remove('open');
-      overlay.classList.remove('active');
-    });
-
-    overlay.addEventListener('click', function () {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-    });
-  });
-</script>
+</div><!-- /#sidebar -->
