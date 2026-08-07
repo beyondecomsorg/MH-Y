@@ -1,3 +1,17 @@
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.desktop_padding_top }}px !important;
+    padding-bottom: {{ section.settings.desktop_padding_bottom }}px !important;
+  }
+  @media screen and (max-width: 740px) {
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.mobile_padding_top }}px !important;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px !important;
+    }
+  }
+{% endstyle %}
+
 {%- liquid
 
   assign collection = collections[section.settings.collection]
@@ -106,13 +120,12 @@
       .custom-shop--video-container {
         order: 1 !important;
         width: 100% !important;
-        padding: 0 16px !important;
         box-sizing: border-box !important;
       }
       .custom-shop--video-container video {
         height: auto !important;
         margin-top: 0 !important;
-        border-radius: 8px !important;
+  
       }
       .custom-shop--right-column {
         order: 2 !important;
@@ -154,7 +167,7 @@
     }
     @media screen and (max-width: 740px) {
       #shopify-section-{{ section.id }} .collection--carousel .collection--carousel_image {
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
       }
      .custom-shop--carousel-conatiner{
       flex-direction: row-reverse;
@@ -263,6 +276,46 @@
 {
   "name": "Custom shop the look",
   "settings": [
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Mobile)",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Mobile)",
+      "default": 15
+    },
     {
       "type": "text",
       "id": "custom_class",

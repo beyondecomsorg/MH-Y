@@ -679,11 +679,11 @@ nav.pdp-breadcrumb.row{
                 </div>
 
                 {% if settings.show_payment_button %}
-                  <div class="mhy-pdp-bin-row">
+                  {% comment %} <div class="mhy-pdp-bin-row">
                     <div class="mhy-pdp-secondary-btn-wrapper">
                       {{ form | payment_button }}
                     </div>
-                  </div>
+                  </div> {% endcomment %}
                 {% endif %}
 
                 <div class="note note-success js-added-msg" style="display: none">

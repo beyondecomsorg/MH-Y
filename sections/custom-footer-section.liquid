@@ -39,7 +39,7 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     margin-bottom: 14px;
-    color: var(--footer-text);
+    color: #173250;
     text-wrap: balance;
   }
 
@@ -79,7 +79,7 @@
     min-height: 52px;
     border: 0;
     border-radius: 999px;
-    background: var(--footer-text);
+    background: #173250;
     color: white;
     font-size: 15px;
     font-weight: 600;
@@ -104,26 +104,52 @@
   .custom_footer__section .footer__social-label {
     font-size: 14px;
     font-weight: 600;
-    color: var(--footer-text);
+    color: #173250;
   }
 
   .custom_footer__section .newsletter__social-icons {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
   }
 
-  .custom_footer__section .footer__bottom-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 24px;
-    align-items: start;
-    margin-top: 34px;
-    padding-top: 28px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  .custom_footer__section .newsletter__social-icons li {
+    display: inline-block !important;
+    margin: 0 !important;
+  }
+
+  .custom_footer__section .newsletter__social-icons p {
+    display: none !important;
+  }
+
+  /* Custom Centered Footer Styles */
+  .custom_footer__section .mhy-custom-footer-centered {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+  }
+
+  .custom_footer__section .footer__newsletter-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .custom_footer__section .footer-centered-social-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  .custom_footer__section .footer__section_menu {
+    width: 100% !important;
   }
 
   .custom_footer__section .footer__section_menu ul {
@@ -162,7 +188,7 @@
   }
 
   .custom_footer__section .footer__section_favicon_logo img {
-    max-width: 90px;
+    max-width: 100%;
     height: auto;
     display: block;
   }
@@ -184,13 +210,13 @@
 
   .custom_footer__section .footer__payment-methods img {
    
-    width: 100%;
+    width: 35%;
     height: auto;
     display: block;
   }
 
   .custom_footer__section .footer__copyright {
-    margin-top: 28px;
+    margin-top: 0px;
     text-align: center;
     font-size: 13px;
     color: var(--footer-muted);
@@ -203,6 +229,9 @@
     .custom_footer__section .footer__newsletter-card,
     .custom_footer__section .footer__bottom-grid {
       grid-template-columns: 1fr;
+    }
+    .custom_footer__section .footer__payment-methods img{
+      width: 100%;
     }
 
     .custom_footer__section .footer__bottom-grid {
@@ -236,7 +265,9 @@
 </style>
 
 <section class="custom_footer__section footer-{{ section.id }}" data-aos="fade">
-  <div class="footer__section-container">
+  <div class="footer__section-container mhy-custom-footer-centered">
+    
+    <!-- 1. Newsletter Card (Keep dynamic structure, just center align internally if needed) -->
     <div class="footer__newsletter-card">
       <div class="footer__section-contentWrapper">
         {% unless section.settings.heading == blank %}
@@ -280,80 +311,63 @@
 
           {{ form.errors | default_errors }}
         {% endform %}
+      </div>
+    </div>
 
-        {% if section.settings.show_social_icons %}
-          <div class="footer__social-wrap">
-            <span class="footer__social-label">Connect</span>
-            <ul class="newsletter__social-icons">
-              {% render 'social-icons',
-                wrapper: '.newsletter__social-icons',
-                fill_color: section.settings.text_color,
-                hover_color: section.settings.text_color
-              %}
-            </ul>
-          </div>
+    <!-- Centered Stack Footer Elements -->
+    
+    <!-- 2. Logo -->
+    <div class="footer__branding">
+      <div class="footer__section_favicon_logo">
+        <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+          <img src="https://cdn.shopify.com/s/files/1/0653/3467/3561/files/LOGO_WITH_TYPO_BLACK2x_1.png?v=1727093974" alt="MH&Y"/>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3. Navigation Menu -->
+    <div class="footer__section_menu">
+      <ul>
+        {% if section.settings.footer_menu != blank %}
+          {% for link in linklists[section.settings.footer_menu].links %}
+            <li>
+              <a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
         {% endif %}
-      </div>
+      </ul>
     </div>
 
-    <div class="footer__bottom-grid">
-      <div class="footer__section_menu">
-        <ul>
-          {% if section.settings.footer_menu != blank %}
-            {% for link in linklists[section.settings.footer_menu].links %}
-              <li>
-                <a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
-              </li>
-            {% endfor %}
-          {% endif %}
-        </ul>
-               <ul id="social-links">
-          {% render 'social-icons', wrapper: '.footer-left', fill_color: 'var(--footer-color)', hover_color: 'var(--footer-color)' %}
-        </ul>
-      </div>
-
-      <div class="footer__branding">
-        <div class="footer__section_favicon_logo">
-          <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
-            {% comment %} {% if section.settings.favicon_logo != blank %}
-              {{ section.settings.favicon_logo | image_url: width: 180 | image_tag:
-                loading: 'eager',
-                fetchpriority: 'high',
-                width: 180,
-                height: 180 | times: section.settings.favicon_logo.height | divided_by: section.settings.favicon_logo.width,
-                alt: shop.name
-              }}
-            {% endif %} {% endcomment %}
-
-            <img src="https://cdn.shopify.com/s/files/1/0653/3467/3561/files/LOGO_WITH_TYPO_BLACK2x_1.png?v=1727093974" alt="MH&Y"/>
-          </a>
-        </div>
-
-        <div class="footer__payment-methods">
-          <span class="footer__payment-label">Secure payments</span>
-
-          {% if section.settings.payment_methods_image != blank %}
-            {{ section.settings.payment_methods_image | image_url: width: 600 | image_tag:
-              loading: 'lazy',
-              width: 600,
-              height: 600 | times: section.settings.payment_methods_image.height | divided_by: section.settings.payment_methods_image.width,
-              alt: 'Accepted payment methods'
-            }}
-          {% else %}
-            <img
-              src="https://cdn.shopify.com/s/files/1/0653/3467/3561/files/2_2_7775c7aa-3d11-4611-982b-53c822c4bd88.png?v=1778839758"
-              alt="Accepted payment methods"
-              loading="lazy"
-              width="600"
-              height="120"
-            >
-          {% endif %}
-        </div>
-      </div>
-
-      <div></div>
+    <!-- 4. Connect (Social Links) -->
+ 
+    <!-- 5. Secure Payments -->
+    <div class="footer__payment-methods">
+      <span class="footer__payment-label">Secure payments</span>
+      {% if section.settings.payment_methods_image != blank %}
+        {{ section.settings.payment_methods_image | image_url: width: 600 | image_tag:
+          loading: 'lazy',
+          width: 600,
+          height: 600 | times: section.settings.payment_methods_image.height | divided_by: section.settings.payment_methods_image.width,
+          alt: 'Accepted payment methods'
+        }}
+      {% else %}
+        <img
+          src="https://cdn.shopify.com/s/files/1/0653/3467/3561/files/2_2_7775c7aa-3d11-4611-982b-53c822c4bd88.png?v=1778839758"
+          alt="Accepted payment methods"
+          loading="lazy"
+          width="600"
+          height="120"
+        >
+      {% endif %}
     </div>
-
+ 
+      <div class="footer__social-wrap footer-centered-social-wrap">
+        <span class="footer__social-label">Connect</span>
+        <ul id="social-links" class="newsletter__social-icons">
+          {% render 'social-icons', wrapper: '.newsletter__social-icons', fill_color: 'var(--footer-text)', hover_color: 'var(--footer-text)' %}
+        </ul>
+      </div>
+    <!-- 6. Copyright -->
     <div class="footer__copyright">
       {% if section.settings.copyright_text != blank %}
         {{ section.settings.copyright_text }}
@@ -361,6 +375,7 @@
         © {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
       {% endif %}
     </div>
+
   </div>
 </section>
 

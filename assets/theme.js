@@ -3333,7 +3333,17 @@ Shopify.theme.quickview = {
         if (openId && openId !== this._mhyOpenId) return;
 
         let context = document.querySelector('.js-quickview-wrapper');
-        if (context) theme.Product(context);
+        if (context) {
+          // Format initial static price displays loaded inside Quickview
+          context.querySelectorAll('.price-item--sale, .price-item--regular').forEach(priceEl => {
+            let txt = priceEl.innerHTML;
+            txt = txt.replace(/(\s|&nbsp;|&#160;|&#x2009;)?00$/, '');
+            txt = txt.replace(/\.00(\s|$)/, '$1');
+            txt = txt.replace(/,00(\s|$)/, '$1');
+            priceEl.innerHTML = txt;
+          });
+          theme.Product(context);
+        }
 
         context = document.querySelector('.js-quickview-wrapper');
         if (context && context.dataset.paymentButton == 'true' && Shopify.PaymentButton) {
@@ -3803,7 +3813,26 @@ theme.Carousel = (function() {
     init() {
       if (this.carousels.length > 0) {
         this.carousels.forEach((carousel) => {
-          const options = JSON.parse(carousel.getAttribute('data-flickity-config'));
+          let options = {};
+          try {
+            const configAttr = carousel.getAttribute('data-flickity-config');
+            if (configAttr) {
+              options = JSON.parse(configAttr);
+            }
+          } catch(e) {
+            console.error("Error parsing flickity config:", e);
+          }
+          // fallback options if empty
+          if (!options || Object.keys(options).length === 0) {
+            options = {
+              wrapAround: true,
+              cellAlign: "left",
+              dragThreshold: 15,
+              draggable: true,
+              prevNextButtons: true,
+              pageDots: false
+            };
+          }
           return new Flickity(carousel, options);
         });
       }
@@ -3822,7 +3851,25 @@ theme.ModdedCarousel = (function() {
     init() {
       if (this.carousels.length > 0) {
         this.carousels.forEach((carousel) => {
-          const options = JSON.parse(carousel.getAttribute('data-flickity-config'));
+          let options = {};
+          try {
+            const configAttr = carousel.getAttribute('data-flickity-config');
+            if (configAttr) {
+              options = JSON.parse(configAttr);
+            }
+          } catch(e) {
+            console.error("Error parsing flickity config:", e);
+          }
+          if (!options || Object.keys(options).length === 0) {
+            options = {
+              wrapAround: true,
+              cellAlign: "left",
+              dragThreshold: 15,
+              draggable: true,
+              prevNextButtons: true,
+              pageDots: false
+            };
+          }
           const COLUMNS_MOBILE = 2;
           const COLUMNS_TABLET = 3;
 
@@ -4914,7 +4961,13 @@ theme.ProductForm = function (context, sectionId, events, Product) {
   })();
 
   function money(cents) {
-    return theme.Helpers.formatMoney(cents, config.money_format);
+    let formatted = theme.Helpers.formatMoney(cents, config.money_format);
+    if (context && (context.classList.contains('js-quickview-wrapper') || context.closest('.product-quickview__container'))) {
+      formatted = formatted.replace(/(\s|&nbsp;|&#160;|&#x2009;)?00$/, ''); // removes standard trailing .00 or similar
+      formatted = formatted.replace(/\.00(\s|$)/, '$1');
+      formatted = formatted.replace(/,00(\s|$)/, '$1');
+    }
+    return formatted;
   }
 
   function getBaseUnit(variant) {

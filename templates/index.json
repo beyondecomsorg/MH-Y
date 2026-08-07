@@ -15,6 +15,10 @@
         "image_QCgPPF": {
           "type": "image",
           "settings": {
+            "desktop_padding_top": 30,
+            "desktop_padding_bottom": 30,
+            "mobile_padding_top": 15,
+            "mobile_padding_bottom": 15,
             "image": "shopify://shop_images/1800X800_2_f4c3212a-7fbe-4aea-86fb-f10bbfb9a8e4.jpg",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
@@ -36,6 +40,10 @@
         "image_d43mqQ": {
           "type": "image",
           "settings": {
+            "desktop_padding_top": 30,
+            "desktop_padding_bottom": 30,
+            "mobile_padding_top": 15,
+            "mobile_padding_bottom": 15,
             "image": "shopify://shop_images/1800X800_1_072473a5-fe4a-466b-9177-129020380e70.jpg",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
@@ -57,6 +65,10 @@
         "image_JC9Dcg": {
           "type": "image",
           "settings": {
+            "desktop_padding_top": 30,
+            "desktop_padding_bottom": 30,
+            "mobile_padding_top": 15,
+            "mobile_padding_bottom": 15,
             "image": "shopify://shop_images/1_copy.jpg",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
@@ -103,188 +115,22 @@
         "section_padding": "none"
       }
     },
-    "slideshow_dPzTCE": {
-      "type": "slideshow",
-      "blocks": {
-        "image_yk4ib3": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0471.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_video": "shopify://files/videos/WhatsApp Video 2026-06-06 at 9.13.19 PM.mp4",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/shackets-1",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
-        "image_wL87mR": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_0481.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/IMG_0592.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/shackets-1",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        },
-        "image_TAK3Dg": {
-          "type": "image",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_0595.jpg",
-            "overlay_color": "#000000",
-            "overlay_opacity": 19,
-            "caption_position": "middle_center",
-            "mobile_image": "shopify://shop_images/IMG_0593.jpg",
-            "hide_caption_background": false,
-            "heading": "",
-            "subheading": "",
-            "link": "shopify://collections/polos-tees",
-            "button_text": "",
-            "second_link": "",
-            "second_button_text": "Button 2 text",
-            "text_color": "#ffffff",
-            "button_color": "#ffffff",
-            "button_background": "#000000",
-            "caption_background": "rgba(0,0,0,0)"
-          }
-        }
-      },
-      "block_order": [
-        "image_yk4ib3",
-        "image_wL87mR",
-        "image_TAK3Dg"
-      ],
-      "disabled": true,
-      "name": "Slideshow",
-      "settings": {
-        "full_width": true,
-        "slideshow_size": "natural",
-        "desktop_height": 900,
-        "mobile_height": 600,
-        "caption_below": false,
-        "pager": "dots",
-        "show_animation": true,
-        "transition": "fade",
-        "slider_speed": 5,
-        "enable_stop_pause_on_mobile": true,
-        "slide_heading_size": 22,
-        "subheading_size": 14,
-        "section_padding": "both"
-      }
-    },
-    "new_feature_collection_MVqbCC": {
-      "type": "new-feature-collection",
-      "disabled": true,
-      "name": "Featured collection 2",
-      "settings": {
-        "heading": "Featured collection",
-        "collection": "new-arrival",
-        "carousel": true,
-        "show_view_all": true,
-        "reduce_width": false,
-        "grid": 4,
-        "limit": 12,
-        "section_padding": "both"
-      }
-    },
     "featured_collection_q6ChHR": {
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "heading": "Best Seller",
         "collection": "bestseller",
-        "carousel": false,
+        "carousel": true,
         "show_view_all": false,
         "reduce_width": false,
         "grid": 4,
-        "limit": 4,
+        "limit": 20,
         "section_padding": "both"
-      }
-    },
-    "custom_grid_collection_3de4Vk": {
-      "type": "custom-grid-collection",
-      "blocks": {
-        "combo_item_XYFAzA": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/1_1_8437134d-b7b4-4ca7-8563-66d77ddc64a1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_wHGadg": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/4_1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_jyEWnG": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/3_1.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        },
-        "combo_item_7DFrhx": {
-          "type": "combo_item",
-          "settings": {
-            "image": "shopify://shop_images/2_3.png",
-            "label": "",
-            "sublabel": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "combo_item_XYFAzA",
-        "combo_item_wHGadg",
-        "combo_item_jyEWnG",
-        "combo_item_7DFrhx"
-      ],
-      "disabled": true,
-      "name": "High Value Combos",
-      "settings": {
-        "heading": "HIGH VALUE COMBOS",
-        "heading_color": "#173250",
-        "heading_size": 18,
-        "bg_color": "#ffffff",
-        "section_width": 1400,
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "items_to_show": 4,
-        "grid_gap": 3,
-        "card_aspect": "1/1",
-        "card_radius": 0,
-        "label_size": 10
       }
     },
     "collection_list_X6mgdk": {
@@ -345,6 +191,10 @@
         "section.global__section.section-template--17318357467289__collection_list_X6mgdk.mt0.pb0.aos-init.aos-animate {padding-bottom: 20px;}"
       ],
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "title": "SHOP BY CATEGORY",
         "grid": 4,
         "carousel": true,
@@ -360,6 +210,10 @@
       "type": "full-video-section",
       "name": "Full Video Section",
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "custom_class": "hero_baner-video",
         "desktop_video": "shopify://files/videos/desktop-intro.mp4",
         "mobile_video": "shopify://files/videos/mobile-intro.mp4",
@@ -370,186 +224,22 @@
         "button_text": "EXPLORE"
       }
     },
-    "featured_collection_xh7DWj": {
-      "type": "featured-collection",
-      "disabled": true,
-      "name": "Featured collection",
-      "settings": {
-        "heading": "NEW COLLECTION",
-        "collection": "the-isle-of-man",
-        "carousel": true,
-        "show_view_all": true,
-        "reduce_width": true,
-        "grid": 5,
-        "limit": 12,
-        "section_padding": "both"
-      }
-    },
-    "new_feature_collection_Ch9JmQ": {
-      "type": "new-feature-collection",
-      "disabled": true,
-      "name": "Featured collection 2",
-      "settings": {
-        "heading": "Featured collection",
-        "collection": "casual-shirts",
-        "carousel": true,
-        "show_view_all": true,
-        "reduce_width": false,
-        "grid": 4,
-        "limit": 4,
-        "section_padding": "both"
-      }
-    },
     "featured_collection_TF4yJz": {
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "heading": "NEW COLLECTION",
         "collection": "the-isle-of-man",
-        "carousel": false,
+        "carousel": true,
         "show_view_all": false,
         "reduce_width": false,
         "grid": 4,
-        "limit": 4,
+        "limit": 20,
         "section_padding": "both"
-      }
-    },
-    "animating_cards_8L4tqe": {
-      "type": "animating-cards",
-      "blocks": {
-        "card_tUcMeU": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/MY_Y_06-09-2500184_1.jpg",
-            "card_label": "Pure Confidence"
-          }
-        },
-        "card_HxRxtE": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/MY_Y_06-09-2500106_2270d493-ec0b-434f-8805-45ff9b141faa.jpg",
-            "card_label": "Born Bold"
-          }
-        },
-        "card_WzCWBg": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/MY_Y_06-09-2532990.jpg",
-            "card_label": "Fearless Spirit"
-          }
-        },
-        "stat_6pBXrQ": {
-          "type": "stat",
-          "settings": {
-            "stat_value": "10K+",
-            "stat_label": "Happy Customers"
-          }
-        },
-        "stat_fQ8QKP": {
-          "type": "stat",
-          "settings": {
-            "stat_value": "4.9★",
-            "stat_label": "Avg. Rating"
-          }
-        },
-        "stat_kdzdUR": {
-          "type": "stat",
-          "settings": {
-            "stat_value": "100%",
-            "stat_label": "Made with Love"
-          }
-        },
-        "ticker_p6dLjp": {
-          "type": "ticker",
-          "settings": {
-            "ticker_text": "WE ARE BOLD"
-          }
-        },
-        "ticker_ehNPAh": {
-          "type": "ticker",
-          "settings": {
-            "ticker_text": "WE ARE STRONG"
-          }
-        },
-        "ticker_MQ7cF6": {
-          "type": "ticker",
-          "settings": {
-            "ticker_text": "WE ARE FEARLESS"
-          }
-        },
-        "ticker_exatkz": {
-          "type": "ticker",
-          "settings": {
-            "ticker_text": "WE ARE CONFIDENT"
-          }
-        },
-        "ticker_nheneY": {
-          "type": "ticker",
-          "settings": {
-            "ticker_text": "WE ARE BEAUTIFUL"
-          }
-        }
-      },
-      "block_order": [
-        "card_tUcMeU",
-        "card_HxRxtE",
-        "card_WzCWBg",
-        "stat_6pBXrQ",
-        "stat_fQ8QKP",
-        "stat_kdzdUR",
-        "ticker_p6dLjp",
-        "ticker_ehNPAh",
-        "ticker_MQ7cF6",
-        "ticker_exatkz",
-        "ticker_nheneY"
-      ],
-      "disabled": true,
-      "name": "About Us — Fan Cards",
-      "settings": {
-        "heading": "ABOUT US",
-        "body_text": "Be bold, be you. Born from a belief that every Men deserves confidence in everything she wears — our products are crafted with care, purpose, and a fearless spirit.",
-        "cta_text": "Our Story",
-        "cta_url": "",
-        "background_color": "#ffffff",
-        "accent_color": "#173250",
-        "padding_top": 80,
-        "padding_bottom": 72
-      }
-    },
-    "background_video_zxAxbM": {
-      "type": "background-video",
-      "disabled": true,
-      "settings": {
-        "display_wide": true,
-        "video": "shopify://files/videos/Art of living well video hz_fe49c174-2c32-4aa3-b0a7-b5c4fbd5aeca.MP4",
-        "overlay": false,
-        "height": "large",
-        "heading": "",
-        "subheading_text": "",
-        "button_text": "",
-        "link": "shopify://collections/casual-wear",
-        "heading_font_size": 30,
-        "subheading_font_size": 16,
-        "text_color": "#ffffff",
-        "button_text_color": "#ffffff",
-        "button_color": "rgba(0,0,0,0)",
-        "section_padding": "top"
-      }
-    },
-    "rich_text_caamGM": {
-      "type": "rich-text",
-      "disabled": true,
-      "settings": {
-        "heading": "NEW IN TOWN",
-        "rich_text": "",
-        "page": "",
-        "link": "",
-        "link_text": "",
-        "background": "rgba(0,0,0,0)",
-        "color": "#173250",
-        "width": 70,
-        "align_text": "center",
-        "section_padding": "none"
       }
     },
     "image_gallery_QyTUt6": {
@@ -595,6 +285,10 @@
         "image_zG3PgE"
       ],
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "heading": "NEW IN TOWN",
         "full_width": true,
         "image_height": "fixed_height",
@@ -610,6 +304,10 @@
     "rich_text_n7LtAC": {
       "type": "rich-text",
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "heading": "OUR ROOTS",
         "rich_text": "<p>Our story goes back to 1947, when our family first stepped into the world of textiles. What started as a simple fabric trading business has grown over the decades into something much bigger; a legacy of craftsmanship, quality, and innovation.</p><p>For generations, we’ve been at the heart of India’s textile industry, supplying some of the country’s biggest retail brands. But we knew we could take things further. With years of expertise under our belt and a deep passion for creating something meaningful, we set out to build a brand that truly speaks to the modern man.</p><p>This isn’t just about clothing; it’s about heritage, quality, and a commitment to excellence. Every garment we create is thoughtfully designed, blending timeless craftsmanship with contemporary style. Our goal? To make pieces that don’t just look good but feel good, last long, and tell a story.</p><p>From our family to yours, welcome to a brand built on tradition, shaped by experience, and crafted for today.</p>",
         "page": "",
@@ -683,6 +381,10 @@
         "image_YqQQ8C"
       ],
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "full_width": false,
         "image_height": "fixed_height",
         "desktop_height": 450,
@@ -694,217 +396,16 @@
         "section_padding": "both"
       }
     },
-    "image_gallery_MPKHyV": {
-      "type": "image-gallery",
-      "blocks": {
-        "image_qLgc7e": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/1230x896-luca-faloni-about-us-1.jpg",
-            "image_width": "50%",
-            "link": "shopify://collections/all",
-            "heading": "",
-            "subheading": "",
-            "button_text": "",
-            "caption_position": "middle_center",
-            "hover_caption": false,
-            "caption_background": "rgba(0,0,0,0)",
-            "text_color": "#dcdcdc",
-            "overlay_color": "#000000",
-            "overlay_opacity": 12
-          }
-        },
-        "image_gjPTGn": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/1230x896-luca-faloni-about-us-2.jpg",
-            "image_width": "25%",
-            "link": "shopify://collections/all",
-            "heading": "",
-            "subheading": "",
-            "button_text": "",
-            "caption_position": "middle_center",
-            "hover_caption": false,
-            "caption_background": "rgba(0,0,0,0)",
-            "text_color": "#dcdcdc",
-            "overlay_color": "#000000",
-            "overlay_opacity": 12
-          }
-        },
-        "image_dNcEmF": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/1230x896-luca-faloni-about-us-3.jpg",
-            "image_width": "25%",
-            "link": "",
-            "heading": "",
-            "subheading": "",
-            "button_text": "",
-            "caption_position": "middle_center",
-            "hover_caption": false,
-            "caption_background": "rgba(0,0,0,0)",
-            "text_color": "#ffffff",
-            "overlay_color": "#000000",
-            "overlay_opacity": 0
-          }
-        }
-      },
-      "block_order": [
-        "image_qLgc7e",
-        "image_gjPTGn",
-        "image_dNcEmF"
-      ],
-      "disabled": true,
-      "settings": {
-        "heading": "",
-        "full_width": false,
-        "image_height": "fixed_height",
-        "desktop_height": 450,
-        "mobile_height": 300,
-        "swipe": true,
-        "images_touching": true,
-        "heading_size": 30,
-        "subheading_size": 14,
-        "section_padding": "none"
-      }
-    },
-    "image_with_text_overlay_PmnrRw": {
-      "type": "image-with-text-overlay",
-      "disabled": true,
-      "settings": {
-        "image": "shopify://shop_images/man-suit-sits-front-window-with-smoke-coming-out-it.jpg",
-        "scale": 3,
-        "page_height": 600,
-        "caption_position": "middle_center",
-        "caption_below": false,
-        "heading": "CURATED FOR YOU",
-        "subheading": "<p>SHOP NOW +</p>",
-        "button_text": "",
-        "button_link": "shopify://collections",
-        "heading_font_size": 27,
-        "subheading_font_size": 14,
-        "text_color": "#ececec",
-        "button_text_color": "#ffffff",
-        "button_color": "rgba(0,0,0,0)",
-        "background": "rgba(0,0,0,0)",
-        "overlay_color": "#4b4b4b",
-        "overlay_opacity": 26,
-        "section_padding": "top"
-      }
-    },
-    "custom_shop_the_look_k6wzMT": {
-      "type": "custom-shop-the-look",
-      "disabled": true,
-      "settings": {
-        "custom_class": "",
-        "heading": "Shop The Look",
-        "sub_heading": "We source the finest natural materials across Italy and work with the most skilled artisans in the country to design and craft our permanent collection directly for you.",
-        "full_width": true,
-        "collection": "all",
-        "grid": 3,
-        "limit": 12,
-        "video": "shopify://files/videos/LOOK_06_Casual_Elegance.mp4",
-        "image_first": true,
-        "caption_heading": "",
-        "caption": "",
-        "button_text": "Button",
-        "link": "",
-        "text_color": "#ffffff",
-        "overlay_color": "#000000",
-        "overlay_opacity": 0,
-        "caption_position": "middle_center",
-        "section_padding": "both"
-      }
-    },
-    "1626728229c657e705": {
-      "type": "featured-collection",
-      "disabled": true,
-      "settings": {
-        "heading": "CURATED FOR YOU",
-        "collection": "all",
-        "carousel": false,
-        "show_view_all": false,
-        "reduce_width": false,
-        "grid": 4,
-        "limit": 4,
-        "section_padding": "both"
-      }
-    },
-    "e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611": {
-      "type": "tabbed-collections",
-      "blocks": {
-        "template--16089984336042__e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611-1678318752c6ed4748-0": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "all",
-            "grid": 4,
-            "limit": 12
-          }
-        },
-        "template--16089984336042__e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611-1678318752c6ed4748-1": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "",
-            "grid": 4,
-            "limit": 12
-          }
-        }
-      },
-      "block_order": [
-        "template--16089984336042__e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611-1678318752c6ed4748-0",
-        "template--16089984336042__e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611-1678318752c6ed4748-1"
-      ],
-      "disabled": true,
-      "settings": {
-        "heading": "Tabbed collections",
-        "section_padding": "both"
-      }
-    },
-    "16267282748dfbd59a": {
-      "type": "image-with-text",
-      "blocks": {
-        "be740c4b-569a-42fa-a018-4eb545141036": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/1.png"
-          }
-        },
-        "image_rQNewA": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/2.png"
-          }
-        }
-      },
-      "block_order": [
-        "be740c4b-569a-42fa-a018-4eb545141036",
-        "image_rQNewA"
-      ],
-      "disabled": true,
-      "settings": {
-        "full_width": false,
-        "section_padding": "both",
-        "appearance": "overlap",
-        "layout": "right",
-        "image_width": "50%",
-        "image_height": "natural",
-        "desktop_height": 400,
-        "mobile_height": 600,
-        "text_align": "left",
-        "heading": "Image with text",
-        "text": "<p>Pair text with an image to add details about your products, brand and selling proposition.</p>",
-        "button": "Shop Now+",
-        "link": "shopify://collections",
-        "background": "#e5e5e5",
-        "color": "#262b2c"
-      }
-    },
     "custom_shop_the_look_RRr8K7": {
       "type": "custom-shop-the-look",
       "custom_css": [
         "@media only screen and (min-width: 600px) {.collection--carousel_image .box-ratio {height: 700px; }}"
       ],
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "custom_class": "lookup_video",
         "heading": "Shop The Look",
         "sub_heading": "Bold in blue, sharp in white, and grounded in camel. The perfect balance of power and poise, walk in, take over. A look that perfectly defines your stature. Bold in blue, sharp in white, and grounded in camel. The perfect balance of power and poise, walk in, take over. A look that perfectly defines your stature. Bold in blue, sharp in white, and grounded in camel. The perfect balance of power and poise, walk in, take over. A look that perfectly defines your stature.",
@@ -928,6 +429,10 @@
     "image_with_text_overlay_LjcknF": {
       "type": "image-with-text-overlay",
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "image": "shopify://shop_images/3600X1200_1_1.jpg",
         "scale": 0,
         "page_height": 500,
@@ -988,6 +493,10 @@
         "review_3"
       ],
       "settings": {
+        "desktop_padding_top": 29,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "heading": "Loved by Our Customers",
         "sub_heading": "Real experiences from our valued customers.",
         "show_overall_rating": true,
@@ -1008,35 +517,21 @@
         "autoplay_speed": 5,
         "show_arrows": true,
         "show_dots": true,
-        "padding_top": 80,
-        "padding_bottom": 80,
+        "padding_top": 0,
+        "padding_bottom": 0,
         "section_padding": "both"
       }
     }
   },
   "order": [
     "slideshow",
-    "slideshow_dPzTCE",
-    "new_feature_collection_MVqbCC",
     "featured_collection_q6ChHR",
-    "custom_grid_collection_3de4Vk",
     "collection_list_X6mgdk",
     "full_video_section_JQXE4c",
-    "featured_collection_xh7DWj",
-    "new_feature_collection_Ch9JmQ",
     "featured_collection_TF4yJz",
-    "animating_cards_8L4tqe",
-    "background_video_zxAxbM",
-    "rich_text_caamGM",
     "image_gallery_QyTUt6",
     "rich_text_n7LtAC",
     "our_roots_section_pj99wC",
-    "image_gallery_MPKHyV",
-    "image_with_text_overlay_PmnrRw",
-    "custom_shop_the_look_k6wzMT",
-    "1626728229c657e705",
-    "e2a7b6b5-73bc-40db-bd9f-de8e3c2cf611",
-    "16267282748dfbd59a",
     "custom_shop_the_look_RRr8K7",
     "image_with_text_overlay_LjcknF",
     "premium_customer_reviews"

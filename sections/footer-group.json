@@ -21,19 +21,8 @@
         "newsletter_background": "#f5f5f5",
         "newsletter_button_color": "rgba(0,0,0,0)",
         "footer_menu": "footer-menu",
-        "favicon_logo": "shopify://shop_images/1_2.png"
-      }
-    },
-    "6e1e7f0e-a8ab-4b5d-b533-03e147b1d76c": {
-      "type": "newsletter",
-      "disabled": true,
-      "settings": {
-        "show_social_icons": true,
-        "heading": "Subscribe to our newsletter",
-        "newsletter_subheading": "<p>Signup for our newsletter to stay up to date on sales and events.</p>",
-        "text_color": "#ffffff",
-        "newsletter_background": "#4a4a4a",
-        "newsletter_button_color": "#ffffff"
+        "favicon_logo": "shopify://shop_images/1_2.png",
+        "copyright_text": "© 2026 Your brand. All rights reserved."
       }
     },
     "footer": {
@@ -81,6 +70,17 @@
         "footer_text_align": "left",
         "footer_title_transform": "uppercase",
         "footer_title_size": 14,
+        "quick_links_menu": "",
+        "quick_links_heading": "Quick Links",
+        "show_support": true,
+        "support_heading": "Customer Care",
+        "support_phone": "+91 9555 263263",
+        "support_email": "contact@mhyindia.com",
+        "support_hours": "Mon–Fri | 10:00 AM – 06:30 PM (IST)",
+        "show_connect": true,
+        "connect_heading": "Connect With Us",
+        "show_payment_strip": true,
+        "payment_strip_alt": "Secure payment methods: UPI, Visa, Mastercard, RuPay, Razorpay",
         "show_credit_cards": true,
         "show_social_icons": true,
         "enable_follow_on_shop": true,
@@ -93,7 +93,6 @@
   },
   "order": [
     "custom_footer_section_MimxG9",
-    "6e1e7f0e-a8ab-4b5d-b533-03e147b1d76c",
     "footer"
   ]
 }

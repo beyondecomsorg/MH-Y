@@ -57,120 +57,105 @@
 
 <div class="footer-section mhy-footer-section" data-section-id="{{ section.id }}" data-section-type="footer-section">
   <footer id="footer" class="footer mhy-footer" role="contentinfo">
-    <div class="mhy-footer__container">
-      <div class="mhy-footer__top">
-        {% if brand_block != blank %}
-          <div class="mhy-footer__col mhy-footer__brand" {{ brand_block.shopify_attributes }}>
-            {% if brand_block.settings.img != blank %}
-              <a class="mhy-footer__logo-link" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
-                {{
-                  brand_block.settings.img
-                  | image_url: width: 360
-                  | image_tag:
-                    class: 'mhy-footer__logo',
-                    loading: 'lazy',
-                    width: 360,
-                    height: 360 | times: brand_block.settings.img.height | divided_by: brand_block.settings.img.width,
-                    alt: 'MH&Y India Premium Menswear Logo'
-                }}
-              </a>
+    <div class="mhy-footer__container mhy-footer-centered">
+      
+      <!-- 1. MH&Y Logo -->
+      {% if brand_block != blank and brand_block.settings.img != blank %}
+        <div class="mhy-footer-centered__logo-wrapper" {{ brand_block.shopify_attributes }}>
+          <a class="mhy-footer__logo-link" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+            {{
+              brand_block.settings.img
+              | image_url: width: 360
+              | image_tag:
+                class: 'mhy-footer__logo',
+                loading: 'lazy',
+                width: 360,
+                height: 360 | times: brand_block.settings.img.height | divided_by: brand_block.settings.img.width,
+                alt: 'MH&Y India Premium Menswear Logo'
+            }}
+          </a>
+        </div>
+      {% endif %}
+
+      <!-- 2. Navigation Menu -->
+      <nav class="mhy-footer-centered__nav" aria-label="Quick links">
+        <ul class="mhy-footer-centered__nav-list" role="list">
+          {% if quick_links_menu_handle != blank %}
+            {% for link in linklists[quick_links_menu_handle].links %}
+              <li class="mhy-footer-centered__nav-item">
+                <a class="mhy-footer__link" href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </nav>
+
+      <!-- 3. Connect Section -->
+      {% if show_connect %}
+        <div class="mhy-footer-centered__connect">
+          <h3 class="mhy-footer__title">{{ section.settings.connect_heading | escape }}</h3>
+          <ul class="mhy-footer__social" role="list">
+            {% if has_instagram %}
+              <li class="mhy-footer__social-item">
+                <a class="mhy-footer__social-link" href="{{ settings.instagram_id }}" target="_blank" rel="noopener" aria-label="MH&Y India on Instagram">
+                  {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'instagram', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
+                </a>
+              </li>
             {% endif %}
 
-            {% if brand_block.settings.footer_text != blank %}
-              <div class="mhy-footer__brand-text rte">
-                {{ brand_block.settings.footer_text }}
-              </div>
+            {% if has_facebook %}
+              <li class="mhy-footer__social-item">
+                <a class="mhy-footer__social-link" href="{{ settings.facebook_url }}" target="_blank" rel="noopener" aria-label="MH&Y India on Facebook">
+                  {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'facebook', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
+                </a>
+              </li>
             {% endif %}
-          </div>
-        {% endif %}
 
-        <nav class="mhy-footer__col mhy-footer__links" aria-label="Quick links">
-          <h3 class="mhy-footer__title">{{ quick_links_heading | escape }}</h3>
-          <ul class="mhy-footer__list" role="list">
-            {% if quick_links_menu_handle != blank %}
-              {% for link in linklists[quick_links_menu_handle].links %}
-                <li class="mhy-footer__item">
-                  <a class="mhy-footer__link" href="{{ link.url }}">{{ link.title }}</a>
-                </li>
-              {% endfor %}
+            {% if has_linkedin %}
+              <li class="mhy-footer__social-item">
+                <a class="mhy-footer__social-link" href="{{ settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="MH&Y India on LinkedIn">
+                  {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'linkedin', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
+                </a>
+              </li>
             {% endif %}
           </ul>
-        </nav>
+        </div>
+      {% endif %}
 
-        {% if show_support %}
-          <div class="mhy-footer__col mhy-footer__support">
-            <h3 class="mhy-footer__title">{{ section.settings.support_heading | escape }}</h3>
-            <ul class="mhy-footer__meta" role="list">
-              {% if section.settings.support_phone != blank %}
-                <li class="mhy-footer__meta-item">
-                  <a class="mhy-footer__link" href="tel:{{ section.settings.support_phone | remove: ' ' | remove: '-' }}">
-                    {{ section.settings.support_phone }}
-                  </a>
-                </li>
-              {% endif %}
-
-              {% if section.settings.support_email != blank %}
-                <li class="mhy-footer__meta-item">
-                  <a class="mhy-footer__link" href="mailto:{{ section.settings.support_email }}">
-                    {{ section.settings.support_email }}
-                  </a>
-                </li>
-              {% endif %}
-
-              {% if section.settings.support_hours != blank %}
-                <li class="mhy-footer__meta-item">
-                  <span class="mhy-footer__muted">{{ section.settings.support_hours }}</span>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
-        {% endif %}
-
-        {% if show_connect %}
-          <div class="mhy-footer__col mhy-footer__connect">
-            <h3 class="mhy-footer__title">{{ section.settings.connect_heading | escape }}</h3>
-            <ul class="mhy-footer__social" role="list">
-              {% if has_instagram %}
-                <li class="mhy-footer__social-item">
-                  <a class="mhy-footer__social-link" href="{{ settings.instagram_id }}" target="_blank" rel="noopener" aria-label="MH&Y India on Instagram">
-                    {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'instagram', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
-                  </a>
-                </li>
-              {% endif %}
-
-              {% if has_facebook %}
-                <li class="mhy-footer__social-item">
-                  <a class="mhy-footer__social-link" href="{{ settings.facebook_url }}" target="_blank" rel="noopener" aria-label="MH&Y India on Facebook">
-                    {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'facebook', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
-                  </a>
-                </li>
-              {% endif %}
-
-              {% if has_linkedin %}
-                <li class="mhy-footer__social-item">
-                  <a class="mhy-footer__social-link" href="{{ settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="MH&Y India on LinkedIn">
-                    {% render 'snip-icons', wrapper: '.mhy-footer__social-link', type: 'social', icon: 'linkedin', classes: 'mhy-footer__social-icon', size: '16px', fill: 'var(--footer-color)', hover: 'var(--footer-color)' %}
-                  </a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="mhy-footer__divider" aria-hidden="true"></div>
-
-      <div class="mhy-footer__lower">
-        <div class="mhy-footer__lower-left">
-          {% if shop.features.follow_on_shop? and section.settings.enable_follow_on_shop %}
-            <div class="footer__follow-on-shop">
-              {{ shop | login_button: action: 'follow' }}
+      <!-- 4. Secure Payments -->
+      {% if section.settings.show_payment_strip or section.settings.show_credit_cards %}
+        <div class="mhy-footer-centered__payments">
+          <h3 class="mhy-footer__title">Secure Payments</h3>
+          
+          {% if section.settings.show_payment_strip and section.settings.payment_strip != blank %}
+            <div class="mhy-footer__payments" aria-label="Secure payment methods">
+              {{
+                section.settings.payment_strip
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'mhy-footer__payment-strip',
+                  loading: 'lazy',
+                  width: 1400,
+                  height: 1400 | times: section.settings.payment_strip.height | divided_by: section.settings.payment_strip.width,
+                  alt: payment_strip_alt_text
+              }}
+            </div>
+          {% elsif section.settings.show_credit_cards %}
+            <div class="mhy-footer__payments" aria-label="Secure payment methods">
+              <div class="payment-methods">
+                {% for type in shop.enabled_payment_types %}
+                  {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+                {% endfor %}
+              </div>
             </div>
           {% endif %}
         </div>
+      {% endif %}
 
-        <div class="mhy-footer__lower-right">
-          {% if locale_selector or country_selector %}
+      <!-- 5. Lower Localization Selectors (if enabled) -->
+      {% if locale_selector or country_selector %}
+        <div class="mhy-footer__lower">
+          <div class="mhy-footer__lower-right">
             <div class="mhy-footer__selectors disclosures">
               {% if locale_selector %}
                 <div class="selectors-form__item">
@@ -288,39 +273,16 @@
           {% endif %}
         </div>
       </div>
-    </div>
 
-    <div class="mhy-footer__bottom">
-      {% if section.settings.show_payment_strip and section.settings.payment_strip != blank %}
-        <div class="mhy-footer__payments" aria-label="Secure payment methods">
-          {{
-            section.settings.payment_strip
-            | image_url: width: 1400
-            | image_tag:
-              class: 'mhy-footer__payment-strip',
-              loading: 'lazy',
-              width: 1400,
-              height: 1400 | times: section.settings.payment_strip.height | divided_by: section.settings.payment_strip.width,
-              alt: payment_strip_alt_text
-          }}
-        </div>
-      {% elsif section.settings.show_credit_cards %}
-        <div class="mhy-footer__payments" aria-label="Secure payment methods">
-          <div class="payment-methods">
-            {% for type in shop.enabled_payment_types %}
-              {{ type | payment_type_svg_tag: class: 'payment-icon' }}
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
-
-      <div class="mhy-footer__bottom-bar">
+      <!-- 6. Copyright Info -->
+      <div class="mhy-footer-centered__bottom-bar">
         {% if section.settings.show_copyright %}
           <p class="mhy-footer__copyright">
-            <a class="mhy-footer__link" href="{{ routes.root_url }}">&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}</a>
+            <a class="mhy-footer__link" href="{{ routes.root_url }}">&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All Rights Reserved.</a>
           </p>
         {% endif %}
       </div>
+
     </div>
 
     <style>
@@ -335,32 +297,24 @@
         max-width: 1200px;
       }
 
-      .mhy-footer__top {
-        display: grid;
-        grid-template-columns: minmax(240px, 1.2fr) minmax(200px, 1fr) minmax(200px, 1fr) minmax(200px, 0.9fr);
-        gap: 48px;
-        align-items: start;
+      /* Centered Layout styles */
+      .mhy-footer-centered {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 32px !important;
       }
 
-      .mhy-footer__title {
-        margin: 0 0 16px;
-        font-family: var(--custom-heading-family);
-        font-size: 12px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--footer-color);
-        opacity: 0.9;
-      }
-
-      .mhy-footer__brand-text {
-        margin-top: 14px;
-        opacity: 0.85;
+      .mhy-footer-centered__logo-wrapper {
+        margin-bottom: 8px !important;
       }
 
       .mhy-footer__logo {
         display: block;
         height: auto;
         width: 160px;
+        margin: 0 auto !important;
       }
 
       .mhy-footer__logo-link {
@@ -369,14 +323,23 @@
         gap: 10px;
       }
 
-      .mhy-footer__list,
-      .mhy-footer__meta,
-      .mhy-footer__social {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        gap: 10px;
+      /* Horizontal Nav List on Desktop, Wrapped on Mobile */
+      .mhy-footer-centered__nav {
+        width: 100% !important;
+      }
+
+      .mhy-footer-centered__nav-list {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 24px !important;
+      }
+
+      .mhy-footer-centered__nav-item {
+        display: inline-block !important;
       }
 
       .mhy-footer__link {
@@ -400,37 +363,32 @@
         border-radius: 6px;
       }
 
-      .mhy-footer__muted {
-        opacity: 0.8;
+      /* Social Links alignment */
+      .mhy-footer-centered__connect {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
       }
 
-      .mhy-footer__divider {
-        margin: 36px 0 0;
-        border-top: 1px solid var(--footer-border);
-        opacity: 0.6;
-      }
-
-      .mhy-footer__lower {
-        margin-top: 18px;
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-      }
-
-      .mhy-footer__selectors {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
+      .mhy-footer__title {
+        margin: 0 !important;
+        font-family: var(--custom-heading-family);
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--footer-color);
+        opacity: 0.9;
       }
 
       .mhy-footer__social {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 12px !important;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
 
       .mhy-footer__social-link {
@@ -451,22 +409,21 @@
         background: rgba(255, 255, 255, 0.06);
       }
 
-      .mhy-footer__social-link:focus-visible {
-        outline: var(--keyboard-focus-border-weight) var(--keyboard-focus-border-style) var(--keyboard-focus-color);
-        outline-offset: 3px;
-      }
-
-      .mhy-footer__bottom {
-        border-top: 1px solid var(--footer-border);
-        margin-top: 0;
+      /* Payments container stack */
+      .mhy-footer-centered__payments {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 16px !important;
+        width: 100% !important;
       }
 
       .mhy-footer__payments {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 18px 50px 0;
-        display: flex;
-        justify-content: center;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
       }
 
       .mhy-footer__payment-strip {
@@ -491,13 +448,28 @@
         opacity: 0.9;
       }
 
-      .mhy-footer__bottom-bar {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 14px 50px 26px;
+      /* Center selectors & copyright */
+      .mhy-footer__lower {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin-top: 8px !important;
+      }
+
+      .mhy-footer__selectors {
         display: flex;
-        justify-content: center;
-        text-align: center;
+        gap: 12px;
+        align-items: center;
+        justify-content: center !important;
+        flex-wrap: wrap;
+      }
+
+      .mhy-footer-centered__bottom-bar {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin-top: 8px !important;
       }
 
       .mhy-footer__copyright {
@@ -507,37 +479,15 @@
         opacity: 0.85;
       }
 
-      @media (max-width: 980px) {
-        .mhy-footer__top {
-          grid-template-columns: 1.2fr 1fr;
-          gap: 32px;
-        }
-      }
-
       @media (max-width: 740px) {
         .mhy-footer__container {
           padding: 44px 20px 22px;
         }
-
-        .mhy-footer__top {
-          grid-template-columns: 1fr;
-          gap: 28px;
+        .mhy-footer-centered {
+          gap: 24px !important;
         }
-
-        .mhy-footer__lower {
-          justify-content: flex-start;
-        }
-
-        .mhy-footer__selectors {
-          justify-content: flex-start;
-        }
-
-        .mhy-footer__payments {
-          padding: 16px 20px 0;
-        }
-
-        .mhy-footer__bottom-bar {
-          padding: 12px 20px 22px;
+        .mhy-footer-centered__nav-list {
+          gap: 16px 20px !important;
         }
       }
     </style>

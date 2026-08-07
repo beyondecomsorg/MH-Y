@@ -1,3 +1,17 @@
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.desktop_padding_top }}px !important;
+    padding-bottom: {{ section.settings.desktop_padding_bottom }}px !important;
+  }
+  @media screen and (max-width: 740px) {
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.mobile_padding_top }}px !important;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px !important;
+    }
+  }
+{% endstyle %}
+
 {%- liquid
 
   assign collection = collections[section.settings.collection]
@@ -10,9 +24,6 @@
   assign grid = section.settings.grid
 
   assign enough_to_wrap = true
-  if collection.products.size <= grid
-    assign enough_to_wrap = false
-  endif
 
   assign section_padding = ''
   if section.settings.section_padding == 'top'
@@ -48,58 +59,156 @@
       </div>
     {% endif %}
 
-    {% capture slideshow_config %}{
-      "wrapAround":{{ enough_to_wrap }},
-      "cellAlign": "left",
-      "dragThreshold":"15",
-      "draggable": {{ enough_to_wrap }},
-      "pauseAutoPlayOnHover":false,
-      "prevNextButtons":{{ enough_to_wrap }},
-      "pageDots": false
-   }{% endcapture %}
+    <!-- Splide assets loaded conditionally for Featured Collection Carousel -->
+    {% if is_carousel %}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    {% endif %}
 
-   <div id="featured_collection--{{ section.id }}" class="featured__collection{% if is_carousel %}-carousel flickity__section js-carousel{% endif %} product-loop span-12 auto"{% if is_carousel %} data-flickity-config='{{ slideshow_config }}'{% endif %} data-product-count="{{ collection.products.size }}">
-     {% if section.settings.collection == blank %}
-      {% render 'onboard-product', prod_limit: prod_limit, grid: grid, aos_mod: aos_mod %}
-     {% else %}
-       {% for product in collection.products limit: prod_limit %}
-         <div class="featured__collection-product product-index js-product-listing" 
-          id="product-listing-{{ product.id }}" 
-          data-product-id="{{ product.id }}" 
-          data-alpha="{{ product.title }}" 
-          data-price="{{ product.price }}"
-          data-aos="fade"
-          data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
-           {% liquid
-
-            assign loading = 'lazy'
-            assign fetch_priority = 'auto'
-
-            if section.index == 1
-              if is_carousel
-                if forloop.index <= grid
+    {% if is_carousel %}
+      <!-- SPLIDE CAROUSEL STRUCTURE -->
+      <div id="featured_collection--{{ section.id }}" class="splide featured__collection-carousel product-loop span-12 auto" data-product-count="{{ collection.products.size }}">
+        <div class="splide__track">
+          <div class="splide__list">
+            {% if section.settings.collection == blank %}
+              {% comment %}
+                Render onboard mockup products wrapped in splide__slide
+              {% endcomment %}
+              {% for i in (1..prod_limit) %}
+                {% capture current %}{% cycle 1, 2, 3, 4, 5 %}{% endcapture %}
+                {%- assign placeholder = 'product-' | append: current -%}
+                <div class="splide__slide aaaaa featured__collection-product product-index" data-aos="fade" data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+                  <div class="onboard">
+                    {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for product in collection.products limit: prod_limit %}
+                <div class="splide__slide aaaaa featured__collection-product product-index js-product-listing" 
+                  id="product-listing-{{ product.id }}" 
+                  data-product-id="{{ product.id }}" 
+                  data-alpha="{{ product.title }}" 
+                  data-price="{{ product.price }}"
+                  data-aos="fade"
+                  data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+                  {% liquid
+                    assign loading = 'lazy'
+                    assign fetch_priority = 'auto'
+                    if section.index == 1 and forloop.index <= grid
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  %}
+                  {% render 'product-listing', product: product, collection: collection, loading: loading, fetchpriority: fetch_priority, index: forloop.index %}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <!-- ORIGINAL DYNAMIC GRID STRUCTURE (No Carousel) -->
+      <div id="featured_collection--{{ section.id }}" class="featured__collection product-loop span-12 auto" data-product-count="{{ collection.products.size }}">
+        {% if section.settings.collection == blank %}
+          {% render 'onboard-product', prod_limit: prod_limit, grid: grid, aos_mod: aos_mod %}
+        {% else %}
+          {% for product in collection.products limit: prod_limit %}
+            <div class="aaaaa featured__collection-product product-index js-product-listing" 
+              id="product-listing-{{ product.id }}" 
+              data-product-id="{{ product.id }}" 
+              data-alpha="{{ product.title }}" 
+              data-price="{{ product.price }}"
+              data-aos="fade"
+              data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
+              {% liquid
+                assign loading = 'lazy'
+                assign fetch_priority = 'auto'
+                if section.index == 1 and forloop.index <= grid
                   assign loading = 'eager'
                   assign fetch_priority = 'high'
                 endif
-              else
-                assign loading = 'eager'
-              endif
-            endif
+              %}
+              {% render 'product-listing', product: product, collection: collection, loading: loading, fetchpriority: fetch_priority, index: forloop.index %}
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% endif %}
 
-           %}
-           {% render 'product-listing', product: product, collection: collection, loading: loading, fetchpriority: fetch_priority, index: forloop.index %}
-         </div>
-       {% endfor %}
-     {% endif %}
-   </div>
-   {% if section.settings.show_view_all %}
-    <div class="featured__collection-button-container span-12 auto">
-      <a class="button featured__collection-view-all-button" href="{{ collection.url }}">
-        {{ 'sections.featured_collection.view_all' | t }}
-      </a>
-    </div>
-   {% endif %}
+    {% if section.settings.show_view_all %}
+      <div class="featured__collection-button-container span-12 auto">
+        <a class="button featured__collection-view-all-button" href="{{ collection.url }}">
+          {{ 'sections.featured_collection.view_all' | t }}
+        </a>
+      </div>
+    {% endif %}
   </div>
+
+  {% if is_carousel %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var el = document.getElementById("featured_collection--{{ section.id }}");
+        if (el && typeof Splide !== 'undefined') {
+          var splide = new Splide(el, {
+            type: 'slide',
+            perPage: {{ grid }},
+            perMove: 1,
+            gap: '24px',
+            pagination: false,
+            arrows: true,
+            breakpoints: {
+              1024: {
+                perPage: 3,
+                gap: '20px'
+              },
+              768: {
+                perPage: 2,
+                gap: '12px'
+              },
+              480: {
+                perPage: 1.5,
+                gap: '10px'
+              }
+            }
+          });
+          splide.mount();
+        }
+      });
+      
+      // Support shopify editor section load events
+      document.addEventListener("shopify:section:load", function(event) {
+        if (event.target.id === "shopify-section-{{ section.id }}") {
+          var el = document.getElementById("featured_collection--{{ section.id }}");
+          if (el && typeof Splide !== 'undefined') {
+            var splide = new Splide(el, {
+              type: 'slide',
+              perPage: {{ grid }},
+              perMove: 1,
+              gap: '24px',
+              pagination: false,
+              arrows: true,
+              breakpoints: {
+                1024: {
+                  perPage: 3,
+                  gap: '20px'
+                },
+                768: {
+                  perPage: 2,
+                  gap: '12px'
+                },
+                480: {
+                  perPage: 1.5,
+                  gap: '10px'
+                }
+              }
+            });
+            splide.mount();
+          }
+        }
+      });
+    </script>
+  {% endif %}
 
   <style>
     {% if section.settings.reduce_width %}
@@ -112,8 +221,30 @@
       }
     {% endif %}
     {% if is_carousel %}
-      #featured_collection--{{ section.id }}.featured__collection-carousel .featured__collection-product {
-        width: {{ prod_grid }}%;
+      #featured_collection--{{ section.id }}.splide {
+        padding: 0 0px !important;
+        box-sizing: border-box !important;
+      }
+      #featured_collection--{{ section.id }} .splide__arrow {
+        background: #173250 !important;
+        color: #ffffff !important;
+        width: 40px !important;
+        height: 40px !important;
+        opacity: 0.9 !important;
+      }
+      #featured_collection--{{ section.id }} .splide__arrow svg {
+        fill: currentColor !important;
+        width: 14px !important;
+        height: 14px !important;
+      }
+      #featured_collection--{{ section.id }} .splide__arrow:hover {
+        background: #805c42 !important;
+      }
+      #featured_collection--{{ section.id }} .splide__arrow--prev {
+        left: -10px !important;
+      }
+      #featured_collection--{{ section.id }} .splide__arrow--next {
+        right: -10px !important;
       }
     {% else %}
       #featured_collection--{{ section.id }}.featured__collection {
@@ -128,7 +259,47 @@
 {% schema %}
 {
   "name": "Featured collection",
-  "settings": [{
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Mobile)",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Mobile)",
+      "default": 15
+    },{
       "type": "text",
       "id": "heading",
       "label": "Heading",

@@ -2,65 +2,77 @@
   ==============================================================================
   SNIPPET: shop-the-look-card.liquid
   ==============================================================================
-  Renders an individual product card inside the Shop the Look / Discover More carousel.
+  Renders an individual product card inside the Shop the Look / Discover More carousel, 
+  matching the layout and styles of the standard product cards.
 {% endcomment %}
 
 {% liquid
-  assign compare_price = item.compare_at_price
-  assign price = item.price
-  
-  assign discount = 0
-  if compare_price > price and compare_price > 0
-    assign discount = compare_price | minus: price | times: 100.0 | divided_by: compare_price | round
+  assign show_quickview = false
+  assign quickview_type = settings.quickview_type
+  if quickview_type == 'none' or quickview_type == blank
+    assign quickview_type = 'modal'
+  endif
+  if quickview_type != 'none'
+    assign show_quickview = true
   endif
 
-  # Metafield or tag badge (e.g. "Value Styles", "Selling Fast")
-  assign badge_tag = item.metafields.custom.product_badge.value | default: item.metafields.custom.badge.value
-  if badge_tag == blank
-    for tag in item.tags
-      if tag contains 'badge:'
-        assign badge_tag = tag | remove: 'badge:'
-        break
-      elsif tag == 'Value Styles' or tag == 'Selling Fast'
-        assign badge_tag = tag
-        break
-      endif
-    endfor
+  # Calculate discount percentage
+  assign discount = 0
+  if item.compare_at_price > item.price and item.compare_at_price > 0
+    assign discount = item.compare_at_price | minus: item.price | times: 100.0 | divided_by: item.compare_at_price | round
   endif
 %}
 
-<div class="stl-card" data-product-id="{{ item.id }}">
-  <div class="stl-card-media">
-    {% if discount > 0 %}
-      <div class="stl-save-badge">SAVE {{ discount }}%</div>
+<div class="product-index stl-product-card" data-product-id="{{ item.id }}" data-alpha="{{ item.title }}" data-price="{{ item.price }}">
+  
+  <div class="prod-container">
+    {% if item.available %}
+      {% if item.compare_at_price > item.price %}
+        <div class="sale-item sale-item--percentage icn">
+          Save {{ discount }}%
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="so icn">{{ 'products.general.sold' | t }}</div>
     {% endif %}
 
-    <a href="{{ item.url }}" class="stl-card-img-link">
-      <img
-        src="{{ item.featured_image | image_url: width: 600 }}"
-        alt="{{ item.title | escape }}"
-        loading="lazy"
-        width="300"
-        height="400"
-      />
-    </a>
-  </div>
-
-  <div class="stl-card-info">
-    <div class="stl-title-price-row">
-      <h5 class="stl-card-title">
-        <a href="{{ item.url }}">{{ item.title }}</a>
-      </h5>
-      <div class="stl-card-price">
-        <span class="stl-price-current">{{ item.price | money }}</span>
-        {% if compare_price > price %}
-          <span class="stl-price-compare">{{ compare_price | money }}</span>
-        {% endif %}
-      </div>
+    <div class="prod-image image_portrait js-product-image">
+      <a href="{{ item.url }}" title="{{ item.title | escape }}">
+        <div class="reveal">
+          {% render 'basic-responsive-image',
+            type: item.featured_media,
+            width: 1200,
+            loading: 'lazy'
+          %}
+        </div>
+      </a>
     </div>
 
-    {% if badge_tag != blank %}
-      <div class="stl-badge-tag">{{ badge_tag }}</div>
+    {% if show_quickview %}
+      {%- liquid
+        if quickview_type == 'modal'
+          assign quickview_classes = 'js-modal-open'
+          assign quickview_settings = 'data-wau-modal-target="quickview"'
+        else
+          assign quickview_classes = 'js-slideout-open'
+          assign quickview_settings = 'data-wau-slideout-target="quickview" data-slideout-direction="right"'
+        endif
+      -%}
+
+      <button class="quick-view-{{ item.id }} product-listing__quickview-trigger {{ quickview_classes }} js-quickview-trigger"
+        type="button"
+        name="button"
+        {{ quickview_settings }}
+        data-product-url="{{ item.url }}?view=quick">Quick Shop</button>
     {% endif %}
   </div>
+
+  <div class="product-info">
+    <a href="{{ item.url }}">
+      <h2>{{ item.title }}</h2>
+    </a>
+    
+    {% render 'product-price-listing', product: item %}
+  </div>
+
 </div>
