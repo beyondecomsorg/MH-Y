@@ -3197,6 +3197,16 @@ form.ajax-cart__cart-form {
   text-align: right !important;
 }
 
+span.video-char.char-s,
+span.video-char.char-e,
+span.video-char.char-f,
+span.video-char.char-a,
+span.video-char.char-n,
+span.video-char.char-l,
+span.video-char.char-o{
+      text-transform: lowercase;
+}
+
 .ajax-cart__final-details .shipping p.a-right,
 .ajax-cart__final-details .tax p.a-right {
   font-size: 13px !important;
