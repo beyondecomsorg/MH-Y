@@ -301,8 +301,33 @@
         "section_padding": "bottom"
       }
     },
+    "background_video_cAGxzE": {
+      "type": "background-video",
+      "name": "Background video",
+      "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "display_wide": true,
+        "video": "shopify://files/videos/MH&Y more b_w.mp4",
+        "overlay": false,
+        "height": "medium",
+        "heading": "",
+        "subheading_text": "",
+        "button_text": "",
+        "link": "",
+        "heading_font_size": 30,
+        "subheading_font_size": 16,
+        "text_color": "#000",
+        "button_text_color": "#fff",
+        "button_color": "#000",
+        "section_padding": "both"
+      }
+    },
     "rich_text_n7LtAC": {
       "type": "rich-text",
+      "disabled": true,
       "settings": {
         "desktop_padding_top": 30,
         "desktop_padding_bottom": 30,
@@ -380,6 +405,7 @@
         "image_NaLLeB",
         "image_YqQQ8C"
       ],
+      "disabled": true,
       "settings": {
         "desktop_padding_top": 30,
         "desktop_padding_bottom": 30,
@@ -530,6 +556,7 @@
     "full_video_section_JQXE4c",
     "featured_collection_TF4yJz",
     "image_gallery_QyTUt6",
+    "background_video_cAGxzE",
     "rich_text_n7LtAC",
     "our_roots_section_pj99wC",
     "custom_shop_the_look_RRr8K7",
