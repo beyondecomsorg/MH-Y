@@ -2,7 +2,10 @@
       border-radius: 50% !important;
       border: 1px solid #c5bbbb;
 }
-
+h2.premium-reviews-title,
+.global__section h2.section-heading{
+  text-transform: uppercase;
+}
 
 .prod-image {
   position: relative;
