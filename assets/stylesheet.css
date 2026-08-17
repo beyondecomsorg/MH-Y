@@ -3995,9 +3995,9 @@ div#thumb-slider-wrapper.js-thumb-horizontal-wrapper .carousel-nav.js-thumb-caro
 }
 
 .product__section-images .flickity-prev-next-button:hover {
-  background-color: transparent;
+  /* background-color: transparent;
   opacity: 1;
-  color:white;
+  color:white; */
 }
 
 .product__section-images .flickity-button:hover .flickity-button-icon {

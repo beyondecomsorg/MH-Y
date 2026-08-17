@@ -37,6 +37,10 @@
     assign show_sizes = true
   endif
 
+  if is_recommendation
+    assign show_quickview = false
+  endif
+
 -%}
 
 <div class="prod-container">
@@ -219,7 +223,8 @@
          color_swatch_style: settings.color_swatch_style,
          show_quickview: show_quickview,
          show_sizes: show_sizes,
-         show_swatches: show_swatches %}
+         show_swatches: show_swatches,
+         is_recommendation: is_recommendation %}
     {% else %}
        <div class="product--grid_add">
          <button class="button select--options" type="button" disabled style="opacity: 0.6; cursor: not-allowed; background: #e5e7eb !important; color: #9ca3af !important; border: 1px solid #e5e7eb !important; font-size: 11px !important; padding: 0 10px !important; height: 26px !important; line-height: 26px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 999px !important; width: unset !important; min-width: 80px !important;">

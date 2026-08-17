@@ -144,6 +144,12 @@
     {{ main_font_bold | font_face: font_display: 'swap' }}
     {{ main_font_italic | font_face: font_display: 'swap' }}
     {{ main_font_bold_italic | font_face: font_display: 'swap' }}
+    .template-product button.flickity-button.flickity-prev-next-button.next,
+.template-product button.flickity-button.flickity-prev-next-button.previous{
+  /* display: none !important; */
+      border: none !important;
+}
+
   </style>
 
   {%- comment -%}
@@ -332,12 +338,12 @@
         <span>Home</span>
       </a>
 
-      <button class="mhy-mobile-bottomnav__item" type="button" data-mhy-mobile-nav-search data-fallback-url="{{ routes.search_url }}" aria-label="Search">
+      <a class="mhy-mobile-bottomnav__item" href="#" data-mhy-mobile-nav-search data-fallback-url="{{ routes.search_url }}" aria-label="Search">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8Zm6.1-1.1 3.3 3.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <span>Search</span>
-      </button>
+      </a>
 
-      <a class="mhy-mobile-bottomnav__item" href="{{ mhy_shop_link }}" aria-label="Shop all">
+      <a class="mhy-mobile-bottomnav__item" href="#" data-mhy-categories-trigger aria-label="Categories">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
         <span>Categories</span>
       </a>
@@ -456,6 +462,16 @@ document.querySelectorAll('.pc-card').forEach((card) => {
       btn.classList.add('is-active');
     });
   });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const categoriesTrigger = document.querySelector('[data-mhy-categories-trigger]');
+  if (categoriesTrigger) {
+    categoriesTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('[data-wau-slideout-target="mobile-navigation"]')?.click();
+    });
+  }
 });
   </script>
 

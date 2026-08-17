@@ -373,9 +373,9 @@
   }
 
   .premium-reviews-section-{{ section.id }} .flickity-prev-next-button:hover {
-    background-color: var(--reviews-accent);
-    color: #ffffff;
-    border-color: var(--reviews-accent);
+    /* background-color: var(--reviews-accent); */
+    /* color: #ffffff; */
+    /* border-color: var(--reviews-accent); */
   }
 
   .premium-reviews-section-{{ section.id }} .flickity-prev-next-button.previous {
@@ -422,6 +422,25 @@
          id="premium-reviews-{{ section.id }}" 
          data-section-id="{{ section.id }}" 
          data-section-type="homepage-testimonials">
+
+  {%- if section.settings.show_overall_rating -%}
+    {%- liquid
+      assign overall_rating = section.settings.overall_score | plus: 0.0
+      assign rating_floor = overall_rating | floor
+      assign rating_remainder = overall_rating | minus: rating_floor
+      assign remainder_percent = rating_remainder | times: 100 | round
+    -%}
+    {%- if remainder_percent > 0 -%}
+      <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+        <defs>
+          <linearGradient id="star-grad-{{ section.id }}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="{{ remainder_percent }}%" stop-color="{{ section.settings.star_color }}" />
+            <stop offset="{{ remainder_percent }}%" stop-color="#cccccc" />
+          </linearGradient>
+        </defs>
+      </svg>
+    {%- endif -%}
+  {%- endif -%}
   
   <div class="premium-reviews-container">
     
@@ -436,21 +455,36 @@
       {%- endif -%}
       
       <!-- Overall rating display -->
-      {%- if section.settings.show_overall_rating -%}
+      {%- if section.settings.show_overall_rating or section.settings.show_review_count -%}
         <div class="premium-reviews-overall">
-          <div class="premium-reviews-overall-stars" aria-label="{{ section.settings.overall_score }} out of 5 stars">
-            {%- for i in (1..5) -%}
-              <svg class="premium-star-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21L12 17.27z" fill="var(--reviews-star)"/>
-              </svg>
-            {%- endfor -%}
-          </div>
+          {%- if section.settings.show_overall_rating -%}
+            <div class="premium-reviews-overall-stars" aria-label="{{ section.settings.overall_score }} out of 5 stars">
+              {%- assign rating_floor_plus_1 = rating_floor | plus: 1 -%}
+              {%- for i in (1..5) -%}
+                {%- liquid
+                  if i <= rating_floor
+                    assign fill_color = section.settings.star_color
+                  elsif i == rating_floor_plus_1 and remainder_percent > 0
+                    assign fill_color = 'url(#star-grad-' | append: section.id | append: ')'
+                  else
+                    assign fill_color = '#cccccc'
+                  endif
+                -%}
+                <svg class="premium-star-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21L12 17.27z" fill="{{ fill_color }}"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+          
           <div class="premium-reviews-overall-text">
-            <span class="premium-reviews-overall-score">{{ section.settings.overall_score }}</span>
-            <span class="premium-reviews-overall-separator">/</span>
-            <span class="premium-reviews-overall-max">5</span>
-            {%- if section.settings.overall_count != blank -%}
-              <span class="premium-reviews-overall-count">{{ section.settings.overall_count }}</span>
+            {%- if section.settings.show_overall_rating -%}
+              <span class="premium-reviews-overall-score">{{ section.settings.overall_score }}</span>
+              <span class="premium-reviews-overall-separator">/</span>
+              <span class="premium-reviews-overall-max">5</span>
+            {%- endif -%}
+            {%- if section.settings.show_review_count and section.settings.overall_count != blank -%}
+              <span class="premium-reviews-overall-count">{% if section.settings.show_overall_rating %}&nbsp;{% endif %}{{ section.settings.overall_count }}</span>
             {%- endif -%}
           </div>
         </div>
@@ -518,10 +552,38 @@
 
                 <!-- Star Ratings -->
                 <div class="premium-card-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
-                  {%- assign rating_val = block.settings.rating | plus: 0 -%}
+                  {%- liquid
+                    assign card_rating = block.settings.rating | plus: 0.0
+                    assign card_rating_floor = card_rating | floor
+                    assign card_rating_remainder = card_rating | minus: card_rating_floor
+                    assign card_remainder_percent = card_rating_remainder | times: 100 | round
+                  -%}
+                  {%- if card_remainder_percent > 0 -%}
+                    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="star-grad-{{ block.id }}" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="{{ card_remainder_percent }}%" stop-color="{{ section.settings.star_color }}" />
+                          <stop offset="{{ card_remainder_percent }}%" stop-color="#cccccc" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  {%- endif -%}
+                  {%- assign card_rating_floor_plus_1 = card_rating_floor | plus: 1 -%}
                   {%- for i in (1..5) -%}
-                    <svg class="premium-card-star-icon {% if i <= rating_val %}active{% else %}inactive{% endif %}" viewBox="0 0 24 24" width="15" height="15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21L12 17.27z" fill="currentColor"/>
+                    {%- liquid
+                      if i <= card_rating_floor
+                        assign card_fill_color = section.settings.star_color
+                        assign is_active = true
+                      elsif i == card_rating_floor_plus_1 and card_remainder_percent > 0
+                        assign card_fill_color = 'url(#star-grad-' | append: block.id | append: ')'
+                        assign is_active = true
+                      else
+                        assign card_fill_color = '#cccccc'
+                        assign is_active = false
+                      endif
+                    -%}
+                    <svg class="premium-card-star-icon {% if is_active %}active{% else %}inactive{% endif %}" viewBox="0 0 24 24" width="15" height="15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21L12 17.27z" fill="{{ card_fill_color }}"/>
                     </svg>
                   {%- endfor -%}
                 </div>
@@ -568,8 +630,6 @@
       }
     };
     
-    initCarousel();
-
     var resizeFlickity = function() {
       if (!carouselEl) return;
       var flkty = Flickity.data(carouselEl);
@@ -578,18 +638,64 @@
       }
     };
 
-    // Periodically resize Flickity instance to handle AOS animations and font loads
-    [100, 300, 700, 1500, 3000].forEach(function(delay) {
-      setTimeout(resizeFlickity, delay);
-    });
+    var startCarousel = function() {
+      initCarousel();
+      [100, 300, 700, 1500, 3000].forEach(function(delay) {
+        setTimeout(resizeFlickity, delay);
+      });
+    };
+
+    {%- if request.page_type != 'index' -%}
+      // Fetch the homepage HTML to display the exact same customized reviews
+      fetch('/')
+        .then(function(response) { return response.text(); })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var homepageSection = doc.querySelector('[data-section-type="homepage-testimonials"]');
+          if (homepageSection) {
+            // Copy defs and linearGradients for stars colors
+            var homepageDefs = homepageSection.querySelectorAll('defs linearGradient');
+            if (homepageDefs.length > 0) {
+              var localDefs = sectionContainer.querySelector('defs');
+              if (!localDefs) {
+                var newSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                newSvg.setAttribute('style', 'position: absolute; width: 0; height: 0; overflow: hidden;');
+                newSvg.setAttribute('aria-hidden', 'true');
+                localDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                newSvg.appendChild(localDefs);
+                sectionContainer.insertBefore(newSvg, sectionContainer.firstChild);
+              }
+              homepageDefs.forEach(function(grad) {
+                localDefs.appendChild(grad.cloneNode(true));
+              });
+            }
+
+            // Replace container contents
+            var localContainer = sectionContainer.querySelector('.premium-reviews-container');
+            var homepageContainer = homepageSection.querySelector('.premium-reviews-container');
+            if (localContainer && homepageContainer) {
+              localContainer.innerHTML = homepageContainer.innerHTML;
+              carouselEl = sectionContainer.querySelector('.js-carousel');
+            }
+          }
+          startCarousel();
+        })
+        .catch(function(err) {
+          console.error("Failed to load global reviews from homepage:", err);
+          startCarousel();
+        });
+    {%- else -%}
+      startCarousel();
+    {%- endif -%}
 
     window.addEventListener('load', resizeFlickity);
     
     // Support Shopify Theme customizer live updates
     document.addEventListener('shopify:section:load', function(event) {
       if (event.detail.sectionId === '{{ section.id }}') {
-        initCarousel();
-        setTimeout(resizeFlickity, 200);
+        carouselEl = sectionContainer.querySelector('.js-carousel');
+        startCarousel();
       }
     });
   });
@@ -658,20 +764,29 @@
     },
     {
       "type": "header",
-      "content": "Overall Rating Summary"
+      "content": "Overall Rating Summary",
+      "info": "To update reviews globally across the storefront, customize the 'Premium Customer Reviews' section on your Home Page."
     },
     {
       "type": "checkbox",
       "id": "show_overall_rating",
-      "label": "Show Overall Rating",
+      "label": "Show Rating",
       "default": true
     },
     {
-      "type": "text",
+      "type": "checkbox",
+      "id": "show_review_count",
+      "label": "Show Review Count",
+      "default": true
+    },
+    {
+      "type": "range",
       "id": "overall_score",
-      "label": "Overall Score",
-      "default": "4.9",
-      "info": "e.g., 4.9"
+      "min": 1.0,
+      "max": 5.0,
+      "step": 0.1,
+      "label": "Overall Rating",
+      "default": 4.9
     },
     {
       "type": "text",
@@ -859,11 +974,11 @@
         {
           "type": "range",
           "id": "rating",
-          "min": 1,
-          "max": 5,
-          "step": 1,
+          "min": 1.0,
+          "max": 5.0,
+          "step": 0.1,
           "label": "Star Rating",
-          "default": 5
+          "default": 5.0
         },
         {
           "type": "text",

@@ -60,6 +60,15 @@ h2.premium-reviews-title,
   justify-content: center;
   gap: 6px;
   text-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  line-height: inherit;
+  height: 100%;
 }
 
 .mhy-mobile-bottomnav__item:nth-child(1) {
