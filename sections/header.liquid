@@ -59,7 +59,9 @@
       <input type="hidden" name="type" value="product">
     {% endif %}
     {%- if settings.predictive_search_enabled -%}
-      <div id="predictive-search-header" class="predictive-search" tabindex="-1"></div>
+      <div id="predictive-search-header" class="predictive-search" tabindex="-1">
+        {% render 'predictive-search-initial' %}
+      </div>
     {%- endif -%}
   </form>
 {%- if settings.predictive_search_enabled -%}
@@ -384,8 +386,10 @@
   {%- endcomment -%}
   <style>
     {% if section.settings.search_layout == 'modal' %}
+      .modal__inner-content-container { padding-top: 45px !important; padding-left: 0px !important; padding-right: 0px !important; }
       .modal__inner-content-container form.header-search-form { position: relative; }
-      .modal__inner-content-container button.search-button { position: absolute; right: 0; top: 0; }
+      .modal__inner-content-container button.search-button { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent; }
+      .modal__general-modal__wrapper .slideout__trigger--close { position: absolute !important; right: 15px !important; top: 15px !important; z-index: 10000 !important; }
     {% else %}
       div#predictive-search { width: 100%; position: absolute; left: 0; right: 0; z-index: 13; transform: translateY(10px); }
     {% endif %}

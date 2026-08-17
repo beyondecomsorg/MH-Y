@@ -511,12 +511,45 @@
             "review_title": "Loved the event and enjoyed it",
             "review_text": "Amazing collection!! The fabric is next to skin and is of superior quality.\nLoved the event and enjoyed it.\nWill surely refer to my friends"
           }
+        },
+        "testimonial_L3RbkL": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Arjun Mehta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Perfect fit and excellent fabric",
+            "review_text": "The shirt fits really well and the fabric feels premium. It is comfortable enough for a full day and looks sharp without being too formal. Really happy with the quality."
+          }
+        },
+        "testimonial_z4cDqp": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Rohan Kapoor",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Simple, elegant, and comfortable",
+            "review_text": "Loved the overall look and feel of the shirt. The fabric is soft, breathable, and the finishing is excellent. It works perfectly for both casual outings and dinner occasions."
+          }
+        },
+        "testimonial_4pbUw4": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Vikram Sharma",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Quality you can feel",
+            "review_text": "The quality exceeded my expectations. The fit is clean, the material feels durable, and the shirt looks even better in person. Definitely a brand I would recommend for premium everyday menswear."
+          }
         }
       },
       "block_order": [
         "review_1",
         "review_2",
-        "review_3"
+        "review_3",
+        "testimonial_L3RbkL",
+        "testimonial_z4cDqp",
+        "testimonial_4pbUw4"
       ],
       "settings": {
         "desktop_padding_top": 29,

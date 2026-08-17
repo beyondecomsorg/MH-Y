@@ -48,7 +48,9 @@
                 {% endif %}
 
                 {%- if settings.predictive_search_enabled -%}
-                  <div id="predictive-search-mobile" class="predictive-search" tabindex="-1"></div>
+                  <div id="predictive-search-mobile" class="predictive-search" tabindex="-1">
+                    {% render 'predictive-search-initial' %}
+                  </div>
                 {%- endif -%}
               </form>
             {%- if settings.predictive_search_enabled -%}

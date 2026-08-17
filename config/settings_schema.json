@@ -844,6 +844,19 @@
         "label": "Enable product suggestions",
         "info": "Suggested results in header search",
         "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "popular_searches",
+        "label": "Popular Searches",
+        "info": "Enter search terms separated by commas (e.g. Jeans, Shirts, T-Shirts)",
+        "default": "Shirts, T-Shirts, Jackets, New Arrivals, Best Sellers"
+      },
+      {
+        "type": "collection",
+        "id": "search_recommendations_collection",
+        "label": "Search Recommendations Collection",
+        "info": "Select collection to use for You May Also Like recommendations when search is empty"
       }
     ]
   },

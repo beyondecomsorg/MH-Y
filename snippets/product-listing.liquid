@@ -77,6 +77,9 @@
    {% endif %}
 
    <div class="prod-image image_{{ aspect_ratio }} js-product-image">
+     {% unless product.available %}
+       <span class="mhy-sold-out-badge">{{ 'products.product.sold_out' | t }}</span>
+     {% endunless %}
      <!-- Wishlist button overlay -->
      {% comment %} <button class="mhy-wishlist-btn js-mhy-wishlist" type="button" aria-label="Add to Wishlist" data-product-id="{{ product.id }}">
        <svg class="mhy-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -209,13 +212,21 @@
     %}
   {% endif %}
 
-  {% if show_quickadd and product.available %}
-     {% render 'product-grid-add',
-       product: product,
-       color_swatch_style: settings.color_swatch_style,
-       show_quickview: show_quickview,
-       show_sizes: show_sizes,
-       show_swatches: show_swatches %}
+  {% if show_quickadd %}
+    {% if product.available %}
+       {% render 'product-grid-add',
+         product: product,
+         color_swatch_style: settings.color_swatch_style,
+         show_quickview: show_quickview,
+         show_sizes: show_sizes,
+         show_swatches: show_swatches %}
+    {% else %}
+       <div class="product--grid_add">
+         <button class="button select--options" type="button" disabled style="opacity: 0.6; cursor: not-allowed; background: #e5e7eb !important; color: #9ca3af !important; border: 1px solid #e5e7eb !important; font-size: 11px !important; padding: 0 10px !important; height: 26px !important; line-height: 26px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 999px !important; width: unset !important; min-width: 80px !important;">
+           <span>{{ 'products.product.sold_out' | t }}</span>
+         </button>
+       </div>
+    {% endif %}
   {% endif %}
 
 </div>

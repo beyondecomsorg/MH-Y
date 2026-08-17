@@ -118,42 +118,47 @@
         gap: 20px !important;
       }
       .custom-shop--video-container {
-        order: 1 !important;
+        order: 2 !important;
         width: 100% !important;
         box-sizing: border-box !important;
       }
       .custom-shop--video-container video {
         height: auto !important;
         margin-top: 0 !important;
-  
       }
       .custom-shop--right-column {
-        order: 2 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
+        display: contents !important;
       }
       .custom-shop--carousel-heading {
-        order: 1 !important; /* Visual order inside the right column: heading displays first (below video) */
-        margin-bottom: 20px !important;
-        margin-left: 0 !important;
-        padding: 0 16px !important;
+        display: contents !important;
+      }
+      .custom-shop--heading {
+        order: 1 !important;
+        width: 100% !important;
         text-align: center !important;
-        position: static !important;
+        margin-bottom: 0px !important;
+      }
+      .custom-shop--heading h2.section-heading{
+        margin-bottom: 0px !important;
       }
       .collection--carousel_heading {
         margin-right: 0 !important;
         text-align: center !important;
       }
       .custom-shop--sub-heading {
+        order: 3 !important;
         text-align: center !important;
-        padding: 0 !important;
+        padding: 0 15px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
       }
       .custom-shop--carousel-wrapper {
-        order: 2 !important; /* Visual order inside right column: products display below heading */
+        order: 4 !important;
         position: static !important;
         height: auto !important;
         padding: 0 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
       }
       .custom-shop--carousel-wrapper .custom-shop--product-index {
         width: 48% !important;

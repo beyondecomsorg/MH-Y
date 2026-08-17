@@ -79,7 +79,16 @@
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: var(--reviews-text-primary);
-    margin: 0 0 20px;
+    margin: 0 0 10px;
+  }
+
+  .premium-reviews-section-{{ section.id }} .premium-reviews-title::after {
+    content: "";
+    display: block;
+    width: 62px;
+    height: 2px;
+    background: var(--dotted-color);
+    margin: 10px auto 0;
   }
 
   @media (min-width: 769px) {
@@ -198,7 +207,7 @@
     background-color: var(--reviews-card-bg);
     border: 1px solid var(--reviews-border);
     border-radius: 16px;
-    padding: 36px;
+    padding: 17px;
     width: 100%;
     display: flex;
     flex-direction: column;

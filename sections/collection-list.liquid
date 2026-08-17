@@ -157,25 +157,45 @@ data-section-type="collection-list">
             width: {{ prod_grid }}%;
             padding: 0 15px;
           }
-          @media screen and (max-width: 740px) {
-            .section-{{ section.id }} .collection__list-collections .collection__list-item {
-              width: 50%;
-              padding: 0 2px;
-            }
-            .collection-loop .flickity-viewport{
-              min-height: 247px;
-            }
-          }
         {% else %}
           .section-{{ section.id }} .collection__list-collections {
             grid-template-columns: repeat({{ grid }}, 1fr);
           }
-          @media screen and (max-width: 740px) {
-            .section-{{ section.id }} .collection__list-collections {
-              grid-template-columns: repeat(2, 1fr);
-            }
-          }
         {% endif %}
+
+        @media screen and (max-width: 740px) {
+          .section-{{ section.id }} .collection__list-collections {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            grid-column-gap: 15px !important;
+            grid-row-gap: 20px !important;
+            height: auto !important;
+          }
+          .section-{{ section.id }} .collection__list-collections .flickity-viewport {
+            display: contents !important;
+            height: auto !important;
+            min-height: 0 !important;
+          }
+          .section-{{ section.id }} .collection__list-collections .flickity-slider {
+            display: contents !important;
+          }
+          .section-{{ section.id }} .collection__list-collections .collection__list-item {
+            width: 100% !important;
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+            transform: none !important;
+            padding: 0 !important;
+            display: block !important;
+          }
+          .section-{{ section.id }} .collection__list-collections .flickity-prev-next-button,
+          .section-{{ section.id }} .collection__list-collections .flickity-page-dots {
+            display: none !important;
+          }
+          .collection-loop .flickity-viewport {
+            min-height: 0 !important;
+          }
+        }
         @media (max-width : 770px){
           .desktop__hide{
           display: block !important;

@@ -65,7 +65,11 @@
     ]
   </script>
   <div class="pc-image-wrap image_{{ aspect_ratio }} js-product-image">
-    {% if product.available and badge_text != blank %}
+    {% if product.available == false %}
+      <div class="pc-badges">
+        <span class="pc-badge pc-badge--soldout" style="background: rgba(23, 50, 80, 0.9) !important; color: #ffffff !important;">{{ 'products.product.sold_out' | t }}</span>
+      </div>
+    {% elsif product.available and badge_text != blank %}
       <div class="pc-badges">
         <span class="pc-badge pc-badge--sale">{{ badge_text }}</span>
       </div>
