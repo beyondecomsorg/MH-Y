@@ -291,7 +291,7 @@
         "mobile_padding_bottom": 15,
         "heading": "NEW IN TOWN",
         "full_width": true,
-        "image_height": "fixed_height",
+        "image_height": "natural",
         "desktop_height": 800,
         "mobile_height": 600,
         "swipe": true,
