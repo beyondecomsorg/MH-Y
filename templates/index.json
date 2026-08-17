@@ -327,7 +327,6 @@
     },
     "rich_text_n7LtAC": {
       "type": "rich-text",
-      "disabled": true,
       "settings": {
         "desktop_padding_top": 30,
         "desktop_padding_bottom": 30,
@@ -589,8 +588,8 @@
     "full_video_section_JQXE4c",
     "featured_collection_TF4yJz",
     "image_gallery_QyTUt6",
-    "background_video_cAGxzE",
     "rich_text_n7LtAC",
+    "background_video_cAGxzE",
     "our_roots_section_pj99wC",
     "custom_shop_the_look_RRr8K7",
     "image_with_text_overlay_LjcknF",
