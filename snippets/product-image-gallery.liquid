@@ -289,33 +289,50 @@
   {{ thumbnails }}
 {%- endif -%}
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const containers = document.querySelectorAll(".circle-zoom-container");
+(function() {
+  function initCircleZoom() {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-  containers.forEach(container => {
-    const image = container.querySelector(".circle-zoom-image");
-    const lens = container.querySelector(".circle-zoom-lens");
+    const containers = document.querySelectorAll(".circle-zoom-container");
+    containers.forEach(container => {
+      const image = container.querySelector(".circle-zoom-image");
+      const lens = container.querySelector(".circle-zoom-lens");
+      if (!image || !lens) return;
 
-    const zoomSrc = image.dataset.zoomSrc || image.src;
-    const zoomFactor = 2;
+      const zoomSrc = image.dataset.zoomSrc || image.src;
+      const zoomFactor = 2;
 
-    container.addEventListener("mousemove", function (e) {
-      const rect = image.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      container.addEventListener("mousemove", function (e) {
+        const rect = image.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-      lens.style.display = "block";
-      lens.style.left = `${x - lens.offsetWidth / 2}px`;
-      lens.style.top = `${y - lens.offsetHeight / 2}px`;
+        // Hide zoom lens in the left 10% and right 10% of the image to clear nav arrows
+        const boundary = rect.width * 0.10;
+        if (x < boundary || x > (rect.width - boundary)) {
+          lens.style.display = "none";
+          return;
+        }
 
-      lens.style.backgroundImage = `url('${zoomSrc}')`;
-      lens.style.backgroundSize = `${image.width * zoomFactor}px ${image.height * zoomFactor}px`;
-      lens.style.backgroundPosition = `-${x * zoomFactor - lens.offsetWidth / 2}px -${y * zoomFactor - lens.offsetHeight / 2}px`;
+        lens.style.display = "block";
+        lens.style.left = `${x - lens.offsetWidth / 2}px`;
+        lens.style.top = `${y - lens.offsetHeight / 2}px`;
+
+        lens.style.backgroundImage = `url('${zoomSrc}')`;
+        lens.style.backgroundSize = `${image.width * zoomFactor}px ${image.height * zoomFactor}px`;
+        lens.style.backgroundPosition = `-${x * zoomFactor - lens.offsetWidth / 2}px -${y * zoomFactor - lens.offsetHeight / 2}px`;
+      });
+
+      container.addEventListener("mouseleave", function () {
+        lens.style.display = "none";
+      });
     });
+  }
 
-    container.addEventListener("mouseleave", function () {
-      lens.style.display = "none";
-    });
-  });
-});
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCircleZoom);
+  } else {
+    initCircleZoom();
+  }
+})();
 </script>

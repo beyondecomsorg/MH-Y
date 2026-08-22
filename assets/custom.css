@@ -2213,6 +2213,11 @@ input#checkout{
   pointer-events: none;
   z-index: 999;
 }
+@media (pointer: coarse), (max-width: 767px) {
+  .circle-zoom-lens {
+    display: none !important;
+  }
+}
 #modal-search-modal.modal__container[data-wau-modal-full] .modal__inner-wrapper {
     border: unset;
     max-height: unset;
