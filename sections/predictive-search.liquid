@@ -41,7 +41,7 @@ section/predictive-search.liquid
       {%- if predictive_search.resources.products.size > 0 -%}
         <li>
           <h3 id="predictive-search-products" class="predictive-search__heading h4 a-left">
-            {{ 'sections.search.products' | t }}
+            Products for "{{ predictive_search.terms }}"
           </h3>
           <ul class="search__product-loop grid__wrapper">
             {%- for product in predictive_search.resources.products -%}
@@ -51,7 +51,19 @@ section/predictive-search.liquid
             {%- endfor -%}
           </ul>
         </li>
+      {%- else -%}
+        <li class="predictive-search__no-results">
+          <p class="predictive-search__no-results-text" style="padding: 20px; font-weight: bold; text-align: center; color: #173250;">No products found for "{{ predictive_search.terms }}"</p>
+        </li>
       {%- endif -%}
+
+      <!-- Dynamic Recommendations -->
+      <li class="predictive-search-recommendations-wrapper">
+        <h3 class="predictive-search__heading h4 a-left YouMayAlsoLikeHeading" style="padding-top: 15px;">You May Also Like</h3>
+        <ul class="search__product-loop grid__wrapper predictive-search-recommendations-list" data-query="{{ predictive_search.terms | escape }}">
+          <!-- JS will load and render related products here -->
+        </ul>
+      </li>
 
 
       <!-- Pages/Articles -->

@@ -118,10 +118,113 @@
         "grid": 4,
         "limit": 4
       }
+    },
+    "premium_customer_reviews": {
+      "type": "premium-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Prateek rana",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "The fabric quality is very good",
+            "review_text": "I’m very happy with the product. The fabric quality is very good—soft, comfortable, and feels durable. The fit is nice, and the overall finish of the T-shirt is impressive. Overall, I really like the product and would recommend it to others looking for good-quality casual wear."
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "CHANDRIKA SANGHVI",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Style, comfort, and quality",
+            "review_text": "Overall, MH&Y is a great option for men who value understated style, comfort, and quality. I’d definitely recommend starting with their linen shirts or chinos to get a feel for what they offer."
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Shweta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Loved the event and enjoyed it",
+            "review_text": "Amazing collection!! The fabric is next to skin and is of superior quality.\nLoved the event and enjoyed it.\nWill surely refer to my friends"
+          }
+        },
+        "testimonial_L3RbkL": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Arjun Mehta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Perfect fit and excellent fabric",
+            "review_text": "The shirt fits really well and the fabric feels premium. It is comfortable enough for a full day and looks sharp without being too formal. Really happy with the quality."
+          }
+        },
+        "testimonial_z4cDqp": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Rohan Kapoor",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Simple, elegant, and comfortable",
+            "review_text": "Loved the overall look and feel of the shirt. The fabric is soft, breathable, and the finishing is excellent. It works perfectly for both casual outings and dinner occasions."
+          }
+        },
+        "testimonial_4pbUw4": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Vikram Sharma",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Quality you can feel",
+            "review_text": "The quality exceeded my expectations. The fit is clean, the material feels durable, and the shirt looks even better in person. Definitely a brand I would recommend for premium everyday menswear."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "testimonial_L3RbkL",
+        "testimonial_z4cDqp",
+        "testimonial_4pbUw4"
+      ],
+      "settings": {
+        "desktop_padding_top": 29,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "heading": "Loved by Our Customers",
+        "sub_heading": "Real experiences from our valued customers.",
+        "show_overall_rating": true,
+        "overall_score": 4.9,
+        "overall_count": "Based on 2,000+ Reviews",
+        "bg_color": "#ffffff",
+        "card_bg_color": "#ffffff",
+        "text_color_primary": "#173250",
+        "text_color_secondary": "#173250",
+        "border_color": "#e5e7eb",
+        "accent_color": "#173250",
+        "star_color": "#d4af37",
+        "cta_text": "View All Reviews",
+        "cta_link": "/collections/all",
+        "btn_bg_color": "#1f1f1f",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#6e7c45",
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_padding": "both"
+      }
     }
   },
   "order": [
     "main",
+    "premium_customer_reviews",
     "product-content",
     "1625847223ea0ebb04",
     "related-products",

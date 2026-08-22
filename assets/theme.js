@@ -532,6 +532,7 @@ WAU.Modal = (function() {
     button.classList.add('slideout__trigger-' + name);
     button.classList.add('slideout__trigger-general-modal');
     button.classList.add('js-modal-close');
+    button.setAttribute('type', 'button');
     button.setAttribute('aria-controls', 'modal-' + name);
     button.setAttribute('aria-label', 'Close modal');
     icon.classList.add('icn-close');
@@ -2789,14 +2790,8 @@ Shopify.theme.ajaxCart = {
 
           Shopify.theme.ajaxCart.updateView(config, Cart);
 
-          if (openCartFromQuickview) {
-            Shopify.theme.ajaxCart.setCartNotice(config, {
-              type: 'success',
-              title: 'Added to bag',
-              message: response.product_title || response.title || '',
-              autoHideMs: 8000
-            });
-          }
+          // Cart drawer opens directly — no success banner needed.
+
         });
       })
       .catch((error) => {
@@ -3339,7 +3334,17 @@ Shopify.theme.quickview = {
         if (openId && openId !== this._mhyOpenId) return;
 
         let context = document.querySelector('.js-quickview-wrapper');
-        if (context) theme.Product(context);
+        if (context) {
+          // Format initial static price displays loaded inside Quickview
+          context.querySelectorAll('.price-item--sale, .price-item--regular').forEach(priceEl => {
+            let txt = priceEl.innerHTML;
+            txt = txt.replace(/(\s|&nbsp;|&#160;|&#x2009;)?00$/, '');
+            txt = txt.replace(/\.00(\s|$)/, '$1');
+            txt = txt.replace(/,00(\s|$)/, '$1');
+            priceEl.innerHTML = txt;
+          });
+          theme.Product(context);
+        }
 
         context = document.querySelector('.js-quickview-wrapper');
         if (context && context.dataset.paymentButton == 'true' && Shopify.PaymentButton) {
@@ -3809,7 +3814,26 @@ theme.Carousel = (function() {
     init() {
       if (this.carousels.length > 0) {
         this.carousels.forEach((carousel) => {
-          const options = JSON.parse(carousel.getAttribute('data-flickity-config'));
+          let options = {};
+          try {
+            const configAttr = carousel.getAttribute('data-flickity-config');
+            if (configAttr) {
+              options = JSON.parse(configAttr);
+            }
+          } catch(e) {
+            console.error("Error parsing flickity config:", e);
+          }
+          // fallback options if empty
+          if (!options || Object.keys(options).length === 0) {
+            options = {
+              wrapAround: true,
+              cellAlign: "left",
+              dragThreshold: 15,
+              draggable: true,
+              prevNextButtons: true,
+              pageDots: false
+            };
+          }
           return new Flickity(carousel, options);
         });
       }
@@ -3828,7 +3852,25 @@ theme.ModdedCarousel = (function() {
     init() {
       if (this.carousels.length > 0) {
         this.carousels.forEach((carousel) => {
-          const options = JSON.parse(carousel.getAttribute('data-flickity-config'));
+          let options = {};
+          try {
+            const configAttr = carousel.getAttribute('data-flickity-config');
+            if (configAttr) {
+              options = JSON.parse(configAttr);
+            }
+          } catch(e) {
+            console.error("Error parsing flickity config:", e);
+          }
+          if (!options || Object.keys(options).length === 0) {
+            options = {
+              wrapAround: true,
+              cellAlign: "left",
+              dragThreshold: 15,
+              draggable: true,
+              prevNextButtons: true,
+              pageDots: false
+            };
+          }
           const COLUMNS_MOBILE = 2;
           const COLUMNS_TABLET = 3;
 
@@ -4480,17 +4522,41 @@ document.addEventListener("DOMContentLoaded", function(){
         this.inputSelector = this.dataset.inputSelector;
         this.resultsSelector = this.dataset.resultsSelector;
 
-        // this.input = this.querySelector('input[type="search"]');
         this.input = this.querySelector(this.inputSelector) ? this.querySelector(this.inputSelector) : this.querySelector('input[type="search"]');
-
-        // this.predictiveSearchResults = this.querySelector('#predictive-search');
         this.predictiveSearchResults = this.querySelector(this.resultsSelector) ? this.querySelector(this.resultsSelector) : this.querySelector('#predictive-search');
+
+        // Cache initial HTML containing Popular Searches and Recommendations
+        this.initialMarkup = this.predictiveSearchResults.innerHTML;
 
         this.input.addEventListener('input', theme.Helpers.debounce((event) => {
           this.onChange(event);
         }, 300).bind(this));
 
+        // Show initial suggestions on focus if empty
+        this.input.addEventListener('focus', () => {
+          if (!this.input.value.trim().length) {
+            this.showInitialSuggestions();
+          }
+        });
 
+        // Intercept clicks on popular search links
+        this.predictiveSearchResults.addEventListener('click', (event) => {
+          const suggestionLink = event.target.closest('.popular-search-link');
+          if (suggestionLink) {
+            event.preventDefault();
+            const term = suggestionLink.getAttribute('data-search-term');
+            this.input.value = term;
+            this.onChange();
+            this.input.focus();
+          }
+        });
+
+        // Close when clicking outside the component
+        document.addEventListener('click', (event) => {
+          if (!this.contains(event.target)) {
+            this.close();
+          }
+        });
       }
 
       featureDetections() {
@@ -4520,15 +4586,19 @@ document.addEventListener("DOMContentLoaded", function(){
         const searchTerm = this.input.value.trim();
 
         if (!searchTerm.length) {
-          this.close();
+          this.showInitialSuggestions();
           return;
         }
 
         this.getSearchResults(searchTerm);
       }
 
-      getSearchResults(searchTerm) {
+      showInitialSuggestions() {
+        this.predictiveSearchResults.innerHTML = this.initialMarkup;
+        this.open();
+      }
 
+      getSearchResults(searchTerm) {
         fetch(`${this.routesPredictiveSearchURL}?q=${encodeURIComponent(searchTerm)}&section_id=predictive-search`)
           .then((response) => {
             if (!response.ok) {
@@ -4543,11 +4613,146 @@ document.addEventListener("DOMContentLoaded", function(){
             const resultsMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-predictive-search').innerHTML;
             this.predictiveSearchResults.innerHTML = resultsMarkup;
             this.open();
+            
+            // Now fetch dynamic related product recommendations
+            this.getRelatedRecommendations(searchTerm);
           })
           .catch((error) => {
             this.close();
             throw error;
           });
+      }
+
+      getRelatedRecommendations(searchTerm) {
+        const recListContainer = this.predictiveSearchResults.querySelector('.predictive-search-recommendations-list');
+        if (!recListContainer) return;
+
+        // Get currently displayed search results product handles/URLs to prevent duplicate products
+        const currentProducts = Array.from(this.predictiveSearchResults.querySelectorAll('.js-product-listing')).map(el => {
+          const link = el.querySelector('a');
+          return link ? link.getAttribute('href').split('?')[0].split('/').pop() : '';
+        }).filter(Boolean);
+
+        // Derive related search keywords based on query matching patterns
+        const relatedQuery = this.getRelatedQuery(searchTerm);
+
+        fetch(`/search/suggest.json?q=${encodeURIComponent(relatedQuery)}&resources[type]=product&resources[limit]=10`)
+          .then(res => res.json())
+          .then(data => {
+            const products = data.resources?.results?.products || [];
+            
+            // Filter out duplicates (not already displayed in the main search results)
+            const filteredProducts = products.filter(p => {
+              const handle = p.url.split('?')[0].split('/').pop();
+              return !currentProducts.includes(handle);
+            }).slice(0, 6); // Up to 6 products
+
+            if (filteredProducts.length > 0) {
+              let html = '';
+              filteredProducts.forEach(product => {
+                html += this.renderProductCard(product);
+              });
+              recListContainer.innerHTML = html;
+              
+              // Trigger theme JS handlers on new elements
+              if (typeof WAU !== 'undefined' && WAU.ProductGridVideo) WAU.ProductGridVideo.init();
+              if (Shopify.theme.ajaxCart) Shopify.theme.ajaxCart.init();
+            } else {
+              // Fallback to general recommendations if no specific keyword-related recommendations are found
+              this.loadDefaultRecommendations(recListContainer, currentProducts);
+            }
+          })
+          .catch(() => {
+            this.loadDefaultRecommendations(recListContainer, currentProducts);
+          });
+      }
+
+      loadDefaultRecommendations(container, currentProducts) {
+        // Use Shopify search suggest with empty search or popular term to get general products
+        fetch(`/search/suggest.json?q=all&resources[type]=product&resources[limit]=10`)
+          .then(res => res.json())
+          .then(data => {
+            const products = data.resources?.results?.products || [];
+            const filtered = products.filter(p => {
+              const handle = p.url.split('?')[0].split('/').pop();
+              return !currentProducts.includes(handle);
+            }).slice(0, 6);
+
+            let html = '';
+            filtered.forEach(product => {
+              html += this.renderProductCard(product);
+            });
+            container.innerHTML = html;
+          });
+      }
+
+      getRelatedQuery(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        if (term.includes('jean') || term.includes('denim') || term.includes('trouser') || term.includes('pant') || term.includes('chino')) {
+          return 'jeans denim trouser pant chino';
+        }
+        if (term.includes('shirt') || term.includes('top') || term.includes('tshirt') || term.includes('t-shirt') || term.includes('polo')) {
+          return 'shirt top tshirt polo overshirt';
+        }
+        if (term.includes('jacket') || term.includes('coat') || term.includes('outerwear') || term.includes('blazer')) {
+          return 'jacket coat outerwear blazer overshirt';
+        }
+        if (term.includes('black') || term.includes('dark') || term.includes('charcoal')) {
+          return 'black dark charcoal';
+        }
+        if (term.includes('white') || term.includes('light') || term.includes('cream')) {
+          return 'white light cream';
+        }
+        return searchTerm;
+      }
+
+      renderProductCard(product) {
+        const priceFormatted = this.formatMoney(product.price);
+        const comparePriceFormatted = product.compare_at_price ? this.formatMoney(product.compare_at_price) : '';
+        const hasSale = product.compare_at_price && parseFloat(product.compare_at_price) > parseFloat(product.price);
+        const saleBadge = hasSale ? `<div class="sale-item sale-item--percentage icn">Save ${Math.round((1 - parseFloat(product.price)/parseFloat(product.compare_at_price)) * 100)}%</div>` : '';
+
+        return `
+          <li class="product-index span-2 md-span-4 sm-span-6 auto js-product-listing" role="option">
+            <div class="prod-container">
+              ${saleBadge}
+              <div class="prod-image image_portrait js-product-image">
+                <a href="${product.url}" title="${product.title}">
+                  <div class="reveal">
+                    <div class="box-ratio" style="padding-bottom: 135%;">
+                      <img src="${product.image}" alt="${product.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="product-info" style="margin-top: 10px; text-align: left;">
+                <a href="${product.url}">
+                  <span class="prod-title" style="font-size: 13px; font-weight: 500; display: block; margin-bottom: 5px; color: #333;">${product.title}</span>
+                </a>
+                <div class="price" style="font-size: 12px; font-weight: 600; color: #173250;">
+                  <span class="money">${priceFormatted}</span>
+                  ${hasSale ? `<span class="was-listing money" style="margin-left: 8px; text-decoration: line-through; color: #999; font-weight: normal;">${comparePriceFormatted}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          </li>
+        `;
+      }
+
+      formatMoney(cents) {
+        let amount = parseFloat(cents);
+        if (isNaN(amount)) return cents;
+        
+        if (!cents.toString().includes('.')) {
+          amount = amount / 100.0;
+        }
+        
+        const symbol = window.theme?.currencySymbol || '₹';
+        
+        return `${symbol} ${amount.toLocaleString('en-IN', {
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0
+        })}`;
       }
 
       open() {
@@ -4600,9 +4805,25 @@ theme.ProductForm = function (context, sectionId, events, Product) {
 
       if ( config.swatches == 'swatches' ) {
         const swatches = Array.from(varSelectors);
-        options = swatches.map((swatch) => {
-          return Array.from(swatch.querySelectorAll('input')).find((radio) => radio.checked).value;
+        options = new Array(Product.options.length);
+        swatches.forEach((swatch) => {
+          const optIndexAttr = swatch.getAttribute('data-option-index');
+          if (optIndexAttr !== null) {
+            const optIndex = parseInt(optIndexAttr, 10) - 1;
+            const checkedInput = Array.from(swatch.querySelectorAll('input')).find((radio) => radio.checked);
+            if (checkedInput && optIndex >= 0 && optIndex < options.length) {
+              options[optIndex] = checkedInput.value;
+            }
+          }
         });
+        const fallbackVariant = Product.variants.find(v => v.available) || Product.variants[0];
+        if (fallbackVariant) {
+          for (let idx = 0; idx < options.length; idx++) {
+            if (options[idx] === undefined) {
+              options[idx] = fallbackVariant.options[idx];
+            }
+          }
+        }
       } else {
         options = Array.from(context.querySelectorAll('select.js-variant-selector'), (select) => select.value);
       }
@@ -4904,7 +5125,11 @@ theme.ProductForm = function (context, sectionId, events, Product) {
   })();
 
   function money(cents) {
-    return theme.Helpers.formatMoney(cents, config.money_format);
+    let formatted = theme.Helpers.formatMoney(cents, config.money_format);
+    formatted = formatted.replace(/(\s|&nbsp;|&#160;|&#x2009;)?00$/, ''); // removes standard trailing .00 or similar
+    formatted = formatted.replace(/\.00(\s|$)/, '$1');
+    formatted = formatted.replace(/,00(\s|$)/, '$1');
+    return formatted;
   }
 
   function getBaseUnit(variant) {
@@ -5031,8 +5256,10 @@ theme.ProductForm = function (context, sectionId, events, Product) {
       };
 
       function updateSaleIcon(variant) {
-        if ( variant.compare_at_price > variant.price ) {
+        if ( variant && variant.compare_at_price > variant.price ) {
           saleIconEl.innerHTML = showDiscount(variant, dataFormat, savingsString);
+        } else {
+          saleIconEl.innerHTML = "";
         }
       }
 
@@ -6537,7 +6764,7 @@ theme.StoreAvailability = function(context, Product, events) {
 theme.Collection = (function() {
   function Collection(container) {
 
-    if ( container.querySelector("[data-collection-filters]") || container.querySelector("[data-collection-sidebar-filters]") ) {
+    if ( container.querySelector("[data-collection-filters]") || container.querySelector("[data-collection-sidebar-filters]") || container.querySelector("[data-mhy-collection-sf]") ) {
       theme.CollectionFilters.init(container, container.dataset.sectionId);
     }
 
@@ -6549,17 +6776,17 @@ theme.Collection = (function() {
 theme.CollectionFilters = {
 	init: function init(container, sectionId) {
 
-		if ( container.querySelector("[data-collection-filters-hz]") || container.querySelector("[data-collection-sort-by]") ) {
+		if ( container.querySelector("[data-collection-filters-hz]") || container.querySelector("[data-collection-sort-by]") || container.querySelector("[data-mhy-collection-sf]") ) {
 			theme.CollectionFilters.horizontalFilters();
 			theme.CollectionFilters.currentFilters();
 		}
 		if ( container.querySelector("[data-collection-filters-price-range]") ) {
 			theme.CollectionFilters.priceRange();
-      theme.CollectionFilters.priceSlider();
+			theme.CollectionFilters.priceSlider();
 		}
-    if ( container.querySelector("[data-collection-sidebar-filters]") ) {
-      theme.CollectionFilters.sidebarFilters();
-    }
+		if ( container.querySelector("[data-collection-sidebar-filters]") || container.querySelector("[data-mhy-collection-sf]") ) {
+			theme.CollectionFilters.sidebarFilters();
+		}
 
 		this.filterData = [];
 
@@ -6813,14 +7040,28 @@ theme.CollectionFilters = {
 
 		filters.forEach((item, i) => {
 			item.addEventListener('click', (event) => {
-				event.preventDefault();
+				const checkbox = item.querySelector('input[type="checkbox"]');
+				if (!checkbox) return;
 
-				if ( item.querySelector('input[type="checkbox"]').checked ) {
-					item.classList.remove('current');
-					item.querySelector('input[type="checkbox"]').checked = false;
+				// If user clicked directly on the checkbox, let the default behavior happen 
+				// and only trigger form submission, otherwise toggle manually
+				if (event.target !== checkbox) {
+					event.preventDefault();
+					if (checkbox.checked) {
+						item.classList.remove('current');
+						checkbox.checked = false;
+					} else {
+						item.classList.add('current');
+						checkbox.checked = true;
+					}
+					checkbox.dispatchEvent(new Event('change', { bubbles: true }));
 				} else {
-					item.classList.add('current');
-					item.querySelector('input[type="checkbox"]').checked = true;
+					// User clicked on checkbox directly
+					if (checkbox.checked) {
+						item.classList.add('current');
+					} else {
+						item.classList.remove('current');
+					}
 				}
 
 				const formData = new FormData(item.closest('form'));
@@ -6830,29 +7071,30 @@ theme.CollectionFilters = {
 			});
 		});
 
-    // Mobile sidebar Trigger
-    const sidebarToggle = document.querySelector('.js-collection-side-toggle');
-
-    if (!sidebarToggle) return false;
-
-    sidebarToggle.addEventListener('click', function(event){
-     event.preventDefault();
-     theme.Helpers.toggleClass("sidebar", "open");
-    });
+    // Mobile sidebar Trigger (supports multiple toggles)
+    const sidebarToggles = document.querySelectorAll('.js-collection-side-toggle');
+    if (sidebarToggles.length > 0) {
+      sidebarToggles.forEach((btn) => {
+        btn.addEventListener('click', function(event){
+          event.preventDefault();
+          theme.Helpers.toggleClass("sidebar", "open");
+        });
+      });
+    }
 
 	},
 	renderFilters: function renderFilters() {
-    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") ) {
+    if ( document.querySelector("[data-collection-filters-hz]") || document.querySelector("[data-collection-sort-by]") || document.querySelector("[data-mhy-collection-sf]") ) {
 			theme.CollectionFilters.horizontalFilters();
 			theme.CollectionFilters.currentFilters();
 		}
 		if ( document.querySelector("[data-collection-filters-price-range]") ) {
 			theme.CollectionFilters.priceRange();
-      theme.CollectionFilters.priceSlider();
+			theme.CollectionFilters.priceSlider();
 		}
-    if ( document.querySelector("[data-collection-sidebar-filters]") ) {
-      theme.CollectionFilters.sidebarFilters();
-    }
+		if ( document.querySelector("[data-collection-sidebar-filters]") || document.querySelector("[data-mhy-collection-sf]") ) {
+			theme.CollectionFilters.sidebarFilters();
+		}
     if ( document.querySelector("[data-collection-sort-by]") ) {
 			if ( document.querySelector("[data-collection-sort-by]").querySelector('.current') ) {
         const placeholder = document.querySelector("[data-collection-sort-by]").querySelector('.current').dataset.placeholder;
@@ -6861,6 +7103,9 @@ theme.CollectionFilters = {
 		}
     Shopify.theme.quickview.init();
     WAU.ProductGridVideo.init();
+    if (typeof window.initCollectionSortFilterUI === "function") {
+      window.initCollectionSortFilterUI();
+    }
 	},
 	renderSectionFromFetch: function renderSectionFromFetch(url, section) {
 		fetch(url)

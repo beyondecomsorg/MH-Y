@@ -19,7 +19,7 @@
     assign available = true
   endif
 
-  assign money_price = price | money
+  assign money_price = price | money_without_trailing_zeros
 -%}
 
 <div id="product-price" class="price product__price-container
@@ -61,7 +61,7 @@
       </dt>
       <dd>
         <span class="price-item price-item--regular" data-regular-price>
-          {{ compare_at_price | money }}
+          {{ compare_at_price | money_without_trailing_zeros }}
         </span>
       </dd>
     </dl>
@@ -74,7 +74,7 @@
               {% assign discount = discount | round | append: '%' %}
               {{ 'products.general.savings' | t: savings: discount }}
             {% when 'amount' %}
-              {% assign discount = variant.compare_at_price | minus: variant.price | money %}
+              {% assign discount = variant.compare_at_price | minus: variant.price | money_without_trailing_zeros %}
               {{ 'products.general.savings' | t: savings: discount }}
             {% when 'icon' %}
               {{ 'products.general.sale' | t }}
@@ -105,7 +105,7 @@
         </span>
       {%- endcapture -%}
 
-      <span data-unit-price>{{ variant.unit_price | money }}</span>{{- unit_price_separator -}}{{- unit_price_base_unit -}}
+      <span data-unit-price>{{ variant.unit_price | money_without_trailing_zeros }}</span>{{- unit_price_separator -}}{{- unit_price_base_unit -}}
     </dd>
   </dl>
 </div>

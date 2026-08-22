@@ -1,3 +1,17 @@
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.desktop_padding_top }}px !important;
+    padding-bottom: {{ section.settings.desktop_padding_bottom }}px !important;
+  }
+  @media screen and (max-width: 740px) {
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.mobile_padding_top }}px !important;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px !important;
+    }
+  }
+{% endstyle %}
+
 {%- liquid
 
   assign collection = collections[section.settings.collection]
@@ -98,39 +112,59 @@
       }
    }
    @media (max-width: 770px){
-     .custom-shop--carousel-wrapper{
-        position: relative;
-        top: 148px;
-        height: 450px;
-     }
-      .custom-shop--carousel-wrapper .flickity-prev-next-button.previous{
-        left: -5px;
+      .custom-shop--carousel-conatiner {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
       }
-      .custom-shop--carousel-wrapper .flickity-prev-next-button.next{
-        right: -4px;
+      .custom-shop--video-container {
+        order: 2 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .custom-shop--video-container video {
+        height: auto !important;
+        margin-top: 0 !important;
+      }
+      .custom-shop--right-column {
+        display: contents !important;
+      }
+      .custom-shop--carousel-heading {
+        display: contents !important;
+      }
+      .custom-shop--heading {
+        order: 1 !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 0px !important;
+      }
+      .custom-shop--heading h2.section-heading{
+        margin-bottom: 0px !important;
+      }
+      .collection--carousel_heading {
+        margin-right: 0 !important;
+        text-align: center !important;
+      }
+      .custom-shop--sub-heading {
+        order: 3 !important;
+        text-align: center !important;
+        padding: 0 15px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+      }
+      .custom-shop--carousel-wrapper {
+        order: 4 !important;
+        position: static !important;
+        height: auto !important;
+        padding: 0 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
       }
       .custom-shop--carousel-wrapper .custom-shop--product-index {
-        width: 42% !important; 
-        box-sizing: border-box;
+        width: 48% !important;
+        box-sizing: border-box !important;
       }
-      /* .custom-shop--video-container video{
-        height: auto;
-        margin-top: 40%;
-      } */
-     .custom-shop--carousel-conatiner{
-      flex-direction: row-reverse;
-      }
-      .custom-shop--carousel-heading{
-        max-width: 100%;
-      }
-      .collection--carousel_heading{
-        margin-right: 0;
-      }
-     .custom-shop--carousel-heading{
-       position: relative;
-       top: -575px;
-     }
-     }
+    }
 
   {% if section.settings.image_first %}
     #shopify-section-{{ section.id }} .collection--carousel .collection--carousel_image {
@@ -138,7 +172,7 @@
     }
     @media screen and (max-width: 740px) {
       #shopify-section-{{ section.id }} .collection--carousel .collection--carousel_image {
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
       }
      .custom-shop--carousel-conatiner{
       flex-direction: row-reverse;
@@ -162,25 +196,55 @@
     {% capture slideshow_config %}{
    }{% endcapture %}
     <div class="custom-shop--content collection--carousel_content span-12 auto">
-    <div class="custom-shop--carousel-conatiner collection--carousel_container span-12 auto">
-      <div class="custom-shop--content-wrapper">
-        <div class="custom-shop--carousel-heading">
-          {% if section.settings.heading != blank %}
-            <div class="custom-shop--heading collection--carousel_heading">
-              <h2 class="section-heading">{{ section.settings.heading }}</h2>
+      <div class="custom-shop--carousel-conatiner collection--carousel_container span-12 auto">
+        
+        <!-- LEFT COLUMN: Video Container -->
+        <div class="custom-shop--video-container collection--carousel_image span-4 sm-span-12 auto" data-aos="fade">
+          {% if section.settings.video != blank %}
+            {%- liquid
+              assign section_video_url = ''
+              for source in section.settings.video.sources
+                if source.format == 'mp4'
+                  assign section_video_url = source.url
+                  break
+                endif
+              endfor
+              if section_video_url == blank
+                for source in section.settings.video.sources
+                  assign section_video_url = source.url
+                  break
+                endfor
+              endif
+            -%}
+            <video class="section-video js-video" muted playsinline loop autoplay preload="none" data-lazy-video title="{{ section.settings.description | escape }}">
+              <source data-src="{{ section_video_url }}" type="video/mp4">
+            </video>
+          {% else %}
+            <div class="onboard">
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
             </div>
-        {% endif %}
-        {% if section.settings.sub_heading != blank %}
-          <div class="custom-shop--sub-heading">
-            {{ section.settings.sub_heading }}
+          {% endif %}
+        </div>
+
+        <!-- RIGHT COLUMN: Text content (first) + Product carousel (second) -->
+        <div class="custom-shop--right-column span-8 sm-span-12 auto">
+          <div class="custom-shop--carousel-heading">
+            {% if section.settings.heading != blank %}
+              <div class="custom-shop--heading collection--carousel_heading">
+                <h2 class="section-heading">{{ section.settings.heading }}</h2>
+              </div>
+            {% endif %}
+            {% if section.settings.sub_heading != blank %}
+              <div class="custom-shop--sub-heading">
+                {{ section.settings.sub_heading }}
+              </div>
+            {% endif %}
           </div>
-        {% endif %}
-      </div>
-      <div class="custom-shop--carousel-wrapper collection--carousel_wrapper product-loop flickity__section {{ grid_count }} span-8 sm-span-12 auto">
+
+          <div class="custom-shop--carousel-wrapper collection--carousel_wrapper product-loop flickity__section {{ grid_count }}">
             {%- if collection == blank -%}
               {% render 'onboard-product', prod_limit: limit, grid: grid, aos_mod: aos_mod %}
             {%- else -%}
-
               {% for product in collection.products %}
                 <div class="custom-shop--product-index product-index js-product-listing"
                   id="product-listing-{{ product.id }}"
@@ -197,39 +261,14 @@
                       assign loading = 'eager'
                       assign fetch_priority = 'high'
                     endif
-                   %}
+                  %}
                   {% render 'product-listing', product: product, collection: collection, loading: loading, fetchpriority: fetch_priority %}
                 </div>
               {% endfor %}
-
             {%- endif -%}
-      </div>
-      </div>
-      <div class="custom-shop--video-container collection--carousel_image span-4 sm-span-12 auto"  data-aos="fade">
-        {% if section.settings.video != blank %}
-              {%- liquid
-                assign section_video_url = ''
-                for source in section.settings.video.sources
-                  if source.format == 'mp4'
-                    assign section_video_url = source.url
-                    break
-                  endif
-                endfor
-                if section_video_url == blank
-                  for source in section.settings.video.sources
-                    assign section_video_url = source.url
-                    break
-                  endfor
-                endif
-              -%}
-              <video class="section-video js-video" muted playsinline loop autoplay preload="none" data-lazy-video title="{{ section.settings.description | escape }}">
-                <source data-src="{{ section_video_url }}" type="video/mp4">
-              </video>
-          {% else %}
-            <div class="onboard">
-              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-            </div>
-        {% endif %}
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -242,6 +281,46 @@
 {
   "name": "Custom shop the look",
   "settings": [
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Padding (Mobile)",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Padding (Mobile)",
+      "default": 15
+    },
     {
       "type": "text",
       "id": "custom_class",

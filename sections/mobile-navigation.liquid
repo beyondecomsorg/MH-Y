@@ -48,7 +48,9 @@
                 {% endif %}
 
                 {%- if settings.predictive_search_enabled -%}
-                  <div id="predictive-search-mobile" class="predictive-search" tabindex="-1"></div>
+                  <div id="predictive-search-mobile" class="predictive-search" tabindex="-1">
+                    {% render 'predictive-search-initial' %}
+                  </div>
                 {%- endif -%}
               </form>
             {%- if settings.predictive_search_enabled -%}
@@ -139,20 +141,20 @@
     {{ link.title | escape }}
 
     {% if link.title == 'THE ISLE OF MAN - NEW COLLECTION' %}
-      <span class="menu-new-label">New</span>
+      {% comment %} <span class="menu-new-label">New</span> {% endcomment %}
     {% endif %}
   </a>
 </li>
 
 {% if forloop.index == 4 %}
-  <li class="mobile-menu-banner">
+  {% comment %} <li class="mobile-menu-banner">
     <a href="/collections/sale">
       <img
         src="https://myraymond.com/cdn/shop/files/Sale_image.png?v=1710850876&width=832"
         alt="Online Exclusive"
         loading="lazy">
     </a>
-  </li>
+  </li> {% endcomment %}
 {% endif %}
 
 <style>

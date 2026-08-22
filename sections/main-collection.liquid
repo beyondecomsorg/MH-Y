@@ -120,16 +120,6 @@ data-collection-link="{{ collection_link }}">
         {%- endif -%}
       {%- endif -%}
 
-      {%- if horizontal_filtering_enabled or horizontal_sort -%}
-        <form id="CollectionFiltersForm" class="span-12 md-span-12 auto" data-collection-filters>
-          {% render 'collection-horizontal-toolbar',
-            collection: collection,
-            filter_count: filter_count,
-            horizontal_filtering_enabled: horizontal_filtering_enabled,
-            horizontal_sort: horizontal_sort %}
-        </form>
-      {%- endif -%}
-
       {%- liquid
         assign mhy_active_sort_name = ''
         for option in collection.sort_options
@@ -143,61 +133,100 @@ data-collection-link="{{ collection_link }}">
         endif
       -%}
 
-      <div class="mhy-collection-sf span-12 md-span-12 auto" data-mhy-collection-sf>
-        {%- if show_sidebar -%}
-          <button class="mhy-collection-sf__control js-collection-side-toggle" type="button" aria-controls="sidebar">
-            <span class="mhy-collection-sf__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M10 18h4v-2h-4v2zm-7-14v2h18V4H3zm3 8h12v-2H6v2z"/>
-              </svg>
-            </span>
-            <span class="mhy-collection-sf__text">
-              <span class="mhy-collection-sf__label">{{ 'collections.filters.filter_button' | t }}</span>
-              <span class="mhy-collection-sf__value">
-                {%- if filter_count > 0 -%}
-                  {{ filter_count }} applied
-                {%- else -%}
-                  All products
-                {%- endif -%}
-              </span>
-            </span>
-            {%- if filter_count > 0 -%}
-              <span class="mhy-collection-sf__badge" aria-label="{{ filter_count }} active filters">{{ filter_count }}</span>
-            {%- endif -%}
-          </button>
-        {%- endif -%}
-
-        <div class="mhy-collection-sf__sort" data-mhy-sort>
-          <button class="mhy-collection-sf__control" type="button" data-mhy-sort-trigger aria-haspopup="listbox" aria-expanded="false">
-            <span class="mhy-collection-sf__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M3 18h6v-2H3v2zm0-5h12v-2H3v2zM3 6v2h18V6H3z"/>
-              </svg>
-            </span>
-            <span class="mhy-collection-sf__text">
-              <span class="mhy-collection-sf__label">{{ 'collections.sorting.title' | t }}</span>
-              <span class="mhy-collection-sf__value" data-mhy-sort-active>{{ mhy_active_sort_name }}</span>
-            </span>
-          </button>
-
-          <div class="mhy-collection-sf__dropdown" data-mhy-sort-dropdown hidden>
-            <div class="mhy-collection-sf__dropdown-inner" role="listbox" aria-label="{{ 'collections.sorting.title' | t }}">
-              {%- for option in collection.sort_options -%}
-                <button
-                  class="mhy-collection-sf__option{% if option.value == collection.sort_by %} is-active{% endif %}"
-                  type="button"
-                  role="option"
-                  aria-selected="{% if option.value == collection.sort_by %}true{% else %}false{% endif %}"
-                  data-mhy-sort-option="{{ option.value | escape }}"
-                  data-mhy-sort-name="{{ option.name | escape }}"
-                >
-                  {{ option.name }}
+      {%- comment -%} DESKTOP TOOLBAR (Horizontal Pill Dropdowns — Image 1 Style) {%- endcomment -%}
+      <div class="mhy-desktop-toolbar span-12 auto">
+        <form id="CollectionFiltersForm" class="mhy-desktop-toolbar__form" data-collection-filters>
+          <div class="mhy-desktop-toolbar__filters">
+            {%- for filter in collection.filters -%}
+              <div class="mhy-dt-filter-pill" data-mhy-dt-filter>
+                <button type="button" class="mhy-dt-filter-pill__btn" data-mhy-dt-trigger>
+                  <span>{{ filter.label }}</span>
+                  {%- if filter.active_values.size > 0 -%}
+                    <span class="mhy-dt-pill__badge">{{ filter.active_values.size }}</span>
+                  {%- endif -%}
+                  <svg class="mhy-dt-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </button>
-              {%- endfor -%}
+
+                <div class="mhy-dt-filter-dropdown" data-mhy-dt-dropdown hidden>
+                  {%- case filter.type -%}
+                    {%- when 'list', 'boolean' -%}
+                      <div class="mhy-dt-dropdown__list">
+                        {%- for value in filter.values -%}
+                          <label class="mhy-dt-option{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                            <input type="checkbox"
+                                   name="{{ value.param_name }}"
+                                   value="{{ value.value }}"
+                                   {% if value.active %}checked{% endif %}
+                                   {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                   class="mhy-dt-checkbox">
+                            <span class="mhy-dt-option__label">{{ value.label }}</span>
+                            <span class="mhy-dt-option__count">({{ value.count }})</span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    {%- when 'price_range' -%}
+                      <div class="mhy-dt-dropdown__price">
+                        <div class="mhy-dt-price__inputs">
+                          <div class="mhy-dt-price__field">
+                            <span>{{ cart.currency.symbol }}</span>
+                            <input type="number"
+                                   name="{{ filter.min_value.param_name }}"
+                                   placeholder="0"
+                                   min="0"
+                                   {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | round }}"{% endif %}
+                                   class="mhy-dt-price-input">
+                          </div>
+                          <span class="mhy-dt-price-sep">-</span>
+                          <div class="mhy-dt-price__field">
+                            <span>{{ cart.currency.symbol }}</span>
+                            <input type="number"
+                                   name="{{ filter.max_value.param_name }}"
+                                   placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' | round }}"
+                                   min="0"
+                                   {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | round }}"{% endif %}
+                                   class="mhy-dt-price-input">
+                          </div>
+                        </div>
+                      </div>
+                  {%- endcase -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <div class="mhy-desktop-toolbar__right">
+            <span class="mhy-dt-item-count">{{ collection.products_count }} items</span>
+            
+            <div class="mhy-dt-sort-pill" data-mhy-sort>
+              <button type="button" class="mhy-dt-filter-pill__btn" data-mhy-sort-trigger>
+                <span>Sort{%- if mhy_active_sort_name != '' -%}: <span data-mhy-sort-active>{{ mhy_active_sort_name }}</span>{%- endif -%}</span>
+                <svg class="mhy-dt-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="mhy-collection-sf__dropdown" data-mhy-sort-dropdown hidden>
+                <div class="mhy-collection-sf__dropdown-inner" role="listbox">
+                  {%- for option in collection.sort_options -%}
+                    <button
+                      class="mhy-collection-sf__option{% if option.value == collection.sort_by %} is-active{% endif %}"
+                      type="button"
+                      data-mhy-sort-option="{{ option.value | escape }}"
+                      data-mhy-sort-name="{{ option.name | escape }}"
+                    >
+                      {{ option.name }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
+
+
+
 
       {% if show_sidebar %}
         <form id="CollectionSidebarFiltersForm" class="span-3 md-span-12 sm-span-12 auto" data-collection-sidebar-filters>
@@ -214,22 +243,32 @@ data-collection-link="{{ collection_link }}">
               {%- for filter in collection.filters -%}
                 {%- for value in filter.active_values -%}
                   <li class="current_filters--filter current_tag">
-                    <a class="js-current-filter" href="{{ value.url_to_remove }}">
-                      {{ value.label | escape }}
+                    <a class="js-current-filter mhy-active-chip" href="{{ value.url_to_remove }}">
+                      <span class="mhy-active-chip__label">{{ filter.label }}: <strong>{{ value.label | escape }}</strong></span>
+                      <svg class="mhy-active-chip__close" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
                     </a>
                   </li>
                 {%- endfor -%}
                 {% if filter.type == "price_range" %}
                   {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
                     <li class="current_filters--filter current_tag">
-                      <a class="js-current-filter" href="{{ filter.url_to_remove }}">
-                        {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                      <a class="js-current-filter mhy-active-chip" href="{{ filter.url_to_remove }}">
+                        <span class="mhy-active-chip__label">Price: <strong>{%- if filter.min_value.value -%}{{ filter.min_value.value | money_without_trailing_zeros }}{%- else -%}{{ 0 | money_without_trailing_zeros }}{%- endif -%} - {%- if filter.max_value.value -%}{{ filter.max_value.value | money_without_trailing_zeros }}{%- else -%}{{ filter.range_max | money_without_trailing_zeros }}{%- endif -%}</strong></span>
+                        <svg class="mhy-active-chip__close" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
                       </a>
                     </li>
                   {%- endif -%}
                 {% endif %}
               {%- endfor -%}
-              <li><a class="current_filters--clear js-current-filter clear-tags" href="{{ collection.url }}">{{ 'collections.filters.clear_all' | t }}</a></li>
+              <li class="current_tag--clear">
+                <a class="current_filters--clear js-current-filter clear-tags mhy-clear-chip" href="{{ collection.url }}">
+                  <span>{{ 'collections.filters.clear_all' | t }}</span>
+                </a>
+              </li>
             </ul>
           </div>
         {% endif %}
@@ -294,7 +333,11 @@ data-collection-link="{{ collection_link }}">
       {% endunless %}
     </div>
   {% endpaginate %}
+
 </section>
+
+{%- comment -%} ── New Mobile Filter & Sort UI (mobile-only) ── {%- endcomment -%}
+{% render 'mf-mobile-filter', collection: collection %}
 
 {% schema %}
 {

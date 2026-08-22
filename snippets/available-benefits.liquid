@@ -2,18 +2,136 @@
   ==============================================================================
   SNIPPET: available-benefits.liquid
   ==============================================================================
-  Renders an "Available Benefits" coupon display card with click-to-copy functionality.
+  Renders an "Available Benefits" carousel with 4 coupon cards (including click-to-copy).
 {% endcomment %}
 
 {% liquid
   assign block_id = block.id | default: section.id
   assign heading = block.settings.heading | default: "AVAILABLE BENEFITS"
-  assign coupon_code = block.settings.coupon_code | default: "ONLYEXCHANGE"
-  assign description = block.settings.description | default: "Extra 5% off on your order - applicable for 1 exchange only, no returns."
-  assign tnc_url = block.settings.tnc_url | default: "#"
-  assign tnc_text = block.settings.tnc_text | default: "T & C"
   assign accent_color = block.settings.accent_color | default: "#b8860b"
+  assign tnc_url_global = block.settings.tnc_url | default: "#"
+  assign tnc_text_global = block.settings.tnc_text | default: "T & C"
+
+  # Card 1 settings
+  assign card1_code = block.settings.coupon_code_1 | default: block.settings.coupon_code | default: "WELCOME10"
+  assign card1_desc = block.settings.description_1 | default: block.settings.description | default: "Get 10% OFF on your first order."
+  assign card1_tnc_url = block.settings.tnc_url_1 | default: tnc_url_global
+  assign card1_tnc_text = block.settings.tnc_text_1 | default: tnc_text_global
+
+  # Card 2 settings
+  assign card2_code = block.settings.coupon_code_2 | default: "EXTRA15"
+  assign card2_desc = block.settings.description_2 | default: "Get an Extra 15% OFF today only. Valid till 11:59 PM."
+  assign card2_tnc_url = block.settings.tnc_url_2 | default: tnc_url_global
+  assign card2_tnc_text = block.settings.tnc_text_2 | default: tnc_text_global
+
+  # Card 3 settings
+  assign card3_code = block.settings.coupon_code_3 | default: "FREESHIP"
+  assign card3_desc = block.settings.description_3 | default: "Free Shipping on your order."
+  assign card3_tnc_url = block.settings.tnc_url_3 | default: tnc_url_global
+  assign card3_tnc_text = block.settings.tnc_text_3 | default: tnc_text_global
+
+  # Card 4 settings
+  assign card4_code = block.settings.coupon_code_4 | default: "MHY10"
+  assign card4_desc = block.settings.description_4 | default: "Shop for ₹10,000 and get an additional 10% OFF."
+  assign card4_tnc_url = block.settings.tnc_url_4 | default: tnc_url_global
+  assign card4_tnc_text = block.settings.tnc_text_4 | default: tnc_text_global
 %}
+
+{% capture cards_html %}
+  <!-- Card 1 -->
+  <div class="ab-card">
+    <div class="ab-row-top">
+      <div class="ab-code-wrapper">
+        <span>Use code</span>
+        <button
+          type="button"
+          class="ab-code-btn js-ab-code-btn"
+          title="Click to copy coupon code {{ card1_code }}"
+          aria-label="Click to copy coupon code {{ card1_code }}"
+        >
+          <span class="js-ab-code-text" data-code="{{ card1_code }}">{{ card1_code }}</span>
+          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+        </button>
+      </div>
+
+    </div>
+    {% if card1_desc != blank %}
+      <p class="ab-description">{{ card1_desc }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Card 2 -->
+  <div class="ab-card">
+    <div class="ab-row-top">
+      <div class="ab-code-wrapper">
+        <span>Use code</span>
+        <button
+          type="button"
+          class="ab-code-btn js-ab-code-btn"
+          title="Click to copy coupon code {{ card2_code }}"
+          aria-label="Click to copy coupon code {{ card2_code }}"
+        >
+          <span class="js-ab-code-text" data-code="{{ card2_code }}">{{ card2_code }}</span>
+          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+        </button>
+      </div>
+      {% if card2_tnc_text != blank %}
+        <a href="{{ card2_tnc_url }}" class="ab-tnc-link">{{ card2_tnc_text }}</a>
+      {% endif %}
+    </div>
+    {% if card2_desc != blank %}
+      <p class="ab-description">{{ card2_desc }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Card 3 -->
+  <div class="ab-card">
+    <div class="ab-row-top">
+      <div class="ab-code-wrapper">
+        <span>Use code</span>
+        <button
+          type="button"
+          class="ab-code-btn js-ab-code-btn"
+          title="Click to copy coupon code {{ card3_code }}"
+          aria-label="Click to copy coupon code {{ card3_code }}"
+        >
+          <span class="js-ab-code-text" data-code="{{ card3_code }}">{{ card3_code }}</span>
+          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+        </button>
+      </div>
+      {% if card3_tnc_text != blank %}
+        <a href="{{ card3_tnc_url }}" class="ab-tnc-link">{{ card3_tnc_text }}</a>
+      {% endif %}
+    </div>
+    {% if card3_desc != blank %}
+      <p class="ab-description">{{ card3_desc }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Card 4 -->
+  <div class="ab-card">
+    <div class="ab-row-top">
+      <div class="ab-code-wrapper">
+        <span>Use code</span>
+        <button
+          type="button"
+          class="ab-code-btn js-ab-code-btn"
+          title="Click to copy coupon code {{ card4_code }}"
+          aria-label="Click to copy coupon code {{ card4_code }}"
+        >
+          <span class="js-ab-code-text" data-code="{{ card4_code }}">{{ card4_code }}</span>
+          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+        </button>
+      </div>
+      {% if card4_tnc_text != blank %}
+        <a href="{{ card4_tnc_url }}" class="ab-tnc-link">{{ card4_tnc_text }}</a>
+      {% endif %}
+    </div>
+    {% if card4_desc != blank %}
+      <p class="ab-description">{{ card4_desc }}</p>
+    {% endif %}
+  </div>
+{% endcapture %}
 
 <style>
   #ab-block-{{ block_id }} {
@@ -21,6 +139,7 @@
     margin-top: 16px;
     margin-bottom: 16px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   #ab-block-{{ block_id }} .ab-heading {
@@ -32,12 +151,64 @@
     color: #11172b;
   }
 
+  #ab-block-{{ block_id }} .ab-marquee-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    position: relative;
+  }
+
+  /* Thin scrollbar for desktop */
+  @media screen and (min-width: 741px) {
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar {
+      height: 4px;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 2px;
+    }
+  }
+
+  #ab-block-{{ block_id }} .ab-marquee-track {
+    display: flex;
+    width: max-content;
+    align-items: stretch;
+    user-select: none;
+  }
+
+  #ab-block-{{ block_id }} .ab-marquee-content {
+    display: flex;
+    flex-shrink: 0;
+    align-items: stretch;
+    gap: 16px;
+    padding-right: 16px;
+  }
+
+  /* Desktop css animation */
+  @media screen and (min-width: 741px) {
+    #ab-block-{{ block_id }} .ab-marquee-content {
+      /* animation: ab-scroll-marquee-{{ block_id }} 30s linear infinite; */
+    }
+    #ab-block-{{ block_id }} .ab-marquee-track:hover .ab-marquee-content {
+      animation-play-state: paused;
+    }
+  }
+
   #ab-block-{{ block_id }} .ab-card {
     border: 1px dashed #d1d1d1;
     padding: 14px 16px;
     background-color: #fafafa;
     border-radius: 2px;
     box-sizing: border-box;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
   }
 
   #ab-block-{{ block_id }} .ab-row-top {
@@ -46,7 +217,7 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   #ab-block-{{ block_id }} .ab-code-wrapper {
@@ -93,6 +264,7 @@
     opacity: 0;
     transform: translateY(-2px);
     transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
   }
 
   #ab-block-{{ block_id }} .ab-code-btn.copied .ab-copy-badge {
@@ -106,6 +278,7 @@
     text-decoration: underline;
     font-weight: 500;
     transition: color 0.15s ease;
+    white-space: nowrap;
   }
 
   #ab-block-{{ block_id }} .ab-tnc-link:hover {
@@ -118,6 +291,47 @@
     color: #555555;
     margin: 0;
   }
+
+  @keyframes ab-scroll-marquee-{{ block_id }} {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  /* Mobile style overrides */
+  @media screen and (max-width: 740px) {
+    #ab-block-{{ block_id }} .ab-marquee-wrapper {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper::-webkit-scrollbar {
+      display: none !important;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper.is-snapping {
+      scroll-snap-type: x mandatory !important;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-wrapper.is-snapping .ab-card {
+      scroll-snap-align: start !important;
+    }
+    #ab-block-{{ block_id }} .ab-card {
+      width: 77vw !important;
+    }
+    #ab-block-{{ block_id }} .ab-marquee-content {
+      gap: 16px !important;
+      padding-right: 16px !important;
+    }
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    #ab-block-{{ block_id }} .ab-marquee-content {
+      animation: none !important;
+    }
+  }
 </style>
 
 <div id="ab-block-{{ block_id }}" class="ab-container" {{ block.shopify_attributes }}>
@@ -125,29 +339,18 @@
     <h4 class="ab-heading">{{ heading }}</h4>
   {% endif %}
 
-  <div class="ab-card">
-    <div class="ab-row-top">
-      <div class="ab-code-wrapper">
-        <span>Use code</span>
-        <button
-          type="button"
-          class="ab-code-btn js-ab-code-btn"
-          title="Click to copy coupon code {{ coupon_code }}"
-          aria-label="Click to copy coupon code {{ coupon_code }}"
-        >
-          <span class="js-ab-code-text" data-code="{{ coupon_code }}">{{ coupon_code }}</span>
-          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
-        </button>
+  <div class="ab-marquee-wrapper">
+    <div class="ab-marquee-track">
+      <div class="ab-marquee-content">
+        {{ cards_html }}
       </div>
-
-      {% if tnc_text != blank %}
-        <a href="{{ tnc_url }}" class="ab-tnc-link">{{ tnc_text }}</a>
-      {% endif %}
+      <div class="ab-marquee-content" aria-hidden="true">
+        {{ cards_html }}
+      </div>
+      <div class="ab-marquee-content" aria-hidden="true">
+        {{ cards_html }}
+      </div>
     </div>
-
-    {% if description != blank %}
-      <p class="ab-description">{{ description }}</p>
-    {% endif %}
   </div>
 </div>
 
@@ -156,47 +359,102 @@
     const container = document.getElementById('ab-block-{{ block_id }}');
     if (!container) return;
 
-    const btn = container.querySelector('.js-ab-code-btn');
-    const feedback = container.querySelector('.js-ab-copy-feedback');
-    const codeSpan = container.querySelector('.js-ab-code-text');
+    const wrapper = container.querySelector('.ab-marquee-wrapper');
+    const track = container.querySelector('.ab-marquee-track');
+    if (!wrapper || !track) return;
 
-    if (!btn || !codeSpan) return;
+    // Click-to-copy handler
+    const buttons = container.querySelectorAll('.js-ab-code-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const codeSpan = btn.querySelector('.js-ab-code-text');
+        const feedback = btn.querySelector('.js-ab-copy-feedback');
+        if (!codeSpan) return;
 
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const codeToCopy = codeSpan.getAttribute('data-code') || codeSpan.textContent.trim();
+        const codeToCopy = codeSpan.getAttribute('data-code') || codeSpan.textContent.trim();
 
-      const handleSuccess = () => {
-        btn.classList.add('copied');
-        if (feedback) feedback.textContent = 'Copied!';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          if (feedback) feedback.textContent = '';
-        }, 1800);
-      };
+        const handleSuccess = () => {
+          btn.classList.add('copied');
+          if (feedback) feedback.textContent = 'Copied!';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            if (feedback) feedback.textContent = '';
+          }, 1800);
+        };
 
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(codeToCopy).then(handleSuccess).catch(fallbackCopy);
-      } else {
-        fallbackCopy();
-      }
-
-      function fallbackCopy() {
-        const textarea = document.createElement('textarea');
-        textarea.value = codeToCopy;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        try {
-          document.execCommand('copy');
-          handleSuccess();
-        } catch (err) {
-          console.error('Fallback copy failed', err);
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(codeToCopy).then(handleSuccess).catch(fallbackCopy);
+        } else {
+          fallbackCopy();
         }
-        document.body.removeChild(textarea);
-      }
+
+        function fallbackCopy() {
+          const textarea = document.createElement('textarea');
+          textarea.value = codeToCopy;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            handleSuccess();
+          } catch (err) {
+            console.error('Fallback copy failed', err);
+          }
+          document.body.removeChild(textarea);
+        }
+      });
     });
+
+    // Mobile Auto-scroll loop
+    let isMobile = window.innerWidth <= 740;
+    let autoScroll = true;
+    const scrollSpeed = 0.5; // pixels per frame
+    let scrollTimeout = null;
+
+    function checkMode() {
+      isMobile = window.innerWidth <= 740;
+      if (!isMobile) {
+        wrapper.classList.remove('is-snapping');
+      }
+    }
+    window.addEventListener('resize', checkMode);
+    checkMode();
+
+    let lastTime = performance.now();
+    function updateScroll(timestamp) {
+      const delta = timestamp - lastTime;
+      lastTime = timestamp;
+
+      if (autoScroll && isMobile) {
+        const firstGroup = track.querySelector('.ab-marquee-content');
+        if (firstGroup) {
+          const groupWidth = firstGroup.offsetWidth;
+          wrapper.scrollLeft += scrollSpeed * (delta / 16.67);
+
+          if (wrapper.scrollLeft >= groupWidth) {
+            wrapper.scrollLeft -= groupWidth;
+          }
+        }
+      }
+      requestAnimationFrame(updateScroll);
+    }
+    requestAnimationFrame(updateScroll);
+
+    wrapper.addEventListener('touchstart', function() {
+      autoScroll = false;
+      wrapper.classList.add('is-snapping');
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', function() {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        wrapper.classList.remove('is-snapping');
+        autoScroll = true;
+      }, 2000);
+    }, { passive: true });
   })();
 </script>

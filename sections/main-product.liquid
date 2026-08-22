@@ -141,35 +141,53 @@
 </nav>
 {% style %} 
 nav.pdp-breadcrumb.row{
-  padding: 10px !important;
+  padding: 10px 15px !important;
 }
 .pdp-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #222;
-  font-family: inherit;
-  margin-bottom: 12px;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 11px !important;
+  color: #222 !important;
+  font-family: inherit !important;
+  margin-bottom: 12px !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+.pdp-breadcrumb::-webkit-scrollbar {
+  display: none !important;
+}
+
+.pdp-breadcrumb a,
+.pdp-breadcrumb span {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .pdp-breadcrumb a {
-  color: #222;
-  text-decoration: none;
+  color: #222 !important;
+  text-decoration: none !important;
 }
 
 .pdp-breadcrumb a:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 .bc-sep {
-  display: flex;
-  align-items: center;
-  opacity: 0.6;
+  display: flex !important;
+  align-items: center !important;
+  opacity: 0.6 !important;
 }
 
 .bc-current {
-  color: #222;
+  color: #777 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 180px !important;
 }
  {% endstyle %}
 <section id="product-{{ product.id }}"
@@ -641,34 +659,38 @@ nav.pdp-breadcrumb.row{
 
                 <input class="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
 
-                {% unless product.gift_card? %}
-                  <div class="mhy-pdp-qty-container mb4">
-                    <label for="mhy-pdp-qty-input-{{ section.id }}" class="mhy-pdp-qty-label">Quantity</label>
-                    <div class="mhy-pdp-qty-wrapper">
-                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-down js-pdp-qty-down" disabled="disabled" aria-label="Decrease quantity">-</button>
-                      <input id="mhy-pdp-qty-input-{{ section.id }}" type="number" name="quantity" class="mhy-pdp-qty-input js-pdp-qty-input formQty" value="1" min="1" aria-label="Quantity" />
-                      <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-up js-pdp-qty-up" aria-label="Increase quantity">+</button>
+                <div class="mhy-pdp-purchase-row-container">
+                  {% unless product.gift_card? %}
+                    <div class="mhy-pdp-qty-container">
+                      <label for="mhy-pdp-qty-input-{{ section.id }}" class="mhy-pdp-qty-label">Quantity</label>
+                      <div class="mhy-pdp-qty-wrapper">
+                        <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-down js-pdp-qty-down" disabled="disabled" aria-label="Decrease quantity">-</button>
+                        <input id="mhy-pdp-qty-input-{{ section.id }}" type="number" name="quantity" class="mhy-pdp-qty-input js-pdp-qty-input formQty" value="1" min="1" aria-label="Quantity" />
+                        <button type="button" class="mhy-pdp-qty-btn mhy-pdp-qty-up js-pdp-qty-up" aria-label="Increase quantity">+</button>
+                      </div>
                     </div>
+                  {% else %}
+                    <input class="formQty" type="hidden" name="quantity" value="1" />
+                  {% endunless %}
+
+                  <div class="mhy-pdp-atc-wrapper">
+                    <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit mhy-pdp-primary-btn" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
                   </div>
-                {% else %}
-                  <input class="formQty" type="hidden" name="quantity" value="1" />
-                {% endunless %}
+                </div>
+
+                {% if settings.show_payment_button %}
+                  {% comment %} <div class="mhy-pdp-bin-row">
+                    <div class="mhy-pdp-secondary-btn-wrapper">
+                      {{ form | payment_button }}
+                    </div>
+                  </div> {% endcomment %}
+                {% endif %}
 
                 <div class="note note-success js-added-msg" style="display: none">
                   <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">{{ 'products.product.view_cart' | t }}</a> {{ 'products.product.or' | t }} <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
                 </div>
                 <div class="note note-error js-error-msg" style="display: none" role="alert">
                   <b class="note__heading">{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;<span class="note__body">{{ 'cart.general.update_qty_error' | t }}</span>
-                </div>
-
-                <div class="mhy-pdp-cta-container">
-                  <input id="addToCart" type="submit" name="button" class="add clearfix AddtoCart js-ajax-submit mhy-pdp-primary-btn" value="{{ call_to_action }}" {% unless current_variant.available %}disabled{% endunless %} />
-
-                  {% if settings.show_payment_button %}
-                    <div class="mhy-pdp-secondary-btn-wrapper">
-                      {{ form | payment_button }}
-                    </div>
-                  {% endif %}
                 </div>
               {%-  endform -%}
             </div>
@@ -720,20 +742,57 @@ nav.pdp-breadcrumb.row{
             %}
 
           {% when 'shop_the_look' %}
-            {%
-              render 'shop-the-look',
-              block: block,
-              section: section,
-              product: product
-            %}
+            {% comment %} Moved below accordion {% endcomment %}
+
+          {% when 'product_feature_icons' %}
+            <div class="product__section--product_feature_icons product__section--element" {{ block.shopify_attributes }}>
+              {% render 'product-feature-svg' %}
+            </div>
 
           {% when 'available_benefits' %}
-            {%
+                      {%- for block in section.blocks -%}
+                  {%- if block.type == 'product_info_image' and block.settings.enable_block and block.settings.image != blank -%}
+                    {%- liquid
+                      assign block_image = block.settings.image
+                      assign alt = block.settings.alt_text | default: block_image.alt | escape
+                      assign width_style = block.settings.desktop_width
+                    -%}
+                    <div class="product__info-image-block" 
+                         id="pdp-image-block-{{ block.id }}" 
+                         {{ block.shopify_attributes }}
+                         style="margin-top: {{ block.settings.top_spacing }}px; margin-bottom: {{ block.settings.bottom_spacing }}px; text-align: center;">
+                      
+                      {{ block_image | image_url: width: 1200 | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 769px) 50vw, 100vw',
+                        widths: '200, 300, 400, 500, 600, 700, 800, 1000, 1200',
+                        alt: alt,
+                        class: 'product__info-image-el'
+                      }}
+                    </div>
+                    {%- style -%}
+                      #pdp-image-block-{{ block.id }} .product__info-image-el {
+                        width: 100% !important;
+                        max-width: {{ width_style }} !important;
+                        height: auto !important;
+                        display: inline-block !important;
+                        border-radius: {{ block.settings.border_radius }}px !important;
+                      }
+                      @media screen and (max-width: 768px) {
+                        #pdp-image-block-{{ block.id }} .product__info-image-el {
+                          max-width: 100% !important;
+                        }
+                      }
+                    {%- endstyle -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+            {% comment %} {%
               render 'available-benefits',
               block: block,
               section: section,
               product: product
-            %}
+            %} {% endcomment %}
 
           {%- when 'image' -%}
             {% if block.settings.image != blank %}
@@ -756,13 +815,43 @@ nav.pdp-breadcrumb.row{
                   %}
               {% if block.settings.link != blank %}</a>{% endif %}
             </div>
-            {% endif %}
+            {% endif %} 
 
           {%- when 'share' -%}
+            {% comment %}
             <div class="product__section--share product__share-container product__section--element" {{ block.shopify_attributes }}>
               {% render 'social' with product %}
             </div>
+            {% endcomment %}
                  
+          {%- when 'product_info_image' -%}
+            {% comment %} Rendered below accordion {% endcomment %}
+
+          {%- when 'promo_alert' -%}
+            {% liquid
+              assign icon = block.settings.icon
+              assign type = 'fash-theme'
+              case icon
+              when 'bag', 'cart', 'chat', 'checkmark', 'gift', 'grid', 'home', 'menu-dots', 'money', 'promo', 'sale-tag', 'search', 'secure', 'share', 'ship-truck', 'star', 'user', 'wish', 'wish-focus'
+                assign type = 'apollo'
+              endcase
+            %}
+            {% unless block.settings.text == blank %}
+              <div class="product__section--promo-alert product__section--element" {{ block.shopify_attributes }} style="background-color: {{ block.settings.background_color }}; color: {{ block.settings.text_color }}; border: 1px solid {{ block.settings.border_color }};">
+                <div class="promo-alert__icon">
+                  {% render 'snip-icons',
+                    wrapper: '.promo-alert__icon',
+                    type: type,
+                    icon: icon,
+                    size: '18px',
+                    fill: block.settings.text_color,
+                    hover: block.settings.text_color %}
+                </div>
+                <div class="promo-alert__text">
+                  {{ block.settings.text }}
+                </div>
+              </div>
+            {% endunless %}
 
           {% when '@app' %}
             <div class="product__section--app product__section--element {{ block.shopify_attributes }}">
@@ -795,26 +884,183 @@ nav.pdp-breadcrumb.row{
                         <h5 class="accordion-thumb">Product Feature</h5>
                         <div class="accordion-panel">
                             {% assign product_feature_array = product.metafields.custom.product_feature.value %}
-                              {% for item in product_feature_array %}
-                                <p>{{ item }}</p>
-                              {% endfor %}
+                            <ul class="product-feature-list" id="product-feature-{{ product.id }}" data-raw="{% for item in product_feature_array %}{{ item | remove: '"' | strip }}|||{% endfor %}">
+                            </ul>
                         </div>
                     </li>
-                      {% endif %}
+                    <script>
+                      (function() {
+                        var list = document.getElementById('product-feature-{{ product.id }}');
+                        if (!list) return;
+
+                        var raw = list.getAttribute('data-raw') || '';
+                        var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
+
+                        function splitGeneric(text) {
+                          text = text.replace(/"/g, '').trim();
+                          if (text.length < 15) return [text];
+
+                          var hasPunctuation = /[\n;•\u00b7]|\.\s+/.test(text);
+
+                          if (hasPunctuation) {
+                            var lines = text.split(/[\n;•\u00b7]|\s+[-*]\s+/);
+                            var results = [];
+                            lines.forEach(function(line) {
+                              var sentences = line.split(/\.\s+/);
+                              sentences.forEach(function(s) {
+                                s = s.trim().replace(/\.$/, '');
+                                if (s) results.push(s);
+                              });
+                            });
+                            return results;
+                          }
+
+                          var words = text.split(/\s+/);
+                          var results = [];
+                          var current = [];
+
+                          for (var i = 0; i < words.length; i++) {
+                            var word = words[i];
+                            var isCapitalized = /^[A-Z][a-z]/.test(word);
+
+                            if (isCapitalized && current.length > 0) {
+                              var lastWord = current[current.length - 1];
+                              var precededByLowercase = /[a-z]$/.test(lastWord);
+
+                              if (precededByLowercase || current.length >= 2) {
+                                results.push(current.join(' '));
+                                current = [word];
+                                continue;
+                              }
+                            }
+                            current.push(word);
+                          }
+
+                          if (current.length > 0) {
+                            results.push(current.join(' '));
+                          }
+
+                          return results;
+                        }
+
+                        var bullets = [];
+                        if (items.length === 1) {
+                          bullets = splitGeneric(items[0]);
+                        } else {
+                          bullets = items;
+                        }
+
+                        var html = '';
+                        bullets.forEach(function(b) {
+                          var clean = b.replace(/"/g, '').trim().replace(/[.,]+$/, '');
+                          if (clean) html += '<li>' + clean + '</li>';
+                        });
+                        list.innerHTML = html;
+                      })();
+                    </script>
+                    {% endif %}
                       {% if product.metafields.custom.wash_care != blank %}
                         <li class="accordion-item">
                           <h5 class="accordion-thumb">Washcare</h5>
                           <div class="accordion-panel">
-                            {% assign wash_care_array = product.metafields.custom.wash_care.value %}
-                              {% for item in wash_care_array %}
-                                <p>{{ item }}</p>
-                              {% endfor %}
+                            {% assign wash_care_value = product.metafields.custom.wash_care.value %}
+                            {%- comment -%}
+                              Output raw items as JSON-safe data. JS will handle smart splitting.
+                              Handles both List (multiple items) and a single long string.
+                            {%- endcomment -%}
+                            <ul class="wash-care-list" id="wash-care-{{ product.id }}" data-raw="{% for item in wash_care_value %}{{ item | remove: '"' | strip }}|||{% endfor %}">
+                            </ul>
                           </div>
                         </li>
+                        <script>
+                          (function() {
+                            var list = document.getElementById('wash-care-{{ product.id }}');
+                            if (!list) return;
+
+                            var raw = list.getAttribute('data-raw') || '';
+                            var items = raw.split('|||').map(function(s) { return s.replace(/"/g, '').trim(); }).filter(Boolean);
+
+                            function splitGeneric(text) {
+                              text = text.replace(/"/g, '').trim();
+                              if (text.length < 15) return [text];
+
+                              var hasPunctuation = /[\n;•\u00b7]|\.\s+/.test(text);
+
+                              if (hasPunctuation) {
+                                var lines = text.split(/[\n;•\u00b7]|\s+[-*]\s+/);
+                                var results = [];
+                                lines.forEach(function(line) {
+                                  var sentences = line.split(/\.\s+/);
+                                  sentences.forEach(function(s) {
+                                    s = s.trim().replace(/\.$/, '');
+                                    if (s) results.push(s);
+                                  });
+                                });
+                                return results;
+                              }
+
+                              var words = text.split(/\s+/);
+                              var results = [];
+                              var current = [];
+
+                              for (var i = 0; i < words.length; i++) {
+                                var word = words[i];
+                                var isCapitalized = /^[A-Z][a-z]/.test(word);
+
+                                if (isCapitalized && current.length > 0) {
+                                  var lastWord = current[current.length - 1];
+                                  var precededByLowercase = /[a-z]$/.test(lastWord);
+
+                                  if (precededByLowercase || current.length >= 2) {
+                                    results.push(current.join(' '));
+                                    current = [word];
+                                    continue;
+                                  }
+                                }
+                                current.push(word);
+                              }
+
+                              if (current.length > 0) {
+                                results.push(current.join(' '));
+                              }
+
+                              return results;
+                            }
+
+                            var bullets = [];
+                            if (items.length === 1) {
+                              bullets = splitGeneric(items[0]);
+                            } else {
+                              bullets = items;
+                            }
+
+                            // Render
+                            var html = '';
+                            bullets.forEach(function(b) {
+                              var clean = b.replace(/"/g, '').trim().replace(/[.,]+$/, '');
+                              if (clean) html += '<li>' + clean + '</li>';
+                            });
+                            list.innerHTML = html;
+                          })();
+                        </script>
                       {% endif %}
                   </ul>
                   
                 </div>
+
+       
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'shop_the_look' -%}
+                    <div class="product__section--shop_the_look product__section--element" {{ block.shopify_attributes }}>
+                      {%
+                        render 'shop-the-look',
+                        block: block,
+                        section: section,
+                        product: product
+                      %}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
       </div>
     </div>
   </div>
@@ -851,20 +1097,194 @@ nav.pdp-breadcrumb.row{
 
   <div class="mhy-sticky-atc" data-mhy-sticky-atc hidden>
     <div class="mhy-sticky-atc__inner">
-      <div class="mhy-sticky-atc__meta">
+      
+      <!-- 1. Product Image Thumbnail -->
+      {% if product.featured_media.preview_image != blank %}
+        <a href="{{ product.url }}" class="mhy-sticky-atc__image-link" aria-label="View product">
+          <img class="mhy-sticky-atc__image" data-mhy-sticky-image src="{{ product.featured_media.preview_image | image_url: width: 160 }}" alt="{{ product.title | escape }}" width="80" height="80" loading="lazy" />
+        </a>
+      {% endif %}
+      
+      <!-- 2. Product Info -->
+      <div class="mhy-sticky-atc__info">
+        {% if product.vendor != blank %}
+          <div class="mhy-sticky-atc__vendor">{{ product.vendor }}</div>
+        {% endif %}
         <div class="mhy-sticky-atc__title">{{ product.title }}</div>
-        <div class="mhy-sticky-atc__pricing" data-mhy-sticky-pricing>
-          <span class="mhy-sticky-atc__price-current" data-mhy-sticky-price-current>{{ current_variant.price | money }}</span>
-          <span class="mhy-sticky-atc__price-compare" data-mhy-sticky-price-compare{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</span>
-          <span class="mhy-sticky-atc__save" data-mhy-sticky-save{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>Save {{ mhy_sticky_discount }}%</span>
+        <div class="mhy-sticky-atc__selections">
+          {%- for option in product.options_with_values -%}
+            <span class="mhy-sticky-atc__selection-item" data-sticky-option-index="{{ forloop.index0 }}">
+              <span class="mhy-sticky-atc__selection-label">{{ option.name }}:</span>
+              <span class="mhy-sticky-atc__selection-value" data-sticky-option-value="{{ forloop.index0 }}">{{ option.selected_value }}</span>
+            </span>
+          {%- endfor -%}
         </div>
       </div>
-      <button class="mhy-sticky-atc__btn" type="button" data-mhy-sticky-atc-btn>
-        {{ 'products.product.add_to_cart' | t }}
-      </button>
+      
+      <!-- 3. Price & Discount Block -->
+      <div class="mhy-sticky-atc__price-block">
+        <div class="mhy-sticky-atc__pricing" data-mhy-sticky-pricing>
+          <div class="mhy-sticky-atc__price-current" data-mhy-sticky-price-current>{{ current_variant.price | money }}</div>
+          <div class="mhy-sticky-atc__sale-info" data-mhy-sticky-sale-info{% if current_variant.compare_at_price <= current_variant.price %} hidden{% endif %}>
+            <span class="mhy-sticky-atc__price-compare" data-mhy-sticky-price-compare>{{ current_variant.compare_at_price | money }}</span>
+            <span class="mhy-sticky-atc__save" data-mhy-sticky-save>Save {{ mhy_sticky_discount }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Premium Quantity Selector -->
+      <div class="mhy-sticky-atc__qty-selector">
+        <button type="button" class="mhy-sticky-atc__qty-btn" data-qty-decrement aria-label="Decrease quantity">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <span class="mhy-sticky-atc__qty-value" data-mhy-sticky-qty-value>1</span>
+        <button type="button" class="mhy-sticky-atc__qty-btn" data-qty-increment aria-label="Increase quantity">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <!-- 5. Actions Wrapper -->
+      <div class="mhy-sticky-atc__actions">
+        {% if product.variants.size > 1 %}
+          <select class="mhy-sticky-atc__variant-select" data-mhy-sticky-variant-select aria-label="Select variant">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endif %}
+        <button class="mhy-sticky-atc__btn" type="button" data-mhy-sticky-atc-btn>
+          <span class="mhy-sticky-atc__btn-text">{{ 'products.product.add_to_cart' | t }}</span>
+          <span class="mhy-sticky-atc__btn-loader" hidden>
+            <svg class="mhy-spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+            </svg>
+          </span>
+        </button>
+      </div>
+      
     </div>
   </div>
 </section>
+
+<!-- PDP Custom Share Modal -->
+<div class="pdp-share-modal-backdrop js-pdp-share-modal-backdrop" id="pdpShareModal-{{ section.id }}" role="dialog" aria-modal="true" aria-labelledby="pdpShareModalTitle-{{ section.id }}" hidden>
+  <div class="pdp-share-modal-content">
+    <button class="pdp-share-modal-close js-pdp-share-modal-close" aria-label="Close share dialog">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A2B4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <h3 id="pdpShareModalTitle-{{ section.id }}" class="pdp-share-modal-title">Share this product</h3>
+    <div class="pdp-share-options">
+      
+      <!-- WhatsApp -->
+      <a href="https://api.whatsapp.com/send?text={{ product.title | escape }}%20-%20{{ shop.url | append: product.url | url_param_escape }}" class="pdp-share-option-link share-whatsapp" target="_blank" rel="noopener">
+        <span class="pdp-share-icon-wrapper">
+          <svg width="20" height="20" fill="#1A2B4C" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.66.986 3.284 1.48 4.908 1.483 5.432 0 9.855-4.387 9.858-9.78.002-2.614-1.012-5.074-2.855-6.918C16.716 2.095 14.26 1.08 11.66 1.08c-5.438 0-9.859 4.386-9.862 9.778-.001 1.77.475 3.5 1.374 5.02L2.14 22.048l6.507-1.706c-.846-.46-1.054-.575-.99-.548zM17.15 15.64c-.284-.144-1.68-.83-1.943-.926-.263-.096-.454-.144-.645.144-.19.288-.74.926-.907 1.117-.167.19-.334.216-.618.072-2.316-1.165-3.8-2.18-5.3-4.75-.143-.245-.285-.49-.428-.737.284-.144.636-.57.74-.756.104-.188.052-.35-.026-.494-.078-.144-.645-1.554-.884-2.13-.233-.56-.47-.482-.646-.492-.167-.008-.358-.01-.55-.01-.19 0-.5.072-.76.36-.26.288-1 .978-1 2.387 0 1.41 1.02 2.77 1.16 2.96.14.19 2.01 3.066 4.87 4.3 2.86 1.234 2.86.824 3.37.776.51-.048 1.68-.686 1.91-1.346.24-.66.24-1.226.17-1.346-.07-.12-.26-.192-.54-.336z"/></svg>
+        </span>
+        <span class="pdp-share-option-text">WhatsApp</span>
+      </a>
+
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: product.url | url_param_escape }}" class="pdp-share-option-link share-facebook" target="_blank" rel="noopener">
+        <span class="pdp-share-icon-wrapper">
+          <svg width="20" height="20" fill="#1A2B4C" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+        </span>
+        <span class="pdp-share-option-text">Facebook</span>
+      </a>
+
+      <!-- X (Twitter) -->
+      <a href="https://twitter.com/intent/tweet?text={{ product.title | escape }}&url={{ shop.url | append: product.url | url_param_escape }}" class="pdp-share-option-link share-x" target="_blank" rel="noopener">
+        <span class="pdp-share-icon-wrapper">
+          <svg width="20" height="20" fill="#1A2B4C" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </span>
+        <span class="pdp-share-option-text">X (Twitter)</span>
+      </a>
+
+      <!-- Pinterest -->
+      <a href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_param_escape }}&media={{ product.featured_media | image_url: width: 1024 | url_param_escape }}&description={{ product.title | escape }}" class="pdp-share-option-link share-pinterest" target="_blank" rel="noopener">
+        <span class="pdp-share-icon-wrapper">
+          <svg width="20" height="20" fill="#1A2B4C" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.204 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        </span>
+        <span class="pdp-share-option-text">Pinterest</span>
+      </a>
+
+      <!-- Copy Link -->
+      <button type="button" class="pdp-share-option-link share-copy-link js-pdp-copy-link" data-share-url="{{ shop.url | append: product.url }}">
+        <span class="pdp-share-icon-wrapper">
+          <svg width="20" height="20" fill="none" stroke="#1A2B4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </span>
+        <span class="pdp-share-option-text js-copy-text">Copy Product Link</span>
+      </button>
+    </div>
+    <div class="pdp-share-success-msg js-pdp-share-success-msg" hidden>Link copied!</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var shareModal = document.getElementById('pdpShareModal-{{ section.id }}');
+    var triggers = document.querySelectorAll('.js-pdp-share-trigger');
+    var closeBtn = shareModal.querySelector('.js-pdp-share-modal-close');
+    var copyBtn = shareModal.querySelector('.js-pdp-copy-link');
+    var successMsg = shareModal.querySelector('.js-pdp-share-success-msg');
+
+    function openModal() {
+      shareModal.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      shareModal.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+      if (successMsg) successMsg.setAttribute('hidden', '');
+    }
+
+    triggers.forEach(function(trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openModal();
+      });
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    shareModal.addEventListener('click', function(e) {
+      if (e.target === shareModal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !shareModal.hasAttribute('hidden')) {
+        closeModal();
+      }
+    });
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var urlToCopy = copyBtn.getAttribute('data-share-url') || window.location.href;
+        navigator.clipboard.writeText(urlToCopy).then(function() {
+          if (successMsg) {
+            successMsg.removeAttribute('hidden');
+            setTimeout(function() {
+              successMsg.setAttribute('hidden', '');
+            }, 3000);
+          }
+        }).catch(function(err) {
+          console.error('Could not copy link: ', err);
+        });
+      });
+    }
+  });
+</script>
 <script type="application/json" id="ModelJson-{{ section.id }}">
   {{ product.media | where: 'media_type', 'model' | json }}
 </script>
@@ -927,6 +1347,70 @@ nav.pdp-breadcrumb.row{
   ],
   "blocks": [
     {
+      "type": "product_info_image",
+      "name": "Product Info Image",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_block",
+          "label": "Enable Block",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text (optional)",
+          "info": "Overrides default image alt text"
+        },
+        {
+          "type": "select",
+          "id": "desktop_width",
+          "label": "Desktop Image Width",
+          "options": [
+            { "value": "100%", "label": "Full Width" },
+            { "value": "75%", "label": "75%" },
+            { "value": "50%", "label": "50%" }
+          ],
+          "default": "100%"
+        },
+        {
+          "type": "range",
+          "id": "top_spacing",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Top Spacing",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "bottom_spacing",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom Spacing",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Border Radius",
+          "default": 4
+        }
+      ]
+    },
+    {
       "type": "@app"
     },
     {
@@ -977,31 +1461,14 @@ nav.pdp-breadcrumb.row{
       "settings": [
         {
           "type": "text",
-          "id": "tab1_title",
-          "label": "Tab 1 Title",
-          "default": "SHOP THE LOOK"
-        },
-        {
-          "type": "text",
-          "id": "tab2_title",
-          "label": "Tab 2 Title",
-          "default": "DISCOVER MORE"
-        },
-        {
-          "type": "select",
-          "id": "rec_method",
-          "label": "Recommendation Method",
-          "options": [
-            { "value": "both", "label": "Native Complementary + Category Rule Fallback" },
-            { "value": "native", "label": "Native Complementary Only" },
-            { "value": "rule_based", "label": "Category Rule Fallback Only" }
-          ],
-          "default": "both"
+          "id": "heading",
+          "label": "Section Heading",
+          "default": "Selected For You"
         },
         {
           "type": "collection",
-          "id": "fallback_collection",
-          "label": "Fallback / Discover More Collection"
+          "id": "collection",
+          "label": "Collection"
         },
         {
           "type": "range",
@@ -1015,6 +1482,11 @@ nav.pdp-breadcrumb.row{
       ]
     },
     {
+      "type": "product_feature_icons",
+      "name": "Product Feature Icons",
+      "settings": []
+    },
+    {
       "type": "available_benefits",
       "name": "Available Benefits",
       "settings": [
@@ -1025,33 +1497,130 @@ nav.pdp-breadcrumb.row{
           "default": "AVAILABLE BENEFITS"
         },
         {
-          "type": "text",
-          "id": "coupon_code",
-          "label": "Coupon Code",
-          "default": "ONLYEXCHANGE"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Offer Description",
-          "default": "Extra 5% off on your order - applicable for 1 exchange only, no returns."
-        },
-        {
-          "type": "url",
-          "id": "tnc_url",
-          "label": "T&C Link URL"
-        },
-        {
-          "type": "text",
-          "id": "tnc_text",
-          "label": "T&C Link Text",
-          "default": "T & C"
-        },
-        {
           "type": "color",
           "id": "accent_color",
           "label": "Coupon Code Accent Color",
           "default": "#b8860b"
+        },
+        {
+          "type": "header",
+          "content": "Card 1"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code",
+          "label": "Card 1 Coupon Code (Legacy)",
+          "default": "WELCOME10"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Card 1 Description (Legacy)",
+          "default": "Get 10% OFF on your first order."
+        },
+        {
+          "type": "text",
+          "id": "coupon_code_1",
+          "label": "Card 1 Coupon Code",
+          "default": "WELCOME10"
+        },
+        {
+          "type": "textarea",
+          "id": "description_1",
+          "label": "Card 1 Description",
+          "default": "Get 10% OFF on your first order."
+        },
+        {
+          "type": "text",
+          "id": "tnc_text_1",
+          "label": "Card 1 T&C Text",
+          "default": "T & C"
+        },
+        {
+          "type": "url",
+          "id": "tnc_url_1",
+          "label": "Card 1 T&C Link"
+        },
+        {
+          "type": "header",
+          "content": "Card 2"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code_2",
+          "label": "Card 2 Coupon Code",
+          "default": "EXTRA15"
+        },
+        {
+          "type": "textarea",
+          "id": "description_2",
+          "label": "Card 2 Description",
+          "default": "Get an Extra 15% OFF today only. Valid till 11:59 PM."
+        },
+        {
+          "type": "text",
+          "id": "tnc_text_2",
+          "label": "Card 2 T&C Text",
+          "default": "T & C"
+        },
+        {
+          "type": "url",
+          "id": "tnc_url_2",
+          "label": "Card 2 T&C Link"
+        },
+        {
+          "type": "header",
+          "content": "Card 3"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code_3",
+          "label": "Card 3 Coupon Code",
+          "default": "FREESHIP"
+        },
+        {
+          "type": "textarea",
+          "id": "description_3",
+          "label": "Card 3 Description",
+          "default": "Free Shipping on your order."
+        },
+        {
+          "type": "text",
+          "id": "tnc_text_3",
+          "label": "Card 3 T&C Text",
+          "default": "T & C"
+        },
+        {
+          "type": "url",
+          "id": "tnc_url_3",
+          "label": "Card 3 T&C Link"
+        },
+        {
+          "type": "header",
+          "content": "Card 4"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code_4",
+          "label": "Card 4 Coupon Code",
+          "default": "MHY10"
+        },
+        {
+          "type": "textarea",
+          "id": "description_4",
+          "label": "Card 4 Description",
+          "default": "Shop for ₹10,000 and get an additional 10% OFF."
+        },
+        {
+          "type": "text",
+          "id": "tnc_text_4",
+          "label": "Card 4 T&C Text",
+          "default": "T & C"
+        },
+        {
+          "type": "url",
+          "id": "tnc_url_4",
+          "label": "Card 4 T&C Link"
         }
       ]
     },
@@ -1214,6 +1783,151 @@ nav.pdp-breadcrumb.row{
       "limit": 1,
       "settings": []
     },
+    {
+      "type": "promo_alert",
+      "name": "Promo Alert",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Free Reusable Cotton Pouch with Every Purchase</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Choose an icon",
+          "default": "bag",
+          "options": [
+            {
+              "value": "appliance",
+              "label": "Appliance"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "battery",
+              "label": "Battery"
+            },
+            {
+              "value": "bed",
+              "label": "Bed"
+            },
+            {
+              "value": "bell",
+              "label": "Bell"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "camera",
+              "label": "Camera"
+            },
+            {
+              "value": "cart",
+              "label": "Cart"
+            },
+            {
+              "value": "chair",
+              "label": "Chair"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "grid",
+              "label": "Grid"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "menu-dots",
+              "label": "Menu dots"
+            },
+            {
+              "value": "money",
+              "label": "Money"
+            },
+            {
+              "value": "promo",
+              "label": "Promo"
+            },
+            {
+              "value": "sale-tag",
+              "label": "Sale tag"
+            },
+            {
+              "value": "search",
+              "label": "Search"
+            },
+            {
+              "value": "secure",
+              "label": "Secure"
+            },
+            {
+              "value": "share",
+              "label": "Share"
+            },
+            {
+              "value": "ship-truck",
+              "label": "Ship truck"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "user",
+              "label": "User"
+            },
+            {
+              "value": "wish",
+              "label": "Wish"
+            },
+            {
+              "value": "wish-focus",
+              "label": "Wish focus"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#f8f8f8"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#121212"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border Color",
+          "default": "rgba(0,0,0,0)"
+        }
+      ]
+    },
+
+
+
     {
       "type": "stock_levels",
       "name": "Stock levels",

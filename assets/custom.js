@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
 });
 
 (function () {
@@ -490,6 +491,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const stickyBtn = document.querySelector("[data-mhy-sticky-atc-btn]");
     if (!sticky || !stickyBtn) return;
 
+    const stickyImage = sticky.querySelector("[data-mhy-sticky-image]");
+    const stickyVariantTitle = sticky.querySelector("[data-mhy-sticky-variant-title]");
+    const stickySelect = sticky.querySelector("[data-mhy-sticky-variant-select]");
+    const variantIdInput = document.querySelector(".formVariantId");
+
     const stickyPriceCurrent = sticky.querySelector("[data-mhy-sticky-price-current]");
     const stickyPriceCompare = sticky.querySelector("[data-mhy-sticky-price-compare]");
     const stickySave = sticky.querySelector("[data-mhy-sticky-save]");
@@ -502,7 +508,47 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sticky.dataset.mhyInit === "true") return;
     sticky.dataset.mhyInit = "true";
 
+    // Move to body to prevent stacking context bugs (e.g. parent transform/filter/will-change)
+    if (sticky.parentNode !== document.body) {
+      document.body.appendChild(sticky);
+    }
+
+    let productData = null;
+    try {
+      const productJsonEl = document.querySelector(".product-json");
+      if (productJsonEl) productData = JSON.parse(productJsonEl.innerHTML || "null");
+    } catch (e) {
+      console.warn("Could not parse product data JSON", e);
+    }
+
     let footerInView = false;
+
+    const stickyQtyVal = sticky.querySelector("[data-mhy-sticky-qty-value]");
+
+    function syncStickyVariantDetails() {
+      if (!productData || !variantIdInput) return;
+      const variantId = variantIdInput.value;
+      const variant = productData.variants.find(v => String(v.id) === String(variantId));
+      if (!variant) return;
+
+      // Update selected options text representation
+      if (variant.options) {
+        variant.options.forEach((optValue, idx) => {
+          const valEl = sticky.querySelector(`[data-sticky-option-value="${idx}"]`);
+          if (valEl) {
+            valEl.textContent = optValue;
+          }
+        });
+      }
+
+      if (stickyImage && variant.featured_image && variant.featured_image.src) {
+        stickyImage.src = variant.featured_image.src;
+      }
+
+      if (stickySelect) {
+        stickySelect.value = variantId;
+      }
+    }
 
     function syncStickyPricing() {
       if (!mainPrice || !stickyPriceCurrent) return;
@@ -526,6 +572,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       stickyPriceCurrent.textContent = currentText;
 
+      const saleInfoEl = sticky.querySelector("[data-mhy-sticky-sale-info]");
+      if (saleInfoEl) {
+        saleInfoEl.hidden = !compareText;
+      }
+
       if (stickyPriceCompare) {
         if (compareText) {
           stickyPriceCompare.textContent = compareText;
@@ -547,15 +598,46 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    function syncStickyButtonState() {
-      const label = mainAtc.value || mainAtc.textContent || "Add to cart";
-      stickyBtn.textContent = label;
-      if (mainAtc.hasAttribute("disabled") || mainAtc.classList.contains("disabled")) {
-        stickyBtn.setAttribute("disabled", "disabled");
-      } else {
-        stickyBtn.removeAttribute("disabled");
+    function syncStickyQuantity() {
+      const mainQtyInput = document.querySelector(".template-product input[name='quantity']");
+      if (mainQtyInput && stickyQtyVal) {
+        stickyQtyVal.textContent = mainQtyInput.value || "1";
       }
+    }
+
+    function syncStickyButtonState() {
+      if (!mainAtc || !stickyBtn) return;
+
+      const isDisabled = mainAtc.hasAttribute("disabled") || mainAtc.classList.contains("disabled");
+      const btnVal = (mainAtc.value || mainAtc.textContent || "").trim().toUpperCase();
+      const isAdding = btnVal.indexOf("ADDING") > -1 || mainAtc.classList.contains("loading") || mainAtc.classList.contains("is-loading");
+      const isAdded = btnVal.indexOf("ADDED") > -1;
+
+      stickyBtn.disabled = isDisabled;
+      stickyBtn.classList.toggle("disabled", isDisabled);
+
+      const btnTextEl = stickyBtn.querySelector(".mhy-sticky-atc__btn-text");
+      const loaderEl = stickyBtn.querySelector(".mhy-sticky-atc__btn-loader");
+
+      if (isAdding) {
+        if (btnTextEl) btnTextEl.textContent = "";
+        if (loaderEl) loaderEl.hidden = false;
+        stickyBtn.classList.add("mhy-btn-loading");
+      } else if (isAdded) {
+        if (btnTextEl) btnTextEl.textContent = "✓ Added to Cart";
+        if (loaderEl) loaderEl.hidden = true;
+        stickyBtn.classList.remove("mhy-btn-loading");
+        stickyBtn.classList.add("mhy-btn-success");
+      } else {
+        if (btnTextEl) btnTextEl.textContent = mainAtc.value || mainAtc.textContent || "Add to Cart";
+        if (loaderEl) loaderEl.hidden = true;
+        stickyBtn.classList.remove("mhy-btn-loading");
+        stickyBtn.classList.remove("mhy-btn-success");
+      }
+
       syncStickyPricing();
+      syncStickyVariantDetails();
+      syncStickyQuantity();
     }
 
     function setVisible(visible) {
@@ -595,6 +677,54 @@ document.addEventListener("DOMContentLoaded", function () {
       syncStickyButtonState();
     });
     mo.observe(mainAtc, { attributes: true, attributeFilter: ["disabled", "value", "class"] });
+
+    document.querySelectorAll(".formVariantId").forEach((input) => {
+      input.addEventListener("change", function () {
+        syncStickyButtonState();
+      });
+    });
+
+    if (stickySelect) {
+      stickySelect.addEventListener("change", function () {
+        const val = this.value;
+        if (variantIdInput) {
+          variantIdInput.value = val;
+          variantIdInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      });
+    }
+
+    // Sync quantity updates from main inputs to sticky text
+    document.querySelectorAll(".template-product input[name='quantity']").forEach((input) => {
+      input.addEventListener("change", function () {
+        syncStickyQuantity();
+      });
+      input.addEventListener("input", function () {
+        syncStickyQuantity();
+      });
+    });
+
+    // Handle sticky quantity increment/decrement clicks
+    sticky.addEventListener("click", function (e) {
+      const decBtn = e.target.closest("[data-qty-decrement]");
+      const incBtn = e.target.closest("[data-qty-increment]");
+
+      if (decBtn || incBtn) {
+        let currentQty = parseInt(stickyQtyVal.textContent, 10) || 1;
+        if (decBtn && currentQty > 1) {
+          currentQty--;
+        } else if (incBtn) {
+          currentQty++;
+        }
+        stickyQtyVal.textContent = currentQty;
+
+        // Sync back to all main quantity inputs
+        document.querySelectorAll(".template-product input[name='quantity']").forEach((input) => {
+          input.value = currentQty;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+      }
+    });
 
     if (mainPrice) {
       const priceObserver = new MutationObserver(function () {
@@ -636,9 +766,245 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 
 (function () {
+  function mhyNormalizeColorName(name) {
+    if (!name) return '';
+    return name.toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '')
+      .replace(/[-_]/g, '');
+  }
+
+  // ── Built-in color map covering all known store colors ──────────────────────
+  var MHY_BUILTIN_COLORS = {
+    'ashgrey':          '#B2BEB5',
+    'balsamgreen':      '#5F8B6A',
+    'beige':            '#E8D8B7',
+    'black':            '#000000',
+    'blue':             '#0057B7',
+    'bluegrey':         '#6E7F8D',
+    'bordeaux':         '#4A0020',
+    'brown':            '#6B3A2A',
+    'camel':            '#C19A6B',
+    'cedar':            '#9E4B2A',
+    'charcoal':         '#36454F',
+    'charcoalgrey':     '#4A4A4A',
+    'chestnut':         '#954535',
+    'darkblue':         '#00008B',
+    'darkgrey':         '#A9A9A9',
+    'deepblue':         '#003A70',
+    'ecru':             '#F5F0E1',
+    'eggplant':         '#614051',
+    'fern':             '#4F7942',
+    'flintstone':       '#857C73',
+    'gray':             '#808080',
+    'green':            '#2E8B57',
+    'grey':             '#808080',
+    'gunmetal':         '#2C3539',
+    'highrisegrey':     '#A0A0A0',
+    'honeybeige':       '#D4A96A',
+    'iceblue':          '#99C5C4',
+    'icegrey':          '#DCDCDC',
+    'khaki':            '#C3B091',
+    'lavender':         '#B57EDC',
+    'lightblue':        '#ADD8E6',
+    'lightgrayishblue': '#B0C4D8',
+    'lightgrey':        '#D3D3D3',
+    'lilac':            '#C8A2C8',
+    'magnet':           '#424B54',
+    'maroon':           '#800000',
+    'mauve':            '#E0B0FF',
+    'midnightnavy':     '#191970',
+    'mocha':            '#967259',
+    'mustard':          '#FFDB58',
+    'navy':             '#000080',
+    'offwhite':         '#F5F5EF',
+    'olive':            '#808000',
+    'paleyellow':       '#FAFAC8',
+    'pine':             '#2A5C45',
+    'pink':             '#FFC0CB',
+    'powderblue':       '#B0E0E6',
+    'rosebrown':        '#BC8F8F',
+    'rust':             '#B7410E',
+    'sagegreen':        '#B2AC88',
+    'sand':             '#C2B280',
+    'shitake':          '#8B7355',
+    'skyblue':          '#87CEEB',
+    'slateblue':        '#6A5ACD',
+    'spruce':           '#1D4E38',
+    'stonegrey':        '#928E85',
+    'tan':              '#D2B48C',
+    'teal':             '#008080',
+    'terracotta':       '#CC4E32',
+    'umber':            '#635147',
+    'walnut':           '#7B3F00',
+    'white':            '#FFFFFF',
+    'wine':             '#722F37',
+    'wood':             '#A0522D',
+    'yellow':           '#FFD700'
+  };
+
+  function mhyApplyDesktopSwatches() {
+    // Start with the built-in color map
+    var swatches = Object.assign({}, MHY_BUILTIN_COLORS);
+
+    // Override / extend with Theme Customizer blocks if available
+    var dataEl = document.getElementById('mhy-color-swatches-data');
+    if (dataEl) {
+      try {
+        var rawSwatches = JSON.parse(dataEl.textContent);
+        for (var key in rawSwatches) {
+          if (rawSwatches.hasOwnProperty(key)) {
+            var normalized = mhyNormalizeColorName(key);
+            if (normalized && rawSwatches[key]) {
+              swatches[normalized] = rawSwatches[key];
+            }
+          }
+        }
+      } catch(e) {
+        console.log("mhy-swatches: error parsing customizer JSON:", e);
+      }
+    }
+
+    var options = document.querySelectorAll('.mhy-dt-option');
+    options.forEach(function(opt) {
+      if (opt.querySelector('.mhy-swatch-circle')) return;
+
+      var checkbox = opt.querySelector('.mhy-dt-checkbox');
+      if (!checkbox) return;
+
+      var nameAttr = checkbox.getAttribute('name') || '';
+      if (nameAttr.toLowerCase().indexOf('color') === -1 && nameAttr.toLowerCase().indexOf('colour') === -1) {
+        return;
+      }
+
+      var labelEl = opt.querySelector('.mhy-dt-option__label');
+      if (!labelEl) return;
+
+      var colorName = labelEl.textContent.trim();
+      var normalizedFilter = mhyNormalizeColorName(colorName);
+      var finalColor = swatches[normalizedFilter] || '#e0e0e0';
+
+      var swatch = document.createElement('span');
+      swatch.className = 'mhy-swatch-circle';
+      swatch.style.backgroundColor = finalColor;
+
+      opt.insertBefore(swatch, labelEl);
+    });
+  }
+
   function initCollectionSortFilterUI() {
+    // Apply desktop swatches
+    mhyApplyDesktopSwatches();
+
+    // Reload new mobile filters state if defined
+    if (typeof window.mhyMobileFilterReload === "function") {
+      window.mhyMobileFilterReload();
+    }
+
+    // 1. Desktop Toolbar Pill Dropdowns
+    const desktopForm = document.getElementById("CollectionFiltersForm");
+    if (desktopForm && !desktopForm.dataset.mhyDtInit) {
+      desktopForm.dataset.mhyDtInit = "true";
+
+      // Restore previously open dropdown if index is saved
+      if (typeof window.mhyLastOpenDropdownIndex === "number" && window.mhyLastOpenDropdownIndex !== -1) {
+        const pills = desktopForm.querySelectorAll("[data-mhy-dt-filter]");
+        if (pills[window.mhyLastOpenDropdownIndex]) {
+          const dropdown = pills[window.mhyLastOpenDropdownIndex].querySelector("[data-mhy-dt-dropdown]");
+          if (dropdown) dropdown.hidden = false;
+        }
+      }
+
+      desktopForm.addEventListener("click", function (e) {
+        const trigger = e.target.closest("[data-mhy-dt-trigger]");
+        if (trigger) {
+          e.preventDefault();
+          const pill = trigger.closest("[data-mhy-dt-filter]");
+          const dropdown = pill ? pill.querySelector("[data-mhy-dt-dropdown]") : null;
+          if (dropdown) {
+            const isHidden = dropdown.hidden;
+            desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+            dropdown.hidden = !isHidden;
+
+            if (!isHidden) {
+              window.mhyLastOpenDropdownIndex = -1;
+            } else {
+              const pills = Array.from(desktopForm.querySelectorAll("[data-mhy-dt-filter]"));
+              window.mhyLastOpenDropdownIndex = pills.indexOf(pill);
+            }
+          }
+          return;
+        }
+
+        const sortTrigger = e.target.closest("[data-mhy-sort-trigger]");
+        if (sortTrigger) {
+          e.preventDefault();
+          const sortPill = sortTrigger.closest("[data-mhy-sort]");
+          const sortDropdown = sortPill ? sortPill.querySelector("[data-mhy-sort-dropdown]") : null;
+          if (sortDropdown) {
+            const isHidden = sortDropdown.hidden;
+            desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+            sortDropdown.hidden = !isHidden;
+            window.mhyLastOpenDropdownIndex = -1;
+          }
+          return;
+        }
+
+        const sortOption = e.target.closest("[data-mhy-sort-option]");
+        if (sortOption) {
+          e.preventDefault();
+          const value = sortOption.getAttribute("data-mhy-sort-option");
+          const name = sortOption.getAttribute("data-mhy-sort-name") || sortOption.textContent;
+          const params = new URLSearchParams(window.location.search);
+
+          const currentFormData = new FormData(desktopForm);
+          for (let [k, v] of currentFormData.entries()) {
+            if (k !== "sort_by") params.set(k, v);
+          }
+          params.set("sort_by", value);
+
+          document.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          document.querySelectorAll("[data-mhy-sort-active]").forEach(el => el.textContent = (name || "").trim());
+
+          window.mhyLastOpenDropdownIndex = -1;
+
+          if (window.theme && theme.CollectionFilters && typeof theme.CollectionFilters.renderPage === "function") {
+            theme.CollectionFilters.renderPage(params.toString());
+          } else {
+            window.location.search = params.toString();
+          }
+          return;
+        }
+
+        if (!e.target.closest("[data-mhy-dt-filter]") && !e.target.closest("[data-mhy-sort]")) {
+          desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+          desktopForm.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          window.mhyLastOpenDropdownIndex = -1;
+        }
+      });
+
+      desktopForm.addEventListener("change", function (e) {
+        const formData = new FormData(desktopForm);
+        const searchParams = new URLSearchParams(formData).toString();
+        if (window.theme && theme.CollectionFilters && typeof theme.CollectionFilters.renderPage === "function") {
+          theme.CollectionFilters.renderPage(searchParams);
+        }
+      });
+
+      document.addEventListener("click", function (e) {
+        if (desktopForm && !desktopForm.contains(e.target)) {
+          desktopForm.querySelectorAll("[data-mhy-dt-dropdown]").forEach(d => d.hidden = true);
+          desktopForm.querySelectorAll("[data-mhy-sort-dropdown]").forEach(d => d.hidden = true);
+          window.mhyLastOpenDropdownIndex = -1;
+        }
+      });
+    }
+
+    // 2. Mobile Toolbar & Sidebar UI
     const toolbar = document.querySelector("[data-mhy-collection-sf]");
     if (!toolbar) return;
+    
     if (toolbar.dataset.mhyInit === "true") return;
     toolbar.dataset.mhyInit = "true";
 
@@ -686,6 +1052,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const value = optionBtn.getAttribute("data-mhy-sort-option");
         const name = optionBtn.getAttribute("data-mhy-sort-name") || optionBtn.textContent;
         const params = new URLSearchParams(window.location.search);
+        
+        const sideForm = document.getElementById("CollectionSidebarFiltersForm");
+        if (sideForm) {
+          const sideData = new FormData(sideForm);
+          for (let [k, v] of sideData.entries()) {
+            if (k !== "sort_by") params.append(k, v);
+          }
+        }
         params.set("sort_by", value);
 
         if (sortActive) sortActive.textContent = (name || "").trim();
@@ -726,6 +1100,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!sidebar || !overlay) return;
       const isOpen = sidebar.classList.contains("open") || sidebar.classList.contains("active");
       overlay.classList.toggle("active", isOpen);
+      document.body.classList.toggle("sidebar-open", isOpen);
     }
 
     if (sidebar) {
@@ -739,9 +1114,11 @@ document.addEventListener("DOMContentLoaded", function () {
       sidebar.classList.remove("open");
       sidebar.classList.remove("active");
       overlay.classList.remove("active");
+      document.body.classList.remove("sidebar-open");
     });
   }
 
+  window.initCollectionSortFilterUI = initCollectionSortFilterUI;
   document.addEventListener("DOMContentLoaded", initCollectionSortFilterUI);
   document.addEventListener("shopify:section:load", initCollectionSortFilterUI);
 })();
@@ -1110,12 +1487,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else if (cartConfig.cart_action === "modal_cart") {
                   Shopify.theme.ajaxCart.showModal(cartConfig);
                 }
-                Shopify.theme.ajaxCart.setCartNotice(cartConfig, {
-                  type: "success",
-                  title: "Product added successfully",
-                  message: "",
-                  autoHideMs: 3500,
-                });
+                // Cart drawer opens directly — no success banner needed.
+
                 setValidation("");
               })
               .catch((err) => {

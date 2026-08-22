@@ -26,16 +26,59 @@
             "show_gift_card_recipient": false
           }
         },
+        "promo_alert_default": {
+          "type": "promo_alert",
+          "settings": {
+            "text": "<p>Free Reusable Cotton Pouch with Every Purchase</p>",
+            "icon": "bag",
+            "background_color": "#f8f8f8",
+            "text_color": "#121212",
+            "border_color": "rgba(0,0,0,0)"
+          }
+        },
+        "product_info_image_eLmYBB": {
+          "type": "product_info_image",
+          "settings": {
+            "enable_block": true,
+            "image": "shopify://shop_images/final_pouch_website_image.png",
+            "alt_text": "",
+            "desktop_width": "100%",
+            "top_spacing": 16,
+            "bottom_spacing": 16,
+            "border_radius": 4
+          }
+        },
+        "product_feature_icons_new": {
+          "type": "product_feature_icons",
+          "settings": {}
+        },
         "share_WKEqCy": {
           "type": "share",
           "settings": {}
         },
-        "complementary_products_BMGWQw": {
-          "type": "complementary_products",
+        "available_benefits_4EjjVW": {
+          "type": "available_benefits",
           "settings": {
-            "heading": "Pair it with",
-            "limit": 2,
-            "appearance": "simple"
+            "heading": "AVAILABLE BENEFITS",
+            "accent_color": "#b8860b",
+            "coupon_code": "ONLYEXCHANGE",
+            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
+            "coupon_code_1": "WELCOME10",
+            "description_1": "Get 10% OFF on your first order.",
+            "tnc_text_1": "T & C",
+            "tnc_url_1": "",
+            "coupon_code_2": "EXTRA15",
+            "description_2": "Get an Extra 15% OFF today only. Valid till 11:59 PM.",
+            "tnc_text_2": "T & C",
+            "tnc_url_2": "",
+            "coupon_code_3": "FREESHIP",
+            "description_3": "Free Shipping on your order.",
+            "tnc_text_3": "T & C",
+            "tnc_url_3": "",
+            "coupon_code_4": "MHY10",
+            "description_4": "Shop for ₹10,000 and get an additional 10% OFF.",
+            "tnc_text_4": "T & C",
+            "tnc_url_4": ""
           }
         },
         "tab_content_ncpXRU": {
@@ -70,24 +113,19 @@
             "tab_text": "<p>{{ product.metafields.custom.wash_care | metafield_text }}</p>"
           }
         },
-        "available_benefits_4EjjVW": {
-          "type": "available_benefits",
+        "complementary_products_BMGWQw": {
+          "type": "complementary_products",
           "settings": {
-            "heading": "AVAILABLE BENEFITS",
-            "coupon_code": "ONLYEXCHANGE",
-            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
-            "tnc_url": "",
-            "tnc_text": "T & C",
-            "accent_color": "#b8860b"
+            "heading": "Pair it with",
+            "limit": 2,
+            "appearance": "simple"
           }
         },
         "shop_the_look_QyHztr": {
           "type": "shop_the_look",
           "settings": {
-            "tab1_title": "SHOP THE LOOK",
-            "tab2_title": "DISCOVER MORE",
-            "rec_method": "both",
-            "fallback_collection": "",
+            "heading": "Selected For You",
+            "collection": "bestseller",
             "limit": 6
           }
         }
@@ -95,13 +133,16 @@
       "block_order": [
         "896887d5-6a65-431c-9081-550cbc1a6676",
         "569acd10-43ac-4854-adc8-bc64927b54bb",
+        "promo_alert_default",
+        "product_info_image_eLmYBB",
+        "product_feature_icons_new",
         "share_WKEqCy",
-        "complementary_products_BMGWQw",
+        "available_benefits_4EjjVW",
         "tab_content_ncpXRU",
         "tab_content_bXpzM3",
         "tab_content_XMD97A",
         "tab_content_PpLMqd",
-        "available_benefits_4EjjVW",
+        "complementary_products_BMGWQw",
         "shop_the_look_QyHztr"
       ],
       "custom_css": [
@@ -116,6 +157,108 @@
         "show_tax_information": false
       }
     },
+    "premium_customer_reviews": {
+      "type": "premium-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Prateek rana",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "The fabric quality is very good",
+            "review_text": "I’m very happy with the product. The fabric quality is very good—soft, comfortable, and feels durable. The fit is nice, and the overall finish of the T-shirt is impressive. Overall, I really like the product and would recommend it to others looking for good-quality casual wear."
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "CHANDRIKA SANGHVI",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Style, comfort, and quality",
+            "review_text": "Overall, MH&Y is a great option for men who value understated style, comfort, and quality. I’d definitely recommend starting with their linen shirts or chinos to get a feel for what they offer."
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Shweta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Loved the event and enjoyed it",
+            "review_text": "Amazing collection!! The fabric is next to skin and is of superior quality.\nLoved the event and enjoyed it.\nWill surely refer to my friends"
+          }
+        },
+        "testimonial_L3RbkL": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Arjun Mehta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Perfect fit and excellent fabric",
+            "review_text": "The shirt fits really well and the fabric feels premium. It is comfortable enough for a full day and looks sharp without being too formal. Really happy with the quality."
+          }
+        },
+        "testimonial_z4cDqp": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Rohan Kapoor",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Simple, elegant, and comfortable",
+            "review_text": "Loved the overall look and feel of the shirt. The fabric is soft, breathable, and the finishing is excellent. It works perfectly for both casual outings and dinner occasions."
+          }
+        },
+        "testimonial_4pbUw4": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Vikram Sharma",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Quality you can feel",
+            "review_text": "The quality exceeded my expectations. The fit is clean, the material feels durable, and the shirt looks even better in person. Definitely a brand I would recommend for premium everyday menswear."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "testimonial_L3RbkL",
+        "testimonial_z4cDqp",
+        "testimonial_4pbUw4"
+      ],
+      "settings": {
+        "desktop_padding_top": 29,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "heading": "Loved by Our Customers",
+        "sub_heading": "Real experiences from our valued customers.",
+        "show_overall_rating": true,
+        "overall_score": 4.9,
+        "overall_count": "Based on 2,000+ Reviews",
+        "bg_color": "#ffffff",
+        "card_bg_color": "#ffffff",
+        "text_color_primary": "#173250",
+        "text_color_secondary": "#173250",
+        "border_color": "#e5e7eb",
+        "accent_color": "#173250",
+        "star_color": "#d4af37",
+        "cta_text": "View All Reviews",
+        "cta_link": "/collections/all",
+        "btn_bg_color": "#1f1f1f",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#6e7c45",
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_padding": "both"
+      }
+    },
     "shop_with_confidence_bm8bTJ": {
       "type": "shop-with-confidence",
       "blocks": {
@@ -124,8 +267,8 @@
           "settings": {
             "icon_type": "returns",
             "icon_custom": "",
-            "title": "FREE 60 DAYS RETURNS & EXCHANGES",
-            "description": "If you need a change for absolutely any reason, its easy and hassle free."
+            "title": "FREE 7 DAYS RETURNS & EXCHANGES",
+            "description": ""
           }
         },
         "feature_Y9r6LM": {
@@ -134,7 +277,7 @@
             "icon_type": "support",
             "icon_custom": "",
             "title": "WHITE GLOVE CUSTOMER SUPPORT",
-            "description": "Our team is always available to help you choose better - before and after you buy."
+            "description": ""
           }
         },
         "feature_3Y9MG9": {
@@ -143,7 +286,7 @@
             "icon_type": "delivery",
             "icon_custom": "",
             "title": "FREE DELIVERY ON ALL ORDERS",
-            "description": "We offer free delivery on all orders - no hidden costs, no surprises."
+            "description": ""
           }
         },
         "feature_yLCKTr": {
@@ -152,7 +295,7 @@
             "icon_type": "payment",
             "icon_custom": "",
             "title": "ALL PAYMENT OPTIONS",
-            "description": "Pay your way - UPI, Visa, Mastercard, Amex, Diners, or Cash on Delivery."
+            "description": ""
           }
         }
       },
@@ -162,6 +305,7 @@
         "feature_3Y9MG9",
         "feature_yLCKTr"
       ],
+      "disabled": true,
       "name": "Shop with Confidence",
       "settings": {
         "heading": "SHOP WITH CONFIDENCE",
@@ -206,6 +350,10 @@
       "type": "image-with-text-overlay",
       "disabled": true,
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "image": "shopify://shop_images/Collection_banner.jpg",
         "scale": 2,
         "page_height": 500,
@@ -249,6 +397,10 @@
       "type": "image-with-text",
       "disabled": true,
       "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
         "full_width": false,
         "section_padding": "both",
         "appearance": "overlap",
@@ -315,11 +467,6 @@
         "section_heading": "",
         "section_description": ""
       }
-    },
-    "product_feature_svg_tAQb8G": {
-      "type": "product-feature-svg",
-      "name": "Fabric Properties",
-      "settings": {}
     },
     "product_icon_feature_section_Y9aDmk": {
       "type": "product-icon-feature-section",
@@ -428,13 +575,13 @@
   },
   "order": [
     "main",
+    "premium_customer_reviews",
     "shop_with_confidence_bm8bTJ",
     "product-content",
     "1625847223ea0ebb04",
     "related-products",
     "1625846216758d1de0",
     "product_icon_grid_Rx4X74",
-    "product_feature_svg_tAQb8G",
     "product_icon_feature_section_Y9aDmk",
     "product-recommendations",
     "opinew-reviews-product-page-code",

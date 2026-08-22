@@ -37,6 +37,10 @@
     assign show_sizes = true
   endif
 
+  if is_recommendation
+    assign show_quickview = false
+  endif
+
 -%}
 
 <div class="prod-container">
@@ -77,6 +81,16 @@
    {% endif %}
 
    <div class="prod-image image_{{ aspect_ratio }} js-product-image">
+     {% unless product.available %}
+       <span class="mhy-sold-out-badge">{{ 'products.product.sold_out' | t }}</span>
+     {% endunless %}
+     <!-- Wishlist button overlay -->
+     {% comment %} <button class="mhy-wishlist-btn js-mhy-wishlist" type="button" aria-label="Add to Wishlist" data-product-id="{{ product.id }}">
+       <svg class="mhy-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+       </svg>
+     </button> {% endcomment %}
+     
      <a href="{{ product.url | within: collection }}" title="{{ product.title | escape }}">
        <div class="reveal">
 
@@ -161,23 +175,14 @@
 
     -%}
 
-     <button class="mobile-view-hide quick-view-{{ product.id }} product-listing__quickview-trigger {{ quickview_classes }} js-quickview-trigger"
+     <button class="quick-view-{{ product.id }} product-listing__quickview-trigger {{ quickview_classes }} js-quickview-trigger"
        type="button"
        name="button"
        {{ quickview_settings }}
-       data-product-url="{{ product.url }}?view=quick">{{ 'products.general.quick_view' | t }}</button>
+       data-product-url="{{ product.url }}?view=quick">Quick Shop</button>
    {% endif %}
 
-   {% if show_quickadd and product.available %}
-      {% render 'product-grid-add'
-        product: product,
-        color_swatch_style: settings.color_swatch_style,
-        show_quickview: show_quickview,
-        show_sizes: show_sizes,
-        show_swatches: show_swatches %}
-   {% endif %}
-
-</div>
+ </div>
 
 <div class="product-info">
   <a href="{{ product.url | within: collection }}">
@@ -209,6 +214,24 @@
       show_swatches: show_swatches,
       show_sizes: show_sizes
     %}
+  {% endif %}
+
+  {% if show_quickadd %}
+    {% if product.available %}
+       {% render 'product-grid-add',
+         product: product,
+         color_swatch_style: settings.color_swatch_style,
+         show_quickview: show_quickview,
+         show_sizes: show_sizes,
+         show_swatches: show_swatches,
+         is_recommendation: is_recommendation %}
+    {% else %}
+       <div class="product--grid_add">
+         <button class="button select--options" type="button" disabled style="opacity: 0.6; cursor: not-allowed; background: #e5e7eb !important; color: #9ca3af !important; border: 1px solid #e5e7eb !important; font-size: 11px !important; padding: 0 10px !important; height: 26px !important; line-height: 26px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 999px !important; width: unset !important; min-width: 80px !important;">
+           <span>{{ 'products.product.sold_out' | t }}</span>
+         </button>
+       </div>
     {% endif %}
+  {% endif %}
 
 </div>

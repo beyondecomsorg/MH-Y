@@ -102,6 +102,12 @@
 
   -%}
   <div id="slider" class=" {{ grid_width }} thumbs_{{ thumbnail_position }} auto {{ no_slider }}">
+    <!-- Circular PDP Overlay Share Button -->
+    <button type="button" class="pdp-image-share-btn js-pdp-share-trigger" aria-label="Share this product">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A2B4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 8v-5l9 9-9 9v-5c-7 0-12 3-15 8 1-7 5-13 15-16z"></path>
+      </svg>
+    </button>
     <div class="slides product-image-container carousel carousel-main js-carousel-main" data-product-id="{{ product.id }}">
       {% for media in product.media %}
         <div class="{{ media.media_type }}-slide carousel-cell js-main-carousel-cell" data-image-id="{{ media.id }}" data-slide-index="{{ forloop.index0 }}" tabindex="-1">

@@ -1,0 +1,528 @@
+/* ==========================================================================
+   MF — Mobile Filter & Sort UI
+   Scope: Mobile ONLY — max-width: 767px
+   Desktop is completely untouched.
+   ========================================================================== */
+
+/* Hide our new mobile UI on desktop */
+.mf-toolbar,
+.mf-overlay,
+.mf-filter-drawer,
+.mf-sort-drawer {
+  display: none;
+}
+
+@media (max-width: 767px) {
+
+  /* ── Hide the desktop sidebar form on mobile ── */
+  #CollectionSidebarFiltersForm {
+    display: none !important;
+  }
+
+  /* ── Add bottom padding so toolbar never covers products ── */
+  .collection__page,
+  section.collection__page {
+    padding-bottom: 88px !important;
+  }
+
+  /* ==========================================================================
+     BOTTOM TOOLBAR
+     ========================================================================== */
+  .mf-toolbar {
+    display: flex;
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 300px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.08),
+      0 8px 28px rgba(0, 0, 0, 0.14);
+    z-index: 900;
+    height: 40px;
+    overflow: hidden;
+  }
+
+  .mf-toolbar__btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    cursor: pointer;
+    height: 100%;
+    padding: 0;
+    letter-spacing: 0.01em;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s ease;
+  }
+
+  .mf-toolbar__btn:active {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .mf-toolbar__divider {
+    width: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 14px 0;
+    align-self: stretch;
+  }
+
+  .mf-toolbar__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: #173250;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    margin-left: 1px;
+  }
+
+  /* ==========================================================================
+     OVERLAY
+     ========================================================================== */
+  .mf-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+  }
+
+  .mf-overlay.mf-is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ==========================================================================
+     DRAWER — SHARED BASE
+     ========================================================================== */
+  .mf-filter-drawer,
+  .mf-sort-drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    z-index: 1100;
+    max-height: 92vh;
+    transform: translateY(100%);
+    transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+  }
+
+  .mf-filter-drawer.mf-is-open,
+  .mf-sort-drawer.mf-is-open {
+    transform: translateY(0);
+  }
+
+  /* Drag handle */
+  .mf-drawer__handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: #e0e0e0;
+    margin: 10px auto 0 auto;
+    flex-shrink: 0;
+  }
+
+  /* ── Drawer Header ── */
+  .mf-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 14px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+
+  .mf-drawer__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .mf-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f2f2f2;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #333;
+    padding: 0;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s;
+  }
+
+  .mf-drawer__close:active {
+    background: #e0e0e0;
+  }
+
+  /* ==========================================================================
+     FILTER DRAWER — TWO-PANEL LAYOUT
+     ========================================================================== */
+  .mf-filter-drawer__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── Left Panel — Filter Groups ── */
+  .mf-filter__groups {
+    width: 85px;
+    flex-shrink: 0;
+    background: #f6f6f6;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mf-filter__group-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px 10px 15px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    text-align: left;
+    cursor: pointer;
+    gap: 6px;
+    line-height: 1.3;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+  }
+
+  .mf-filter__group-btn.mf-is-active {
+    background: #ffffff;
+    border-left-color: #173250;
+    color: #173250;
+    font-weight: 700;
+  }
+
+  .mf-filter__group-btn:active {
+    background: rgba(23, 50, 80, 0.05);
+  }
+
+  .mf-group-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    border-radius: 8px;
+    background: #173250;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ── Right Panel — Filter Values ── */
+  .mf-filter__values {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
+  }
+
+  .mf-filter__value-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+    /* padding: 13px 18px; */
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.1s;
+  }
+
+  .mf-filter__value-btn:active {
+    background: #f8f8f8;
+  }
+
+  .mf-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: #fff;
+  }
+
+  .mf-filter__value-btn.mf-is-checked {
+    background-color: #173250 !important;
+  }
+
+  .mf-filter__value-btn.mf-is-checked .mf-value-label {
+    color: #ffffff !important;
+  }
+
+  .mf-filter__value-btn.mf-is-checked .mf-value-count {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .mf-filter__value-btn.mf-is-checked .mf-checkbox {
+    background: transparent;
+    border-color: #ffffff;
+  }
+
+  .mf-filter__value-btn.mf-is-checked .mf-checkbox::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 9px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  .mf-value-label {
+    font-size: 14px;
+    color: #1a1a1a;
+    flex: 1;
+    line-height: 1.3;
+  }
+
+  .mf-value-count {
+    font-size: 12px;
+    color: #aaa;
+    flex-shrink: 0;
+  }
+
+  .mf-filter__value-btn.mf-is-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Empty right panel */
+  .mf-filter__empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  /* ── Price Range ── */
+  .mf-price-range {
+    padding: 20px 18px;
+  }
+
+  .mf-price-range__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 14px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .mf-price-range__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mf-price-range__field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 46px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    padding: 0 12px;
+    gap: 6px;
+    background: #fff;
+    transition: border-color 0.15s;
+  }
+
+  .mf-price-range__field:focus-within {
+    border-color: #173250;
+  }
+
+  .mf-price-range__symbol {
+    font-size: 13px;
+    color: #888;
+    flex-shrink: 0;
+  }
+
+  .mf-price-range__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #1a1a1a;
+    background: transparent;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .mf-price-range__sep {
+    color: #bbb;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ── Drawer Footer ── */
+  .mf-drawer__footer {
+    display: flex;
+    gap: 12px;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    border-top: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+
+  .mf-btn-clear {
+    flex: 1;
+    height: 50px;
+    border: 1.5px solid #173250;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #173250;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s;
+  }
+
+  .mf-btn-clear:active {
+    background: #f0f4f8;
+  }
+
+  .mf-btn-apply {
+    flex: 1.6;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    background: #173250;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s;
+  }
+
+  .mf-btn-apply:active {
+    background: #0f243c;
+  }
+
+  /* ==========================================================================
+     SORT DRAWER
+     ========================================================================== */
+  .mf-sort__list {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mf-sort__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 17px 20px;
+    font-size: 15px;
+    color: #1a1a1a;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.1s;
+  }
+
+  .mf-sort__option:last-child {
+    border-bottom: none;
+  }
+
+  .mf-sort__option:active {
+    background: #f8f8f8;
+  }
+
+  .mf-sort__option.mf-is-active {
+    color: #173250;
+    font-weight: 700;
+  }
+
+  .mf-sort__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .mf-sort__option.mf-is-active .mf-sort__radio {
+    border-color: #173250;
+    background: #173250;
+  }
+
+  .mf-sort__option.mf-is-active .mf-sort__radio::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+} /* end @media (max-width: 767px) */

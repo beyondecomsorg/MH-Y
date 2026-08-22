@@ -1,0 +1,174 @@
+{% comment %}
+snippet/predictive-search-initial.liquid
+{% endcomment %}
+
+<div class="predictive-search-initial-container">
+  {%- if settings.popular_searches != blank -%}
+    <div class="popular-searches-wrapper">
+      <h3 class="predictive-search__heading h4 a-left">Popular Searches</h3>
+      <ul class="popular-searches-list">
+        {%- assign popular_terms = settings.popular_searches | split: ',' -%}
+        {%- for term in popular_terms -%}
+          {%- assign trimmed_term = term | strip -%}
+          {%- if trimmed_term != blank -%}
+            <li>
+              <a href="#" class="popular-search-link" data-search-term="{{ trimmed_term | escape }}">
+                {{ trimmed_term }}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+  
+  <div class="you-may-also-like-wrapper">
+    <h3 class="predictive-search__heading h4 a-left">You May Also Like</h3>
+    <ul class="search__product-loop grid__wrapper">
+      {%- assign rec_collection = collections[settings.search_recommendations_collection] -%}
+      {%- if rec_collection == blank or rec_collection.products_count == 0 -%}
+        {%- for c in collections -%}
+          {%- if c.products_count > 0 -%}
+            {%- assign rec_collection = c -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {%- if rec_collection == blank -%}
+        {%- assign rec_collection = collections['all'] -%}
+      {%- endif -%}
+      
+      {%- for product in rec_collection.products limit: 6 -%}
+        <li class="product-index span-2 md-span-4 sm-span-6 auto js-product-listing" role="option">
+          {% render 'product-listing', product: product, collection: rec_collection %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+<style>
+/* Styling overrides for predictive search results area */
+.predictive-search {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  border-radius: 4px !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+}
+
+/* In modal and mobile drawer, make it relative to fit inside scrollable panels */
+.modal__inner-wrapper .predictive-search,
+.mobile-menu .predictive-search {
+  position: relative !important;
+  top: 0 !important;
+  left: unset !important;
+  right: unset !important;
+  transform: none !important;
+  box-shadow: none !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  background: transparent !important;
+}
+
+#predictive-search-header {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+.predictive-search-results {
+  padding: 20px !important;
+}
+
+/* Adjust title colors and sizes */
+.predictive-search__heading {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #173250 !important;
+  border-bottom: 2px solid #e5e5e5 !important;
+  margin-bottom: 15px !important;
+  padding-bottom: 8px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* List styles */
+.predictive-search__results-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.predictive-search__results-list > li {
+  margin-bottom: 25px !important;
+}
+
+/* Scrollable search suggestions layout */
+.popular-searches-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 15px 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.popular-search-link {
+  display: inline-block !important;
+  background: #f5f5f5 !important;
+  color: #333333 !important;
+  padding: 6px 12px !important;
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+  border: 1px solid transparent !important;
+  text-decoration: none !important;
+}
+
+.popular-search-link:hover {
+  background: #173250 !important;
+  color: #ffffff !important;
+  border-color: #173250 !important;
+}
+
+/* Ensure horizontal scroll on both desktop and mobile for You May Also Like */
+.search__product-loop {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  gap: 15px !important;
+  padding: 5px 0 15px 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.search__product-loop::-webkit-scrollbar {
+  display: none !important;
+}
+
+.search__product-loop .product-index {
+  flex: 0 0 calc(25% - 12px) !important;
+  width: calc(25% - 12px) !important;
+  scroll-snap-align: start !important;
+  box-sizing: border-box !important;
+}
+
+@media screen and (max-width: 767px) {
+  .search__product-loop .product-index {
+    flex: 0 0 calc(50% - 8px) !important;
+    width: calc(50% - 8px) !important;
+  }
+}
+</style>

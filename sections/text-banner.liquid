@@ -1,30 +1,60 @@
 <section class="section-{{ section.id }} usp__section {{ section.settings.custom_class }}" data-section-id="{{ section.id }}" data-aos="fade">
 
-  <div class="row usp__section-container grid__wrapper">
-    {% for block in section.blocks %}
+  {% if section.blocks.size > 0 %}
+    <div class="usp__marquee-wrapper">
+      <div class="usp__marquee-track">
+        
+        {%- comment -%} Group 1 {%- endcomment -%}
+        <div class="usp__marquee-content">
+          {% for block in section.blocks %}
+            <div class="usp__content usp-{{ block.id }}">
+              {%- if block.settings.image != blank -%}
+                {%- assign img_height = 40 | times: block.settings.image.height | divided_by: block.settings.image.width -%}
+                {{ block.settings.image | image_url: width: 40 | image_tag: class: 'textcol-image', loading: 'lazy', alt: block.settings.image_alt, width: 40, height: img_height }}
+              {%- endif -%}
+              <div class="usp__text-group">
+                <h3>{{ block.settings.heading | escape }}</h3>
+                <div class="usp__textarea">{{ block.settings.textarea }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
 
-    {%- liquid
+        {%- comment -%} Group 2 (Duplicated for seamless looping) {%- endcomment -%}
+        <div class="usp__marquee-content" aria-hidden="true">
+          {% for block in section.blocks %}
+            <div class="usp__content usp-{{ block.id }}">
+              {%- if block.settings.image != blank -%}
+                {%- assign img_height = 40 | times: block.settings.image.height | divided_by: block.settings.image.width -%}
+                {{ block.settings.image | image_url: width: 40 | image_tag: class: 'textcol-image', loading: 'lazy', alt: block.settings.image_alt, width: 40, height: img_height }}
+              {%- endif -%}
+              <div class="usp__text-group">
+                <h3>{{ block.settings.heading | escape }}</h3>
+                <div class="usp__textarea">{{ block.settings.textarea }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
 
-      case section.blocks.size
-        when 1
-          assign grid = 'span-12'
-        when 2
-          assign grid = 'span-6'
-        when 3
-          assign grid = 'span-4'
-      endcase
+        {%- comment -%} Group 3 (Duplicated for seamless looping on ultra-wide screens) {%- endcomment -%}
+        <div class="usp__marquee-content" aria-hidden="true">
+          {% for block in section.blocks %}
+            <div class="usp__content usp-{{ block.id }}">
+              {%- if block.settings.image != blank -%}
+                {%- assign img_height = 40 | times: block.settings.image.height | divided_by: block.settings.image.width -%}
+                {{ block.settings.image | image_url: width: 40 | image_tag: class: 'textcol-image', loading: 'lazy', alt: block.settings.image_alt, width: 40, height: img_height }}
+              {%- endif -%}
+              <div class="usp__text-group">
+                <h3>{{ block.settings.heading | escape }}</h3>
+                <div class="usp__textarea">{{ block.settings.textarea }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
 
-      -%}
-
-      <div class="usp__content usp-{{ block.id }} {{ grid }} auto">
-        {{ block.settings.image | image_url: width: 160 | image_tag: class: 'textcol-image', loading: 'lazy', alt: block.settings.image_alt, width: 160, height: 160 | times: block.settings.image.height | divided_by: block.settings.image.width }}
-        <h3>{{ block.settings.heading | escape }}</h3>
-        {{ block.settings.textarea }}
       </div>
-    {% endfor %}
-  </div>
-
-  {% if section.blocks.size == 0 %}
+    </div>
+  {% else %}
     {% render 'no-blocks' %}
   {% endif %}
 
@@ -45,87 +75,207 @@
     .section-{{ section.id }}.usp__section {
       background: {{ section.settings.background }};
       padding: {{ section.settings.vertical_spacing }}px 0 !important;
+      overflow: hidden;
+      width: 100%;
     }
-    .section-{{ section.id }} .usp__section-container {
-      grid-row-gap: 0;
-      column-gap: {{ section.settings.spacing }}px;
-      justify-items: stretch;
+    .section-{{ section.id }} .usp__marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .section-{{ section.id }} .usp__marquee-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      user-select: none;
+    }
+    .section-{{ section.id }} .usp__marquee-content {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      gap: {{ section.settings.spacing | times: 3 | plus: 40 }}px;
+      padding-right: {{ section.settings.spacing | times: 3 | plus: 40 }}px;
+    }
+    
+    /* Desktop css animation */
+    @media screen and (min-width: 741px) {
+      .section-{{ section.id }} .usp__marquee-content {
+        animation: scroll-marquee-{{ section.id }} 25s linear infinite;
+      }
+      .section-{{ section.id }} .usp__marquee-track:hover .usp__marquee-content {
+        animation-play-state: paused;
+      }
+    }
+
+    .section-{{ section.id }} .usp__content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .section-{{ section.id }} .usp__content .textcol-image {
+      width: 32px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .section-{{ section.id }} .usp__text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      text-align: left;
     }
     .section-{{ section.id }}.usp__section .usp__content h3 {
       font-size: {{ section.settings.notification_heading_size }}px;
-      margin-bottom: 0;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin: 0;
+      line-height: 1.2;
     }
-    .section-{{ section.id }}.usp__section .usp__content p {
+    .section-{{ section.id }}.usp__section .usp__content .usp__textarea p,
+    .section-{{ section.id }}.usp__section .usp__content .usp__textarea {
       font-size: {{ section.settings.notification_font_size }}px;
-      margin-top: 10px;
+      margin: 2px 0 0 0;
+      color:  {{ section.settings.text_color }} !important;
+      line-height: 1.3;
     }
-
     .section-{{ section.id }} .usp__content h3,
-    .section-{{ section.id }} .usp__content p,
+    .section-{{ section.id }} .usp__content .usp__textarea,
     .section-{{ section.id }} .usp__content a,
     .section-{{ section.id }} .usp__content a:visited {
-      color: {{ section.settings.text_color }};
-    }
-    {% if section.settings.add_divider %}
-      {% assign gap = section.settings.spacing | divided_by: 2 %}
-      .section-{{ section.id }} .row.usp__section-container .usp__content:nth-child(2n):after,
-      .section-{{ section.id }} .row.usp__section-container .usp__content:nth-child(2n):before {
-          content: "";
-          position: absolute;
-          height: 50%;
-          width: 1px;
-          background: {{ section.settings.text_color }};
-          opacity: 0.7;
-      }
-      .section-{{ section.id }} .row.usp__section-container .usp__content:nth-child(2n):after {
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translate({{ gap }}px, -50%);
-      }
-      .section-{{ section.id }} .row.usp__section-container .usp__content:nth-child(2n):before {
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translate(-{{ gap }}px, -50%);
-      }
-      .section-{{ section.id }} .row.usp__section-container .usp__content:last-child:after {
-        display: none;
-      }
-    {% endif %}
-    @media screen and ( max-width: 740px ) {
-    {% if section.blocks.size > 1 %}
-      .section-{{ section.id }} .usp__section-container {
-          display: flex !important;
-          flex-wrap: nowrap !important;
-          overflow-x: auto !important;
-          -webkit-overflow-scrolling: touch;
-          margin-bottom: 10px;
-      }
-      .section-{{ section.id }} .usp__section-container::-webkit-scrollbar {
-        display: none;
-        -ms-overflow-style: none;
-      }
-      .section-{{ section.id }} .usp__content {
-          flex: 0 0 auto;
-          width: 270px;
-          margin-right: {{ section.settings.spacing }}px;
-      }
-      .section-{{ section.id }} .usp__content:last-child {
-        margin-right: 0;
-      }
-      {% endif %}
+      color: {{ section.settings.text_color }} !important;
     }
 
-    @media screen and (max-width: 740px) {
-      .section-{{ section.id }}.usp__section .usp__content h3 {
-        font-size: calc({{ section.settings.notification_heading_size }}px - ({{ section.settings.notification_heading_size }}px * 0.15));
+    /* Divider styling between items */
+    {% if section.settings.add_divider %}
+      .section-{{ section.id }} .usp__content {
+        position: relative;
       }
-      .section-{{ section.id }}.usp__section .usp__content p {
-        font-size: calc({{ section.settings.notification_font_size }}px - ({{ section.settings.notification_font_size }}px * 0.15));
+      .section-{{ section.id }} .usp__content::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 24px;
+        background: {{ section.settings.text_color }};
+        opacity: 0.3;
+        margin-left: {{ section.settings.spacing | times: 1.5 | plus: 20 }}px;
+      }
+    {% endif %}
+
+    @keyframes scroll-marquee-{{ section.id }} {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(-100%, 0, 0);
+      }
+    }
+
+    /* Mobile marquee styles */
+    @media screen and (max-width: 740px) {
+      .section-{{ section.id }} .usp__marquee-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+      }
+      .section-{{ section.id }} .usp__marquee-wrapper::-webkit-scrollbar {
+        display: none !important;
+      }
+      .section-{{ section.id }} .usp__marquee-wrapper.is-snapping {
+        scroll-snap-type: x mandatory !important;
+      }
+      .section-{{ section.id }} .usp__marquee-wrapper.is-snapping .usp__content {
+        scroll-snap-align: start !important;
+      }
+      .section-{{ section.id }} .usp__content {
+        width: 77vw !important;
+      }
+      .section-{{ section.id }} .usp__marquee-content {
+        gap: 24px !important;
+        padding-right: 24px !important;
+      }
+      {% if section.settings.add_divider %}
+        .section-{{ section.id }} .usp__content::after {
+          margin-left: 12px !important;
+        }
+      {% endif %}
+      .section-{{ section.id }}.usp__section .usp__content h3 {
+        font-size: calc({{ section.settings.notification_heading_size }}px * 0.85);
+      }
+      .section-{{ section.id }}.usp__section .usp__content .usp__textarea p,
+      .section-{{ section.id }}.usp__section .usp__content .usp__textarea {
+        font-size: calc({{ section.settings.notification_font_size }}px * 0.85);
+      }
+      .section-{{ section.id }} .usp__content .textcol-image {
+        width: 28px;
+      }
+    }
+
+    /* Accessibility prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .section-{{ section.id }} .usp__marquee-content {
+        animation: none !important;
       }
     }
   </style>
+
+  <script>
+    (function() {
+      const wrapper = document.querySelector('.section-{{ section.id }} .usp__marquee-wrapper');
+      if (!wrapper) return;
+      const track = wrapper.querySelector('.usp__marquee-track');
+      if (!track) return;
+
+      let isMobile = window.innerWidth <= 740;
+      let autoScroll = true;
+      const scrollSpeed = 0.5; // pixels per frame
+      let scrollTimeout = null;
+
+      function checkMode() {
+        isMobile = window.innerWidth <= 740;
+        if (!isMobile) {
+          wrapper.classList.remove('is-snapping');
+        }
+      }
+      window.addEventListener('resize', checkMode);
+      checkMode();
+
+      let lastTime = performance.now();
+      function updateScroll(timestamp) {
+        const delta = timestamp - lastTime;
+        lastTime = timestamp;
+
+        if (autoScroll && isMobile) {
+          const firstGroup = track.querySelector('.usp__marquee-content');
+          if (firstGroup) {
+            const groupWidth = firstGroup.offsetWidth;
+            wrapper.scrollLeft += scrollSpeed * (delta / 16.67);
+            
+            if (wrapper.scrollLeft >= groupWidth) {
+              wrapper.scrollLeft -= groupWidth;
+            }
+          }
+        }
+        requestAnimationFrame(updateScroll);
+      }
+      requestAnimationFrame(updateScroll);
+
+      wrapper.addEventListener('touchstart', function() {
+        autoScroll = false;
+        wrapper.classList.add('is-snapping');
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+      }, { passive: true });
+
+      wrapper.addEventListener('touchend', function() {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+          wrapper.classList.remove('is-snapping');
+          autoScroll = true;
+        }, 2000);
+      }, { passive: true });
+    })();
+  </script>
 
 </section>
 

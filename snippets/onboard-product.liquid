@@ -3,7 +3,7 @@
 {% for i in (1..prod_limit) %}
   {% capture current %}{% cycle 1, 2, 3, 4, 5 %}{% endcapture %}
   {%- assign placeholder = 'product-' | append: current -%}
-  <div class="featured__collection-product product-index"
+  <div class="fffff featured__collection-product product-index"
     data-aos="fade"
     data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
     <div class="onboard">
