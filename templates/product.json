@@ -571,6 +571,18 @@
         "add_divider": true,
         "section_padding": "none"
       }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed Products",
+        "limit": 4,
+        "section_padding": "both",
+        "desktop_padding_top": 36,
+        "desktop_padding_bottom": 36,
+        "mobile_padding_top": 24,
+        "mobile_padding_bottom": 24
+      }
     }
   },
   "order": [
@@ -584,6 +596,7 @@
     "product_icon_grid_Rx4X74",
     "product_icon_feature_section_Y9aDmk",
     "product-recommendations",
+    "recently-viewed",
     "opinew-reviews-product-page-code",
     "17509226857ec6e460",
     "1626727788d94cc42e"

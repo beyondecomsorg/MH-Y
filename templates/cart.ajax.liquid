@@ -42,6 +42,25 @@
       <p class="ajax-cart__empty-text">{{ 'cart.general.empty' | t }}</p>
       <a href="/collections/all" class="ajax-cart__continue-btn">Continue Shopping</a>
     </div>
+
+    {%- liquid
+      assign rec_product_id = nil
+      if product
+        assign rec_product_id = product.id
+      elsif settings.cart_featured_collection != blank and collections[settings.cart_featured_collection].products.size > 0
+        assign rec_product_id = collections[settings.cart_featured_collection].products.first.id
+      elsif collections.all.products.size > 0
+        assign rec_product_id = collections.all.products.first.id
+      endif
+    -%}
+    {%- if rec_product_id != blank -%}
+      <div class="ajax-cart__recommendations span-12 auto js-cart-recommendations" data-product-id="{{ rec_product_id }}" data-money-format="{{ shop.money_format | escape }}">
+        <h3 class="ajax-cart__recommendations-title">You may also like</h3>
+        <div class="ajax-cart__recommendations-slider js-recommendations-container">
+          <!-- Recommended products will load here via JavaScript -->
+        </div>
+      </div>
+    {%- endif -%}
   {% else %}
     {% render 'cart-form',
        drawer: drawer,

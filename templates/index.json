@@ -301,6 +301,24 @@
         "section_padding": "bottom"
       }
     },
+    "featured_collection_9Trj8p": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "heading": "Office Essentials",
+        "collection": "office-essentials",
+        "carousel": true,
+        "show_view_all": false,
+        "reduce_width": false,
+        "grid": 4,
+        "limit": 12,
+        "section_padding": "both"
+      }
+    },
     "rich_text_n7LtAC": {
       "type": "rich-text",
       "settings": {
@@ -589,6 +607,7 @@
     "full_video_section_JQXE4c",
     "featured_collection_TF4yJz",
     "image_gallery_QyTUt6",
+    "featured_collection_9Trj8p",
     "rich_text_n7LtAC",
     "background_video_cAGxzE",
     "our_roots_section_pj99wC",

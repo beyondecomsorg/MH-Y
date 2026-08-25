@@ -1,0 +1,233 @@
+{% comment %}
+  Section: recently-viewed.liquid
+  Renders recently viewed products using browser localStorage and Shopify search section rendering.
+{% endcomment %}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.desktop_padding_top }}px !important;
+    padding-bottom: {{ section.settings.desktop_padding_bottom }}px !important;
+  }
+  @media screen and (max-width: 740px) {
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.mobile_padding_top }}px !important;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px !important;
+    }
+  }
+
+  #recently-viewed-grid-{{ section.id }} {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.limit }}, 1fr);
+    grid-column-gap: 3px;
+    grid-row-gap: 32px;
+    margin: 0 auto;
+    width: 95%;
+  }
+  @media screen and (max-width: 1024px) {
+    #recently-viewed-grid-{{ section.id }} {
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 3px;
+      grid-row-gap: 28px;
+    }
+  }
+  @media screen and (max-width: 740px) {
+    #recently-viewed-grid-{{ section.id }} {
+      grid-template-columns: repeat(2, 1fr) !important;
+      grid-column-gap: 3px;
+      grid-row-gap: 24px;
+    }
+  }
+{% endstyle %}
+
+{%- liquid
+  assign prod_limit = section.settings.limit | default: 4
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+-%}
+
+<div class="recently-viewed-section-container global__section {{ section_padding }}" 
+     data-section-id="{{ section.id }}" 
+     data-section-type="recently-viewed" 
+     data-limit="{{ prod_limit }}"
+     style="display: none;">
+     
+  <div class="row grid__wrapper gr0">
+    {% if section.settings.heading != blank %}
+      <div class="span-12 auto" style="text-align: center; margin-bottom: 24px;">
+        <h2 class="section-heading mb0">
+          {{ section.settings.heading | escape }}
+        </h2>
+      </div>
+    {% endif %}
+
+    <div id="recently-viewed-grid-{{ section.id }}" class="recently-viewed-products-grid product-loop span-12 auto">
+      {% if search.performed and search.results.size > 0 %}
+        {% for item in search.results limit: prod_limit %}
+          {% if item.object_type == 'product' %}
+            <div class="aaaaa featured__collection-product product-index js-product-listing" 
+                 id="recently-viewed-listing-{{ item.id }}" 
+                 data-product-id="{{ item.id }}" 
+                 data-alpha="{{ item.title }}" 
+                 data-price="{{ item.price }}">
+              {% render 'product-listing', product: item %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const currentProductId = {{ product.id | json }};
+  
+  // 1. Track the current product page view
+  if (currentProductId) {
+    let recentlyViewed = JSON.parse(localStorage.getItem('mhy-recently-viewed') || '[]');
+    recentlyViewed = recentlyViewed.filter(id => id !== currentProductId);
+    recentlyViewed.unshift(currentProductId);
+    recentlyViewed = recentlyViewed.slice(0, 8);
+    localStorage.setItem('mhy-recently-viewed', JSON.stringify(recentlyViewed));
+  }
+  
+  // 2. Render recently viewed products
+  const container = document.querySelector('.recently-viewed-section-container');
+  if (!container) return;
+  
+  const sectionId = container.dataset.sectionId;
+  const limit = parseInt(container.dataset.limit || '4');
+  
+  let recentlyViewed = JSON.parse(localStorage.getItem('mhy-recently-viewed') || '[]');
+  // Filter out the current product from display list
+  const displayIds = recentlyViewed.filter(id => id !== currentProductId).slice(0, limit);
+  
+  if (displayIds.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  // Construct search query
+  const queryParts = displayIds.map(id => `id:${id}`);
+  const query = queryParts.join(' OR ');
+  const searchUrl = `/search?q=${encodeURIComponent(query)}&section_id=${sectionId}`;
+  
+  fetch(searchUrl)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newGrid = doc.querySelector('.recently-viewed-products-grid');
+      
+      if (newGrid && newGrid.children.length > 0) {
+        const currentGrid = container.querySelector('.recently-viewed-products-grid');
+        if (currentGrid) {
+          // Replace content
+          currentGrid.innerHTML = newGrid.innerHTML;
+          
+          // Re-order children based on displayIds sequence (most recent first)
+          const cards = Array.from(currentGrid.children);
+          currentGrid.innerHTML = '';
+          displayIds.forEach(id => {
+            const matchedCard = cards.find(card => card.dataset.productId == id);
+            if (matchedCard) {
+              currentGrid.appendChild(matchedCard);
+            }
+          });
+          
+          container.style.display = 'block';
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error loading recently viewed products:', error);
+    });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed Products"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Limit products shown",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section Padding",
+      "default": "both",
+      "options": [
+        { "value": "both", "label": "Both" },
+        { "value": "top", "label": "Top Only" },
+        { "value": "bottom", "label": "Bottom Only" },
+        { "value": "none", "label": "None" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Bottom",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently Viewed",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

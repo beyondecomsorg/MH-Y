@@ -220,6 +220,18 @@
         "padding_bottom": 0,
         "section_padding": "both"
       }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed Products",
+        "limit": 4,
+        "section_padding": "both",
+        "desktop_padding_top": 36,
+        "desktop_padding_bottom": 36,
+        "mobile_padding_top": 24,
+        "mobile_padding_bottom": 24
+      }
     }
   },
   "order": [
@@ -229,6 +241,7 @@
     "1625847223ea0ebb04",
     "related-products",
     "1625846216758d1de0",
-    "product-recommendations"
+    "product-recommendations",
+    "recently-viewed"
   ]
 }

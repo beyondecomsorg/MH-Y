@@ -2881,23 +2881,15 @@ Shopify.theme.ajaxCart = {
       };
 
       if (Cart.item_count === 0) {
-        // Hide form
-        document.querySelectorAll(selectors.cartForm).forEach((item, i) => {
-          item.classList.add('hide');
-        });
-        // Show empty msg
-        document.querySelectorAll(selectors.cartEmpty).forEach((item, i) => {
-          item.classList.remove('hide');
+        // Replace cart page and drawer content to show empty state with recommendations
+        document.querySelectorAll(selectors.cartContent).forEach((item, i) => {
+          item.innerHTML = html.content;
         });
         // Update cart count
         document.querySelectorAll(selectors.cartCount).forEach((item, i) => {
           item.innerHTML = '0';
         });
       } else {
-        // Hide empty msg
-        document.querySelectorAll(selectors.cartEmpty).forEach((item, i) => {
-          item.classList.add('hide');
-        });
         // Update cart count
         document.querySelectorAll(selectors.cartCount).forEach((item, i) => {
           item.innerHTML = Cart.item_count;
