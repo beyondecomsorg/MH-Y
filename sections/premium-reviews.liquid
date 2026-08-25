@@ -325,6 +325,13 @@
     text-overflow: ellipsis;
   }
 
+  @media only screen and (max-width: 749px){
+      .premium-reviews-section-{{ section.id }} .premium-card-review-body,
+      .premium-reviews-section-{{ section.id }} .premium-card-review-title {
+        font-size: 15px;
+      }
+  }
+
   /* Bottom CTA */
   .premium-reviews-section-{{ section.id }} .premium-reviews-cta-wrapper {
     text-align: center;
