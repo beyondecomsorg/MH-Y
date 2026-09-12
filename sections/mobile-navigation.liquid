@@ -278,6 +278,182 @@
               {% endif %}
             </a>
           </div>
+        {% when 'category_grid' %}
+          {%- liquid
+            assign cat_unique_id = block.id | slice: 0, 7
+            assign is_open = block.settings.initially_open
+            assign title = block.settings.title | default: 'Shop By Category'
+            assign columns = block.settings.columns | default: '3'
+            assign card_shape = block.settings.image_shape | default: 'rounded_square'
+            assign card_aspect = block.settings.image_aspect_ratio | default: '1 / 1'
+            assign card_radius = block.settings.border_radius | default: '8px'
+            if card_shape == 'circle'
+              assign card_radius = '50%'
+            elsif card_shape == 'square'
+              assign card_radius = '0px'
+            endif
+          -%}
+          <div class="mobile-menu__block mobile-menu__category-grid mhy-category-grid mhy-category-grid--{{ cat_unique_id }}"
+               style="--mhy-card-aspect-ratio: {{ card_aspect }}; --mhy-card-border-radius: {{ card_radius }};"
+               {{ block.shopify_attributes }}>
+            {% if block.settings.show_heading and title != blank %}
+              <div class="mhy-category-grid__header{% if is_open %} is-active{% endif %}"
+                   {% if block.settings.is_collapsible %}
+                     role="button"
+                     tabindex="0"
+                     aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+                     aria-controls="mhy-cat-grid-content-{{ cat_unique_id }}"
+                     data-mhy-toggle="category-grid"
+                   {% endif %}>
+                <h3 class="mhy-category-grid__title">{{ title }}</h3>
+                {% if block.settings.is_collapsible %}
+                  <span class="mhy-category-grid__toggle-btn" aria-hidden="true">
+                    <span class="mhy-toggle-line-horizontal"></span>
+                    <span class="mhy-toggle-line-vertical"></span>
+                  </span>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="mhy-category-grid__content{% if is_open %} is-open{% endif %}" id="mhy-cat-grid-content-{{ cat_unique_id }}">
+              <div class="mhy-category-grid__items mhy-category-grid__items--cols-{{ columns }}">
+                {%- liquid
+                  assign rendered_count = 0
+                -%}
+
+                {%- comment -%} 1. Custom slots 1 to 12 {%- endcomment -%}
+                {% for i in (1..12) %}
+                  {% assign slot_col_key = 'collection_' | append: i %}
+                  {% assign slot_img_key = 'image_' | append: i %}
+                  {% assign slot_title_key = 'title_' | append: i %}
+                  {% assign slot_link_key = 'link_' | append: i %}
+
+                  {% assign slot_col = collections[block.settings[slot_col_key]] %}
+                  {% assign slot_img = block.settings[slot_img_key] %}
+                  {% assign slot_title = block.settings[slot_title_key] %}
+                  {% assign slot_link = block.settings[slot_link_key] %}
+
+                  {%- liquid
+                    assign item_url = ''
+                    assign item_title = ''
+                    assign item_image = nil
+
+                    if slot_col != blank
+                      assign item_url = slot_col.url
+                      assign item_title = slot_col.title
+                      assign item_image = slot_col.image | default: slot_col.products.first.featured_image
+                    endif
+
+                    if slot_title != blank
+                      assign item_title = slot_title
+                    endif
+
+                    if slot_link != blank
+                      assign item_url = slot_link
+                    endif
+
+                    if slot_img != blank
+                      assign item_image = slot_img
+                    endif
+                  -%}
+
+                  {% if item_title != blank or item_image != blank %}
+                    {% assign rendered_count = rendered_count | plus: 1 %}
+                    <a href="{{ item_url | default: '#' }}" class="mhy-category-card">
+                      <div class="mhy-category-card__img-wrap">
+                        {% if item_image != blank %}
+                          {% if item_image.src %}
+                            <img
+                              src="{{ item_image | image_url: width: 400 }}"
+                              alt="{{ item_title | default: 'Category' | escape }}"
+                              loading="lazy"
+                              class="mhy-category-card__img"
+                            />
+                          {% else %}
+                            <img
+                              src="{{ item_image }}"
+                              alt="{{ item_title | default: 'Category' | escape }}"
+                              loading="lazy"
+                              class="mhy-category-card__img"
+                            />
+                          {% endif %}
+                        {% else %}
+                          <div class="mhy-category-card__placeholder">
+                            <span>{{ item_title | slice: 0, 1 | upcase }}</span>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <span class="mhy-category-card__title">{{ item_title }}</span>
+                    </a>
+                  {% endif %}
+                {% endfor %}
+
+                {%- comment -%} 2. Collection list {%- endcomment -%}
+                {% if rendered_count == 0 and block.settings.collection_list != blank %}
+                  {% for collection in block.settings.collection_list %}
+                    {%- liquid
+                      assign col_img = collection.image | default: collection.products.first.featured_image
+                      assign col_title = collection.title
+                      assign col_url = collection.url
+                    -%}
+                    <a href="{{ col_url }}" class="mhy-category-card">
+                      <div class="mhy-category-card__img-wrap">
+                        {% if col_img != blank %}
+                          <img
+                            src="{{ col_img | image_url: width: 400 }}"
+                            alt="{{ col_title | escape }}"
+                            loading="lazy"
+                            class="mhy-category-card__img"
+                          />
+                        {% else %}
+                          <div class="mhy-category-card__placeholder">
+                            <span>{{ col_title | slice: 0, 1 | upcase }}</span>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <span class="mhy-category-card__title">{{ col_title }}</span>
+                    </a>
+                  {% endfor %}
+                {% endif %}
+
+                {%- comment -%} 3. Menu list {%- endcomment -%}
+                {% if rendered_count == 0 and block.settings.collection_list == blank and block.settings.category_menu != blank %}
+                  {% assign cat_menu = linklists[block.settings.category_menu] %}
+                  {% for link in cat_menu.links %}
+                    {%- liquid
+                      assign link_img = nil
+                      if link.type == 'collection_link' and link.object != blank
+                        assign link_img = link.object.image | default: link.object.products.first.featured_image
+                      elsif link.url contains '/collections/'
+                        assign handle = link.url | split: '/collections/' | last | split: '?' | first | split: '/' | first
+                        if collections[handle] != blank
+                          assign link_img = collections[handle].image | default: collections[handle].products.first.featured_image
+                        endif
+                      endif
+                    -%}
+                    <a href="{{ link.url }}" class="mhy-category-card">
+                      <div class="mhy-category-card__img-wrap">
+                        {% if link_img != blank %}
+                          <img
+                            src="{{ link_img | image_url: width: 400 }}"
+                            alt="{{ link.title | escape }}"
+                            loading="lazy"
+                            class="mhy-category-card__img"
+                          />
+                        {% else %}
+                          <div class="mhy-category-card__placeholder">
+                            <span>{{ link.title | slice: 0, 1 | upcase }}</span>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <span class="mhy-category-card__title">{{ link.title }}</span>
+                    </a>
+                  {% endfor %}
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
       {% endcase %}
     {% endfor %}
     <style>
@@ -360,6 +536,151 @@
         color: {{ section.settings.link_color }};
       }
 
+      /* Shop By Category 3-Column Grid */
+      .mhy-category-grid {
+        width: 100%;
+        border-bottom: 1px solid {{ section.settings.border_color }};
+        padding: 0;
+      }
+      .mhy-category-grid__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px 12px;
+        cursor: pointer;
+        user-select: none;
+        background: transparent;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+      .mhy-category-grid__title {
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 700;
+        color: {{ section.settings.link_color }};
+        margin: 0;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+      }
+      .mhy-category-grid__toggle-btn {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mhy-toggle-line-horizontal,
+      .mhy-toggle-line-vertical {
+        position: absolute;
+        background-color: {{ section.settings.link_color }};
+        border-radius: 1px;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+      }
+      .mhy-toggle-line-horizontal {
+        width: 14px;
+        height: 2px;
+        top: 7px;
+        left: 1px;
+      }
+      .mhy-toggle-line-vertical {
+        width: 2px;
+        height: 14px;
+        top: 1px;
+        left: 7px;
+        transform: rotate(0deg);
+        opacity: 0;
+      }
+      .mhy-category-grid__header:not(.is-active) .mhy-toggle-line-vertical {
+        opacity: 1;
+      }
+      .mhy-category-grid__content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        opacity: 0;
+      }
+      .mhy-category-grid__content.is-open {
+        max-height: 1500px;
+        opacity: 1;
+      }
+      .mhy-category-grid__items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 10px;
+        padding: 6px 14px 20px;
+      }
+      .mhy-category-grid__items--cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .mhy-category-grid__items--cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .mhy-category-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        text-decoration: none;
+        color: {{ section.settings.link_color }} !important;
+        transition: transform 0.2s ease;
+      }
+      .mhy-category-card:active {
+        transform: scale(0.96);
+      }
+      .mhy-category-card__img-wrap {
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: var(--mhy-card-aspect-ratio, 1 / 1);
+        overflow: hidden;
+        background: #f0ede8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      }
+      .mhy-category-card:hover .mhy-category-card__img-wrap {
+        transform: scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .mhy-category-card__img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        display: block !important;
+      }
+      .mhy-category-card__placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8e4dc;
+        font-weight: 700;
+        font-size: 20px;
+        color: {{ section.settings.link_color }};
+        border-radius: var(--mhy-card-border-radius, 8px);
+      }
+      .mhy-category-card__title {
+        margin-top: 8px;
+        font-size: 11.5px;
+        font-weight: 500;
+        line-height: 1.25;
+        color: {{ section.settings.link_color }};
+        text-align: center;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+        letter-spacing: 0.01em;
+      }
+
       /* Predictive search results - show as mobile in editor when triggered */
       @media screen and (min-width: 741px) {
         div#shopify-section-mobile-navigation li.product-index {
@@ -381,7 +702,7 @@
           position: relative;
         }
         .search-icon {
-       display: block;
+        display: block;
         position: absolute;
         left: 10px;
         top: 25%;
@@ -398,6 +719,33 @@
   </nav>
   <script>
 document.addEventListener('DOMContentLoaded', function () {
+  // Shop By Category Accordion Toggle
+  document.querySelectorAll('[data-mhy-toggle="category-grid"]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      const contentId = btn.getAttribute('aria-controls');
+      const content = document.getElementById(contentId);
+
+      if (isExpanded) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('is-active');
+        if (content) content.classList.remove('is-open');
+      } else {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.classList.add('is-active');
+        if (content) content.classList.add('is-open');
+      }
+    });
+
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+
   const nav = document.querySelector('.mhy-mobile-bottomnav');
   if (!nav) return;
 
@@ -461,7 +809,314 @@ document.addEventListener('DOMContentLoaded', function () {
       "default": "#000000"
     }
   ],
-  "blocks": [{
+  "blocks": [
+    {
+      "type": "category_grid",
+      "name": "Shop by category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Shop By Category"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_heading",
+          "label": "Show heading",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "is_collapsible",
+          "label": "Enable collapsible accordion",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "initially_open",
+          "label": "Open by default",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "columns",
+          "label": "Columns per row",
+          "options": [
+            { "value": "2", "label": "2 Columns" },
+            { "value": "3", "label": "3 Columns" },
+            { "value": "4", "label": "4 Columns" }
+          ],
+          "default": "3"
+        },
+        {
+          "type": "select",
+          "id": "image_shape",
+          "label": "Image shape",
+          "options": [
+            { "value": "rounded_square", "label": "Rounded Square Cards" },
+            { "value": "square", "label": "Sharp Square Cards" },
+            { "value": "portrait", "label": "Portrait Cards" },
+            { "value": "circle", "label": "Circle Icons" }
+          ],
+          "default": "rounded_square"
+        },
+        {
+          "type": "select",
+          "id": "image_aspect_ratio",
+          "label": "Image aspect ratio",
+          "options": [
+            { "value": "1 / 1", "label": "Square (1:1)" },
+            { "value": "3 / 4", "label": "Portrait (3:4)" },
+            { "value": "4 / 5", "label": "Tall Portrait (4:5)" },
+            { "value": "4 / 3", "label": "Landscape (4:3)" }
+          ],
+          "default": "1 / 1"
+        },
+        {
+          "type": "select",
+          "id": "border_radius",
+          "label": "Card Corner Radius",
+          "options": [
+            { "value": "0px", "label": "Square (0px)" },
+            { "value": "6px", "label": "Slightly Rounded (6px)" },
+            { "value": "8px", "label": "Rounded (8px)" },
+            { "value": "12px", "label": "Extra Rounded (12px)" },
+            { "value": "50%", "label": "Circle (50%)" }
+          ],
+          "default": "8px"
+        },
+        {
+          "type": "collection_list",
+          "id": "collection_list",
+          "label": "Collections (Automatic)",
+          "info": "Select collections to automatically display in the grid"
+        },
+        {
+          "type": "link_list",
+          "id": "category_menu",
+          "label": "Menu (Optional)",
+          "info": "Alternatively select a menu list for categories"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 1"
+        },
+        {
+          "type": "collection",
+          "id": "collection_1",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_1",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 2"
+        },
+        {
+          "type": "collection",
+          "id": "collection_2",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_2",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 3"
+        },
+        {
+          "type": "collection",
+          "id": "collection_3",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_3",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 4"
+        },
+        {
+          "type": "collection",
+          "id": "collection_4",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_4",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 5"
+        },
+        {
+          "type": "collection",
+          "id": "collection_5",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_5",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_5",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 6"
+        },
+        {
+          "type": "collection",
+          "id": "collection_6",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_6",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_6",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 7"
+        },
+        {
+          "type": "collection",
+          "id": "collection_7",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_7",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_7",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 8"
+        },
+        {
+          "type": "collection",
+          "id": "collection_8",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_8",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_8",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_8",
+          "label": "Custom Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Category 9"
+        },
+        {
+          "type": "collection",
+          "id": "collection_9",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_9",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title_9",
+          "label": "Custom Title"
+        },
+        {
+          "type": "url",
+          "id": "link_9",
+          "label": "Custom Link"
+        }
+      ]
+    },
+    {
       "type": "search_box",
       "name": "Search box",
       "settings": [],
@@ -555,6 +1210,9 @@ document.addEventListener('DOMContentLoaded', function () {
   "default": {
     "blocks": [{
         "type": "featured_image"
+      },
+      {
+        "type": "category_grid"
       },
       {
         "type": "cart_status"

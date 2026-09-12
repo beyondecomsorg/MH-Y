@@ -495,6 +495,40 @@
               "full_featured_image": false
             }
           },
+          "mobile-navigation-category-grid": {
+            "type": "category_grid",
+            "settings": {
+              "title": "Shop By Category",
+              "show_heading": true,
+              "is_collapsible": true,
+              "initially_open": true,
+              "columns": "3",
+              "collection_1": "formal-shirts",
+              "image_1": "shopify://shop_images/640X800_8_1.jpg",
+              "title_1": "Formal Shirts",
+              "link_1": "shopify://collections/formal-shirts",
+              "collection_2": "casual-shirts",
+              "image_2": "shopify://shop_images/640X800_2_81477c5c-e89a-40bb-85ec-08fd34410d35.jpg",
+              "title_2": "Casual Shirts",
+              "link_2": "shopify://collections/casual-shirts",
+              "collection_3": "linen-shirts",
+              "image_3": "shopify://shop_images/640X800_9_43c1959d-55c6-4b7c-a3b7-81fb187a2b89.jpg",
+              "title_3": "Linen Living",
+              "link_3": "shopify://collections/linen-shirts",
+              "collection_4": "shackets-1",
+              "image_4": "shopify://shop_images/640X800_5_29acc1b4-e729-4665-9782-8befc758576e.jpg",
+              "title_4": "Shackets",
+              "link_4": "shopify://collections/shackets-1",
+              "collection_5": "polos-tees",
+              "image_5": "shopify://shop_images/640X800_4_00f989dc-ad3b-47cf-b11a-0479be471f00.jpg",
+              "title_5": "Polos & Tees",
+              "link_5": "shopify://collections/polos-tees",
+              "collection_6": "trousers-shorts",
+              "image_6": "shopify://shop_images/640X800_6_4c375475-5f53-4893-aae8-5245fd4fdeaf.jpg",
+              "title_6": "Trousers & Shorts",
+              "link_6": "shopify://collections/trousers-shorts"
+            }
+          },
           "mobile-navigation-4": {
             "type": "search_box",
             "disabled": true,
@@ -523,6 +557,7 @@
         },
         "block_order": [
           "mobile-navigation-0",
+          "mobile-navigation-category-grid",
           "mobile-navigation-4",
           "mobile-navigation-2",
           "mobile-navigation-3",
