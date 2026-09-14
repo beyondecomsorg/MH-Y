@@ -129,7 +129,7 @@
 
 </head>
 
-<body class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper">
+<body class="gridlock template-{{ template | handleize }} {% render 'body-classes' %} js-slideout-toggle-wrapper js-modal-toggle-wrapper">
   <a class="skip-link button visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
   <main id="MainContent" class="site-wrap shown" role="main" tabindex="-1">
 
@@ -144,3 +144,13 @@
   </script>
 </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'body-classes' | strip %}"
+  to: "{% render 'body-classes' %}"
+  position: 4354..4381
+{% endcomment %}

@@ -95,12 +95,7 @@ data-section-type="collection-list">
             data-aos-delay="{{ forloop.index | minus: 1 | modulo: aos_mod | times: 100 }}">
             <div class="collection__item-image">
               {% if block.settings.collection_image != blank %}
-                {%
-                  render 'basic-responsive-image',
-                  type: block.settings.collection_image,
-                  width: 1200,
-                  alt: 'MH&Y India Category Image ' | append: forloop.index
-                %}
+                {% render 'basic-responsive-image', type: block.settings.collection_image, width: 1200, alt: 'MH&Y India Category Image ', append: forloop.index %}
               {% else %}
                 {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
                 {%- assign placeholder = 'collection-' | append: current -%}
@@ -426,3 +421,20 @@ data-section-type="collection-list">
   }
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                      render 'basic-responsive-image',
+                      type: block.settings.collection_image,
+                      width: 1200,
+                      alt: 'MH&Y India Category Image ' | append: forloop.index
+                    %}
+  to: "{% render 'basic-responsive-image', type: block.settings.collection_image,
+    width: 1200, alt: 'MH&Y India Category Image ', append: forloop.index %}"
+  position: 3286..3433
+{% endcomment %}

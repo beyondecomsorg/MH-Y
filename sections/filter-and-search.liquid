@@ -117,7 +117,7 @@ wau-filter-search .filter--search__item {
   {% endif %}
 
       {% if has_image %}
-        {% capture image'%}
+        {% capture image %}
           {% liquid
             assign sm_render = '100vw'
             assign md_render = '100vw'
@@ -362,3 +362,13 @@ wau-filter-search .filter--search__item {
   }
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% capture image'%}"
+  to: "{% capture image %}"
+  position: 2730..2749
+{% endcomment %}

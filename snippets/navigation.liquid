@@ -30,13 +30,7 @@
                     {% capture menu_image %}
                       <span class="span-3 auto mm-image">
                         <a href="{{ block.settings.nav_promo_link }}">
-                          {%
-                            render 'basic-responsive-image',
-                            type: block.settings.nav_image,
-                            width: 1200,
-                            alt: link.title | append: ' Featured Image by MH&Y India',
-                            loading: 'eager'
-                          %}
+                          {% render 'basic-responsive-image', type: block.settings.nav_image, width: 1200, alt: link.title, append: ' Featured Image by MH&Y India', loading: 'eager' %}
                         </a>
                       </span>
                     {% endcapture %}
@@ -148,13 +142,7 @@
                       {% if image != blank %}
                       <span class="links__withimages--image image_{{ block.settings.image_ratio }}">
                         {% if link_n != blank %}<a href="{{ link_n }}">{% endif %}
-                          {%
-                            render 'basic-responsive-image',
-                            type: image,
-                            width: 1200,
-                            alt: link.title | append: ' Menu Image ' | append: n | append: ' by MH&Y India',
-                            loading: 'eager'
-                          %}
+                          {% render 'basic-responsive-image', type: image, width: 1200, alt: link.title, append: ' by MH&Y India', loading: 'eager' %}
                         {% if link_n != blank %}</a>{% endif %}
                       </span>
                       {% endif %}
@@ -257,3 +245,33 @@
     </li>
   {% endif %}
 {% endfor %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                                render 'basic-responsive-image',
+                                type: block.settings.nav_image,
+                                width: 1200,
+                                alt: link.title | append: ' Featured Image by MH&Y India',
+                                loading: 'eager'
+                              %}
+  to: "{% render 'basic-responsive-image', type: block.settings.nav_image, width:
+    1200, alt: link.title, append: ' Featured Image by MH&Y India', loading: 'eager'
+    %}"
+  position: 1488..1646
+- from: |-
+    {%
+                                render 'basic-responsive-image',
+                                type: image,
+                                width: 1200,
+                                alt: link.title | append: ' Menu Image ' | append: n | append: ' by MH&Y India',
+                                loading: 'eager'
+                              %}
+  to: "{% render 'basic-responsive-image', type: image, width: 1200, alt: link.title,
+    append: ' by MH&Y India', loading: 'eager' %}"
+  position: 7775..7899
+{% endcomment %}

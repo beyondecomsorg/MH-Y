@@ -190,7 +190,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   endif
 -%}
 
-<body class="gridlock template-{{ template | handleize }} {% render 'body-classes' | strip %} js-slideout-toggle-wrapper js-modal-toggle-wrapper{% if mhy_show_mobile_bottomnav %} mhy-has-mobile-bottomnav{% endif %}"
+<body class="gridlock template-{{ template | handleize }} {% render 'body-classes' %} js-slideout-toggle-wrapper js-modal-toggle-wrapper{% if mhy_show_mobile_bottomnav %} mhy-has-mobile-bottomnav{% endif %}"
       data-quick-add-enabled="{{ settings.quickadd | json }}">
       <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8JFVCCT"
@@ -497,3 +497,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'body-classes' | strip %}"
+  to: "{% render 'body-classes' %}"
+  position: 7938..7965
+{% endcomment %}

@@ -63,12 +63,7 @@
                     width: 120
                   %}
                 {% elsif has_icon %}
-                  {% render 'snip-icons',
-                     wrapper: '.scrolling__text-icon',
-                     type: type,
-                     icon: block.settings.icon,
-                     size: section.settings.icon_height | append: 'px',
-                     fill: section.settings.color %}
+                  {% render 'snip-icons', wrapper: '.scrolling__text-icon', type: type, icon: block.settings.icon, size: section.settings.icon_height, append: 'px', fill: section.settings.color %}
                 {% endif %}
               </span>
             {% endif %}
@@ -438,4 +433,21 @@
     }
   ]
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'snip-icons',
+                         wrapper: '.scrolling__text-icon',
+                         type: type,
+                         icon: block.settings.icon,
+                         size: section.settings.icon_height | append: 'px',
+                         fill: section.settings.color %}
+  to: "{% render 'snip-icons', wrapper: '.scrolling__text-icon', type: type, icon:
+    block.settings.icon, size: section.settings.icon_height, append: 'px', fill: section.settings.color
+    %}"
+  position: 2545..2723
+{%- endcomment -%}
