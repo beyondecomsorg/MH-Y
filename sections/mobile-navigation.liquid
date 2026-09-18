@@ -293,7 +293,7 @@
               assign card_radius = '0px'
             endif
           -%}
-          <div class="mobile-menu__block mobile-menu__category-grid mhy-category-grid mhy-category-grid--{{ cat_unique_id }}"
+          {% comment %} <div class="mobile-menu__block mobile-menu__category-grid mhy-category-grid mhy-category-grid--{{ cat_unique_id }}"
                style="--mhy-card-aspect-ratio: {{ card_aspect }}; --mhy-card-border-radius: {{ card_radius }};"
                {{ block.shopify_attributes }}>
             {% if block.settings.show_heading and title != blank %}
@@ -453,7 +453,7 @@
 
               </div>
             </div>
-          </div>
+          </div> {% endcomment %}
       {% endcase %}
     {% endfor %}
     <style>
