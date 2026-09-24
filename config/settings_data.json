@@ -662,15 +662,12 @@
         "disabled": false,
         "settings": {}
       },
-      "10240826089515305284": {
-        "type": "shopify://apps/wishlist-plus-my-wishlist/blocks/app/019df433-6d2f-75cc-9433-af8cf264ff4b",
-        "disabled": true,
+      "7870687481494312845": {
+        "type": "shopify://apps/wishlist-hero/blocks/app-embed/a9a5079b-59e8-47cb-b659-ecf1c60b9b72",
+        "disabled": false,
         "settings": {
-          "wishlist_count": false,
-          "header_icon_color": "#000000",
-          "count_background_color": "#000000",
-          "count_text_color": "#ffffff",
-          "disable_header_icon": false
+          "additionalWLButtonCssClasses": "",
+          "additionalWLCartBubbleCssClasses": ""
         }
       }
     }
