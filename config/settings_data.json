@@ -503,6 +503,11 @@
               "is_collapsible": true,
               "initially_open": true,
               "columns": "3",
+              "image_shape": "rounded_square",
+              "image_aspect_ratio": "1 / 1",
+              "border_radius": "8px",
+              "collection_list": [],
+              "category_menu": "",
               "collection_1": "formal-shirts",
               "image_1": "shopify://shop_images/640X800_8_1.jpg",
               "title_1": "Formal Shirts",
@@ -526,7 +531,16 @@
               "collection_6": "trousers-shorts",
               "image_6": "shopify://shop_images/640X800_6_4c375475-5f53-4893-aae8-5245fd4fdeaf.jpg",
               "title_6": "Trousers & Shorts",
-              "link_6": "shopify://collections/trousers-shorts"
+              "link_6": "shopify://collections/trousers-shorts",
+              "collection_7": "",
+              "title_7": "",
+              "link_7": "",
+              "collection_8": "",
+              "title_8": "",
+              "link_8": "",
+              "collection_9": "",
+              "title_9": "",
+              "link_9": ""
             }
           },
           "mobile-navigation-4": {
@@ -585,6 +599,30 @@
           "popup_text_color": "#000000",
           "popup_background_color": "#ffffff"
         }
+      },
+      "welcome-popup": {
+        "type": "welcome-popup",
+        "settings": {
+          "enable": true,
+          "delay": 5,
+          "heading": "Welcome to Our Store!",
+          "description": "Join our community and get early access to new arrivals, exclusive offers, and your personal discount code.",
+          "subheading": "On your first order above ₹2,999",
+          "button_text": "Claim My 10% OFF",
+          "success_message": "Here is your exclusive welcome code:",
+          "coupon_code": "WELCOME10",
+          "min_order_text": "above ₹2,999",
+          "popup_width": 820,
+          "panel_bg_color": "#0d1117",
+          "panel_accent_color": "#c9a84c",
+          "bg_color": "#ffffff",
+          "text_color": "#0d1117",
+          "btn_color": "#0d1117",
+          "btn_text_color": "#ffffff",
+          "border_radius": 16,
+          "overlay_opacity": 60,
+          "animation_duration": 0.4
+        }
       }
     },
     "content_for_index": [],
@@ -624,10 +662,16 @@
         "disabled": false,
         "settings": {}
       },
-      "1744347199190486471": {
-        "type": "shopify://apps/advanced-wishlist/blocks/app/330d9272-08ea-4193-b3e0-475a69fa65fa",
-        "disabled": false,
-        "settings": {}
+      "10240826089515305284": {
+        "type": "shopify://apps/wishlist-plus-my-wishlist/blocks/app/019df433-6d2f-75cc-9433-af8cf264ff4b",
+        "disabled": true,
+        "settings": {
+          "wishlist_count": false,
+          "header_icon_color": "#000000",
+          "count_background_color": "#000000",
+          "count_text_color": "#ffffff",
+          "disable_header_icon": false
+        }
       }
     }
   },
