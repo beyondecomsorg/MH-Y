@@ -149,25 +149,40 @@
   }
 
   #ab-block-{{ block_id }} .ab-card {
-    border: 1px dashed #d1d1d1;
-    padding: 14px 16px;
-    background-color: #fafafa;
-    border-radius: 2px;
-    box-sizing: border-box;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-shrink: 0;
+  border: 1px dashed #d1d1d1;
+  padding: 14px 16px;
+  background-color: #fafafa;
+  border-radius: 2px;
+  box-sizing: border-box;
+  width: 300px;
+  min-height: 156px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-shrink: 0;
   }
+  #ab-block-{{ block_id }} .ab-offer-title {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #333333;
+}
+
+#ab-block-{{ block_id }} .ab-offer-note {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #555555;
+  margin: 0;
+}
 
   #ab-block-{{ block_id }} .ab-row-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-    flex-wrap: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 24px;
+  margin-bottom: 12px;
+  flex-wrap: nowrap;
   }
 
   #ab-block-{{ block_id }} .ab-code-wrapper {
