@@ -750,6 +750,7 @@ nav.pdp-breadcrumb.row{
             </div>
 
           {% when 'available_benefits' %}
+               {% render 'available-benefits' %}
                       {%- for block in section.blocks -%}
                   {%- if block.type == 'product_info_image' and block.settings.enable_block and block.settings.image != blank -%}
                     {%- liquid
