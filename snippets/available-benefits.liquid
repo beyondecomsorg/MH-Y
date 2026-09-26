@@ -9,128 +9,70 @@
   assign block_id = block.id | default: section.id
   assign heading = block.settings.heading | default: "AVAILABLE BENEFITS"
   assign accent_color = block.settings.accent_color | default: "#b8860b"
-  assign tnc_url_global = block.settings.tnc_url | default: "#"
-  assign tnc_text_global = block.settings.tnc_text | default: "T & C"
 
-  # Card 1 settings
-  assign card1_code = block.settings.coupon_code_1 | default: block.settings.coupon_code | default: "WELCOME10"
-  assign card1_desc = block.settings.description_1 | default: block.settings.description | default: "Get 10% OFF on your first order."
-  assign card1_tnc_url = block.settings.tnc_url_1 | default: tnc_url_global
-  assign card1_tnc_text = block.settings.tnc_text_1 | default: tnc_text_global
+  # Offer 1 - Free Shipping
+  assign card1_desc = block.settings.description_1 | default: "Free shipping on all orders."
 
-  # Card 2 settings
-  assign card2_code = block.settings.coupon_code_2 | default: "EXTRA15"
-  assign card2_desc = block.settings.description_2 | default: "Get an Extra 15% OFF today only. Valid till 11:59 PM."
-  assign card2_tnc_url = block.settings.tnc_url_2 | default: tnc_url_global
-  assign card2_tnc_text = block.settings.tnc_text_2 | default: tnc_text_global
-
-  # Card 3 settings
-  assign card3_code = block.settings.coupon_code_3 | default: "FREESHIP"
-  assign card3_desc = block.settings.description_3 | default: "Free Shipping on your order."
-  assign card3_tnc_url = block.settings.tnc_url_3 | default: tnc_url_global
-  assign card3_tnc_text = block.settings.tnc_text_3 | default: tnc_text_global
-
-  # Card 4 settings
-  assign card4_code = block.settings.coupon_code_4 | default: "MHY10"
-  assign card4_desc = block.settings.description_4 | default: "Shop for ₹10,000 and get an additional 10% OFF."
-  assign card4_tnc_url = block.settings.tnc_url_4 | default: tnc_url_global
-  assign card4_tnc_text = block.settings.tnc_text_4 | default: tnc_text_global
+  # Offer 2 - Extra 5% OFF
+  assign card2_code = block.settings.coupon_code_2 | default: "EXTRA5"
+  assign card2_desc = block.settings.description_2 | default: "Get an extra 5% OFF on purchases of ₹10,000 and above."
+  assign card2_tnc_url = block.settings.tnc_url_2 | default: "#"
+  assign card2_tnc_text = block.settings.tnc_text_2 | default: "T & C"
 %}
 
 {% capture cards_html %}
-  <!-- Card 1 -->
+
+  <!-- Offer 1 - Free Shipping -->
   <div class="ab-card">
     <div class="ab-row-top">
       <div class="ab-code-wrapper">
-        <span>Use code</span>
-        <button
-          type="button"
-          class="ab-code-btn js-ab-code-btn"
-          title="Click to copy coupon code {{ card1_code }}"
-          aria-label="Click to copy coupon code {{ card1_code }}"
-        >
-          <span class="js-ab-code-text" data-code="{{ card1_code }}">{{ card1_code }}</span>
-          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
-        </button>
+        <span>{{ card1_desc }}</span>
       </div>
-
     </div>
-    {% if card1_desc != blank %}
-      <p class="ab-description">{{ card1_desc }}</p>
-    {% endif %}
   </div>
 
-  <!-- Card 2 -->
+
+  <!-- Offer 2 - Extra 5% OFF -->
   <div class="ab-card">
     <div class="ab-row-top">
       <div class="ab-code-wrapper">
         <span>Use code</span>
+
         <button
           type="button"
           class="ab-code-btn js-ab-code-btn"
           title="Click to copy coupon code {{ card2_code }}"
           aria-label="Click to copy coupon code {{ card2_code }}"
         >
-          <span class="js-ab-code-text" data-code="{{ card2_code }}">{{ card2_code }}</span>
-          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
+          <span
+            class="js-ab-code-text"
+            data-code="{{ card2_code }}"
+          >
+            {{ card2_code }}
+          </span>
+
+          <span
+            class="ab-copy-badge js-ab-copy-feedback"
+            aria-live="polite"
+          ></span>
         </button>
       </div>
+
       {% if card2_tnc_text != blank %}
-        <a href="{{ card2_tnc_url }}" class="ab-tnc-link">{{ card2_tnc_text }}</a>
+        <a
+          href="{{ card2_tnc_url }}"
+          class="ab-tnc-link"
+        >
+          {{ card2_tnc_text }}
+        </a>
       {% endif %}
     </div>
-    {% if card2_desc != blank %}
-      <p class="ab-description">{{ card2_desc }}</p>
-    {% endif %}
+
+    <p class="ab-description">
+      {{ card2_desc }}
+    </p>
   </div>
 
-  <!-- Card 3 -->
-  <div class="ab-card">
-    <div class="ab-row-top">
-      <div class="ab-code-wrapper">
-        <span>Use code</span>
-        <button
-          type="button"
-          class="ab-code-btn js-ab-code-btn"
-          title="Click to copy coupon code {{ card3_code }}"
-          aria-label="Click to copy coupon code {{ card3_code }}"
-        >
-          <span class="js-ab-code-text" data-code="{{ card3_code }}">{{ card3_code }}</span>
-          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
-        </button>
-      </div>
-      {% if card3_tnc_text != blank %}
-        <a href="{{ card3_tnc_url }}" class="ab-tnc-link">{{ card3_tnc_text }}</a>
-      {% endif %}
-    </div>
-    {% if card3_desc != blank %}
-      <p class="ab-description">{{ card3_desc }}</p>
-    {% endif %}
-  </div>
-
-  <!-- Card 4 -->
-  <div class="ab-card">
-    <div class="ab-row-top">
-      <div class="ab-code-wrapper">
-        <span>Use code</span>
-        <button
-          type="button"
-          class="ab-code-btn js-ab-code-btn"
-          title="Click to copy coupon code {{ card4_code }}"
-          aria-label="Click to copy coupon code {{ card4_code }}"
-        >
-          <span class="js-ab-code-text" data-code="{{ card4_code }}">{{ card4_code }}</span>
-          <span class="ab-copy-badge js-ab-copy-feedback" aria-live="polite"></span>
-        </button>
-      </div>
-      {% if card4_tnc_text != blank %}
-        <a href="{{ card4_tnc_url }}" class="ab-tnc-link">{{ card4_tnc_text }}</a>
-      {% endif %}
-    </div>
-    {% if card4_desc != blank %}
-      <p class="ab-description">{{ card4_desc }}</p>
-    {% endif %}
-  </div>
 {% endcapture %}
 
 <style>
