@@ -61,11 +61,11 @@
           "settings": {
             "heading": "AVAILABLE BENEFITS",
             "accent_color": "#b8860b",
-            "coupon_code": "ONLYEXCHANGE",
-            "description": "Extra 5% off on your order - applicable for 1 exchange only, no returns.",
-            "coupon_code_1": "WELCOME10",
-            "description_1": "Get 10% OFF on your first order.",
-            "tnc_text_1": "T & C",
+            "coupon_code": "",
+            "description": "",
+            "coupon_code_1": "Free shipping on all orders",
+            "description_1": "",
+            "tnc_text_1": "",
             "tnc_url_1": "",
             "coupon_code_2": "EXTRA15",
             "description_2": "Get an Extra 15% OFF today only. Valid till 11:59 PM.",
@@ -237,6 +237,7 @@
         "heading": "Loved by Our Customers",
         "sub_heading": "Real experiences from our valued customers.",
         "show_overall_rating": true,
+        "show_review_count": true,
         "overall_score": 4.9,
         "overall_count": "Based on 2,000+ Reviews",
         "bg_color": "#ffffff",
@@ -487,6 +488,18 @@
         "limit": 4
       }
     },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed Products",
+        "limit": 4,
+        "section_padding": "both",
+        "desktop_padding_top": 36,
+        "desktop_padding_bottom": 36,
+        "mobile_padding_top": 24,
+        "mobile_padding_bottom": 24
+      }
+    },
     "opinew-reviews-product-page-code": {
       "type": "apps",
       "settings": {
@@ -570,18 +583,6 @@
         "text_color": "#ffffff",
         "add_divider": true,
         "section_padding": "none"
-      }
-    },
-    "recently-viewed": {
-      "type": "recently-viewed",
-      "settings": {
-        "heading": "Recently Viewed Products",
-        "limit": 4,
-        "section_padding": "both",
-        "desktop_padding_top": 36,
-        "desktop_padding_bottom": 36,
-        "mobile_padding_top": 24,
-        "mobile_padding_bottom": 24
       }
     }
   },
