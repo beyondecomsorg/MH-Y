@@ -371,6 +371,26 @@ document.addEventListener("DOMContentLoaded", function () {
       variantsWrap.classList.remove("mhy-pdp--needs-selection");
     }
 
+    // ── Check if Shopify already pre-selected a size on page load ──
+    function isSizeAlreadyChosen() {
+      // Swatches: any checked radio inside the variants wrapper
+      const checkedRadio = variantsWrap.querySelector('input[type="radio"]:checked');
+      if (checkedRadio) return true;
+      // Select-based: any <select> that has a non-empty value
+      const selects = variantsWrap.querySelectorAll('select[name^="options["]');
+      for (var i = 0; i < selects.length; i++) {
+        if (selects[i].value && selects[i].value !== "") return true;
+      }
+      return false;
+    }
+
+    // Shopify always pre-selects the first available variant — honour that
+    if (isSizeAlreadyChosen()) {
+      markSelected();
+    } else {
+      variantsWrap.classList.add("mhy-pdp--needs-selection");
+    }
+
     variantsWrap.addEventListener("click", function (e) {
       if (e.isTrusted !== true) return;
       const input = e.target && e.target.closest ? e.target.closest('input[type="radio"]') : null;
@@ -383,8 +403,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!target) return;
       if (target.matches('select[name^="options["]')) markSelected();
     });
-
-    variantsWrap.classList.add("mhy-pdp--needs-selection");
 
     document.addEventListener(
       "click",
