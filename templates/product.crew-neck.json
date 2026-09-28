@@ -1,0 +1,605 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "896887d5-6a65-431c-9081-550cbc1a6676": {
+          "type": "product_variants",
+          "settings": {
+            "show_size_chart": true,
+            "size_chart_page": "size-chart",
+            "size_chart_label": "Size chart"
+          }
+        },
+        "569acd10-43ac-4854-adc8-bc64927b54bb": {
+          "type": "product_buttons",
+          "settings": {
+            "show_gift_card_recipient": false
+          }
+        },
+        "promo_alert_default": {
+          "type": "promo_alert",
+          "settings": {
+            "text": "<p>Free Reusable Cotton Pouch with Every Purchase</p>",
+            "icon": "bag",
+            "background_color": "#f8f8f8",
+            "text_color": "#121212",
+            "border_color": "rgba(0,0,0,0)"
+          }
+        },
+        "product_info_image_eLmYBB": {
+          "type": "product_info_image",
+          "settings": {
+            "enable_block": true,
+            "image": "shopify://shop_images/final_pouch_website_image.png",
+            "alt_text": "",
+            "desktop_width": "100%",
+            "top_spacing": 16,
+            "bottom_spacing": 16,
+            "border_radius": 4
+          }
+        },
+        "product_feature_icons_new": {
+          "type": "product_feature_icons",
+          "settings": {}
+        },
+        "share_WKEqCy": {
+          "type": "share",
+          "settings": {}
+        },
+        "available_benefits_4EjjVW": {
+          "type": "available_benefits",
+          "settings": {
+            "heading": "AVAILABLE BENEFITS",
+            "accent_color": "#b8860b",
+            "coupon_code": "",
+            "description": "",
+            "coupon_code_1": "Free shipping on all orders",
+            "description_1": "",
+            "tnc_text_1": "",
+            "tnc_url_1": "",
+            "coupon_code_2": "",
+            "description_2": "",
+            "tnc_text_2": "",
+            "tnc_url_2": "",
+            "coupon_code_3": "",
+            "description_3": "",
+            "tnc_text_3": "",
+            "tnc_url_3": "",
+            "coupon_code_4": "MHY10",
+            "description_4": "",
+            "tnc_text_4": "",
+            "tnc_url_4": ""
+          }
+        },
+        "tab_content_ncpXRU": {
+          "type": "tab_content",
+          "disabled": true,
+          "settings": {
+            "tab_title": "Description",
+            "tab_text": "{{ product.description }}"
+          }
+        },
+        "tab_content_bXpzM3": {
+          "type": "tab_content",
+          "disabled": true,
+          "settings": {
+            "tab_title": "Fabric & Composition",
+            "tab_text": "<p>{{ product.metafields.custom.fabric_composition | metafield_tag }}</p>"
+          }
+        },
+        "tab_content_XMD97A": {
+          "type": "tab_content",
+          "disabled": true,
+          "settings": {
+            "tab_title": "Product feature",
+            "tab_text": "<p>{{ product.metafields.custom.product_feature | metafield_text }}</p>"
+          }
+        },
+        "tab_content_PpLMqd": {
+          "type": "tab_content",
+          "disabled": true,
+          "settings": {
+            "tab_title": "Wash Care",
+            "tab_text": "<p>{{ product.metafields.custom.wash_care | metafield_text }}</p>"
+          }
+        },
+        "complementary_products_BMGWQw": {
+          "type": "complementary_products",
+          "settings": {
+            "heading": "Pair it with",
+            "limit": 2,
+            "appearance": "simple"
+          }
+        },
+        "shop_the_look_QyHztr": {
+          "type": "shop_the_look",
+          "settings": {
+            "heading": "Selected For You",
+            "collection": "bestseller",
+            "limit": 6
+          }
+        }
+      },
+      "block_order": [
+        "896887d5-6a65-431c-9081-550cbc1a6676",
+        "569acd10-43ac-4854-adc8-bc64927b54bb",
+        "promo_alert_default",
+        "product_info_image_eLmYBB",
+        "product_feature_icons_new",
+        "share_WKEqCy",
+        "available_benefits_4EjjVW",
+        "tab_content_ncpXRU",
+        "tab_content_bXpzM3",
+        "tab_content_XMD97A",
+        "tab_content_PpLMqd",
+        "complementary_products_BMGWQw",
+        "shop_the_look_QyHztr"
+      ],
+      "custom_css": [
+        ".product__section--text p {background: red; color: white; font-weight: 800; font-size: 16px; padding: 12px; text-transform: uppercase; text-align: center;}",
+        ".product__section--text-with-icon {display: flex; gap: 10px; background: #3f4c660f; margin-bottom: 10px; color: #3f4c66; font-weight: 600; padding: 5px;}"
+      ],
+      "settings": {
+        "product_background": "#ffffff",
+        "thumbnail_position": "left",
+        "click_to_enlarge": false,
+        "enable_video_looping": false,
+        "show_tax_information": false
+      }
+    },
+    "premium_customer_reviews": {
+      "type": "premium-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Prateek rana",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "The fabric quality is very good",
+            "review_text": "I’m very happy with the product. The fabric quality is very good—soft, comfortable, and feels durable. The fit is nice, and the overall finish of the T-shirt is impressive. Overall, I really like the product and would recommend it to others looking for good-quality casual wear."
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "CHANDRIKA SANGHVI",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Style, comfort, and quality",
+            "review_text": "Overall, MH&Y is a great option for men who value understated style, comfort, and quality. I’d definitely recommend starting with their linen shirts or chinos to get a feel for what they offer."
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Shweta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Loved the event and enjoyed it",
+            "review_text": "Amazing collection!! The fabric is next to skin and is of superior quality.\nLoved the event and enjoyed it.\nWill surely refer to my friends"
+          }
+        },
+        "testimonial_L3RbkL": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Arjun Mehta",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Perfect fit and excellent fabric",
+            "review_text": "The shirt fits really well and the fabric feels premium. It is comfortable enough for a full day and looks sharp without being too formal. Really happy with the quality."
+          }
+        },
+        "testimonial_z4cDqp": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Rohan Kapoor",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Simple, elegant, and comfortable",
+            "review_text": "Loved the overall look and feel of the shirt. The fabric is soft, breathable, and the finishing is excellent. It works perfectly for both casual outings and dinner occasions."
+          }
+        },
+        "testimonial_4pbUw4": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "Vikram Sharma",
+            "verified_buyer": true,
+            "rating": 5,
+            "review_title": "Quality you can feel",
+            "review_text": "The quality exceeded my expectations. The fit is clean, the material feels durable, and the shirt looks even better in person. Definitely a brand I would recommend for premium everyday menswear."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "testimonial_L3RbkL",
+        "testimonial_z4cDqp",
+        "testimonial_4pbUw4"
+      ],
+      "settings": {
+        "desktop_padding_top": 29,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "heading": "Loved by Our Customers",
+        "sub_heading": "Real experiences from our valued customers.",
+        "show_overall_rating": true,
+        "show_review_count": true,
+        "overall_score": 4.9,
+        "overall_count": "Based on 2,000+ Reviews",
+        "bg_color": "#ffffff",
+        "card_bg_color": "#ffffff",
+        "text_color_primary": "#173250",
+        "text_color_secondary": "#173250",
+        "border_color": "#e5e7eb",
+        "accent_color": "#173250",
+        "star_color": "#d4af37",
+        "cta_text": "View All Reviews",
+        "cta_link": "/collections/all",
+        "btn_bg_color": "#1f1f1f",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#6e7c45",
+        "autoplay_speed": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_padding": "both"
+      }
+    },
+    "shop_with_confidence_bm8bTJ": {
+      "type": "shop-with-confidence",
+      "blocks": {
+        "feature_etcVgG": {
+          "type": "feature",
+          "settings": {
+            "icon_type": "returns",
+            "icon_custom": "",
+            "title": "FREE 7 DAYS RETURNS & EXCHANGES",
+            "description": ""
+          }
+        },
+        "feature_Y9r6LM": {
+          "type": "feature",
+          "settings": {
+            "icon_type": "support",
+            "icon_custom": "",
+            "title": "WHITE GLOVE CUSTOMER SUPPORT",
+            "description": ""
+          }
+        },
+        "feature_3Y9MG9": {
+          "type": "feature",
+          "settings": {
+            "icon_type": "delivery",
+            "icon_custom": "",
+            "title": "FREE DELIVERY ON ALL ORDERS",
+            "description": ""
+          }
+        },
+        "feature_yLCKTr": {
+          "type": "feature",
+          "settings": {
+            "icon_type": "payment",
+            "icon_custom": "",
+            "title": "ALL PAYMENT OPTIONS",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_etcVgG",
+        "feature_Y9r6LM",
+        "feature_3Y9MG9",
+        "feature_yLCKTr"
+      ],
+      "disabled": true,
+      "name": "Shop with Confidence",
+      "settings": {
+        "heading": "SHOP WITH CONFIDENCE",
+        "show_top_divider": true,
+        "footer_line1": "Designed & Marketed by: Impulse International Pvt. Ltd.",
+        "footer_line2": "Country of Origin: India",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "product-content": {
+      "type": "main-product-content",
+      "blocks": {
+        "fb1f4d16-df0d-45b5-9465-721dc7a91c53": {
+          "type": "product_description",
+          "disabled": true,
+          "settings": {
+            "label": "Product details",
+            "block_width": "medium"
+          }
+        },
+        "image_fmpc97": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/38282.jpg",
+            "link": "",
+            "block_width": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "fb1f4d16-df0d-45b5-9465-721dc7a91c53",
+        "image_fmpc97"
+      ],
+      "disabled": true,
+      "settings": {
+        "color": "#000000",
+        "background": "#f9f9f9"
+      }
+    },
+    "1625847223ea0ebb04": {
+      "type": "image-with-text-overlay",
+      "disabled": true,
+      "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "image": "shopify://shop_images/Collection_banner.jpg",
+        "scale": 2,
+        "page_height": 500,
+        "caption_position": "middle_center",
+        "caption_below": false,
+        "heading": "",
+        "subheading": "",
+        "button_text": "",
+        "button_link": "",
+        "heading_font_size": 30,
+        "subheading_font_size": 15,
+        "text_color": "#000000",
+        "button_text_color": "#ffffff",
+        "button_color": "#000000",
+        "background": "rgba(0,0,0,0)",
+        "overlay_color": "#000000",
+        "overlay_opacity": 15,
+        "section_padding": "both"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "blocks": {
+        "product_pFtENb": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_pFtENb"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "You might like",
+        "section_padding": "both"
+      }
+    },
+    "1625846216758d1de0": {
+      "type": "image-with-text",
+      "disabled": true,
+      "settings": {
+        "desktop_padding_top": 30,
+        "desktop_padding_bottom": 30,
+        "mobile_padding_top": 15,
+        "mobile_padding_bottom": 15,
+        "full_width": false,
+        "section_padding": "both",
+        "appearance": "overlap",
+        "layout": "right",
+        "image_width": "50%",
+        "image_height": "natural",
+        "desktop_height": 900,
+        "mobile_height": 600,
+        "text_align": "left",
+        "heading": "Image with text",
+        "text": "<p>Pair text with an image to add details about your products, brand and selling proposition.</p>",
+        "button": "",
+        "link": "",
+        "background": "#ffffff",
+        "color": "#000000"
+      }
+    },
+    "product_icon_grid_Rx4X74": {
+      "type": "product-icon-grid",
+      "blocks": {
+        "feature_8gKrXe": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/cotton.png",
+            "heading": "Fabric",
+            "content": "Linen"
+          }
+        },
+        "feature_wxQEJe": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/cotton.png",
+            "heading": "Weight",
+            "content": "Light Weight"
+          }
+        },
+        "feature_cDUmKc": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/cotton.png",
+            "heading": "Material",
+            "content": "100% Linen"
+          }
+        },
+        "feature_zhYbhm": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/cotton.png",
+            "heading": "Occasion",
+            "content": "Casual"
+          }
+        }
+      },
+      "block_order": [
+        "feature_8gKrXe",
+        "feature_wxQEJe",
+        "feature_cDUmKc",
+        "feature_zhYbhm"
+      ],
+      "disabled": true,
+      "name": "Icon Feature Grid",
+      "settings": {
+        "custom_class": "product-innfo-sec",
+        "section_heading": "",
+        "section_description": ""
+      }
+    },
+    "product_icon_feature_section_Y9aDmk": {
+      "type": "product-icon-feature-section",
+      "disabled": true,
+      "name": "Product Icon Feature Sec",
+      "settings": {
+        "custom_class": "product-innfo-sec",
+        "section_heading": "",
+        "section_description": "",
+        "enable_metafields": true
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "You Might Like",
+        "grid": 4,
+        "limit": 4
+      }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed Products",
+        "limit": 4,
+        "section_padding": "both",
+        "desktop_padding_top": 36,
+        "desktop_padding_bottom": 36,
+        "mobile_padding_top": 24,
+        "mobile_padding_bottom": 24
+      }
+    },
+    "opinew-reviews-product-page-code": {
+      "type": "apps",
+      "settings": {
+        "section_padding": "both"
+      }
+    },
+    "17509226857ec6e460": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_medals_XGRfh3": {
+          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
+          "settings": {}
+        },
+        "judge_me_reviews_verified_badge_ghjkDQ": {
+          "type": "shopify://apps/judge-me-reviews/blocks/verified_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_M9E4CG": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_medals_XGRfh3",
+        "judge_me_reviews_verified_badge_ghjkDQ",
+        "judge_me_reviews_review_widget_M9E4CG"
+      ],
+      "settings": {
+        "section_padding": "both"
+      }
+    },
+    "1626727788d94cc42e": {
+      "type": "text-banner",
+      "blocks": {
+        "1626727788d94cc42e-0": {
+          "type": "text",
+          "settings": {
+            "heading": "SHIPPING ALL OVER INDIA",
+            "image": "shopify://shop_images/shipped.png",
+            "image_alt": "SHIPPING ALL OVER INDIA",
+            "textarea": "<p>Get super fast shipping all over india</p>"
+          }
+        },
+        "text_XFVfTU": {
+          "type": "text",
+          "settings": {
+            "heading": "EASY RETURNS",
+            "image": "shopify://shop_images/return-box.png",
+            "image_alt": "EASY RETURNS",
+            "textarea": "<p>Buy in confidence with no-hassle returns</p>"
+          }
+        },
+        "1626727788d94cc42e-2": {
+          "type": "text",
+          "settings": {
+            "heading": "SAFE & SECURE CHECKOUT",
+            "image": "shopify://shop_images/security-saFe.png",
+            "image_alt": "SAFE & SECURE CHECKOUT",
+            "textarea": "<p>Get 100% safe & secure checkout.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "1626727788d94cc42e-0",
+        "text_XFVfTU",
+        "1626727788d94cc42e-2"
+      ],
+      "settings": {
+        "notification_heading_size": 20,
+        "custom_class": "product-text_slide",
+        "notification_font_size": 14,
+        "vertical_spacing": 0,
+        "spacing": 7,
+        "background": "#3f4c66",
+        "text_color": "#ffffff",
+        "add_divider": true,
+        "section_padding": "none"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "premium_customer_reviews",
+    "shop_with_confidence_bm8bTJ",
+    "product-content",
+    "1625847223ea0ebb04",
+    "related-products",
+    "1625846216758d1de0",
+    "product_icon_grid_Rx4X74",
+    "product_icon_feature_section_Y9aDmk",
+    "product-recommendations",
+    "recently-viewed",
+    "opinew-reviews-product-page-code",
+    "17509226857ec6e460",
+    "1626727788d94cc42e"
+  ]
+}
